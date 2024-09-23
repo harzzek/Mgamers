@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     <div>
       <Navbar />
       <div className="w-full aspect-auto">
-        <div className="columns-2 ">
+        <div className="mx-auto max-w-7xl">
           <div>
             This is a start
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
