@@ -22,6 +22,15 @@ To enter database
 docker exec -it <container_id> psql -U postgres -W postgres
 ```
 
+To send script to database container
+```
+docker cp <file> <container_name>:<path_on_container>
+```
+
+Run script on container
+```
+docker exec -it b53bfca70532 psql -U postgres -d postgres -f /Initial_setup.sql
+```
 
 ### Backend
 
