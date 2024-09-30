@@ -1,8 +1,5 @@
 import Image from "next/image";
 import Navbar from "./components/navbar";
-import { fetchWeatherData } from '../app/services/weatherService';
-import Weather from "./components/Weather";
-import { useEffect, useState } from 'react';
 import WeatherData from "./components/WeatherData";
 
 const Home: React.FC = () => {

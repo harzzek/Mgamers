@@ -1,5 +1,5 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, IdentificationIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, IdentificationIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 
 const navigation = [
@@ -11,7 +11,7 @@ const navigation = [
     { name: 'Calendar', href: '#', current: false },
   ]
   
-  function classNames(...classes: any[]) {
+  function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
   }
 

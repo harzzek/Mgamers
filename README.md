@@ -52,8 +52,21 @@ docker run -d -p 5000:8080 --name mgamersapp_container mgamersapi
 
 Now you should be able to see it on the port stated
 
-You can change the port 5000 as you see fit, but not 8080 internal port.
+You can change the port 5000 as you see fit, but not the internal port.
 
 localhost:5000/
 
 ### Frontend
+
+#### Local
+
+Go to the frontend folder and read the README attached to that project.
+
+#### Docker
+build the docker image:
+```
+docker build -t my-nextjs-app .
+docker run -d -p 5000:8080 --name mgamersWeb my-nextjs-app
+```
+
+Once build run the container for port 3000.
