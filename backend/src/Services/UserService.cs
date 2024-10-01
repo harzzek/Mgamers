@@ -10,9 +10,7 @@ namespace backend.Services
 
         public UserService()
         {
-            // Adding some mock users for demonstration purposes
-            _users.Add(new User(1, "John Doe", "example@com.com", "fdef", new Role(1, "Admin")));
-            _users.Add(new User(2, "Jane Doe", "jane@example.com", "fdef", new Role(2, "User")));
+
         }
 
         public List<User> GetAllUsers()
@@ -37,6 +35,12 @@ namespace backend.Services
             return user;
         }
 
+        public User CreateUser(User user)
+        {
+            _users.Add(user);
+            return user;
+        }
+
 
         public User UpdateUser(int id, User user)
         {
@@ -46,8 +50,8 @@ namespace backend.Services
                 throw new System.Exception("User not found");
             }
             existingUser.Name = user.Name;
-            existingUser.Email = user.Email;
             existingUser.Password = user.Password;
+            existingUser.Email = user.Email;
             existingUser.Role = user.Role;
             return existingUser;
         }

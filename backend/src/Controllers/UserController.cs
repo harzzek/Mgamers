@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace backend.Controllers
@@ -10,43 +11,94 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private UserService _userService;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(UserService userService)
+        public UserController(ApplicationDbContext context)
         {
-            _userService = userService;
+            _context = context;
         }
 
         [HttpGet]
-        public ActionResult<List<User>> GetAllUsers()
+        public async Task<ActionResult<List<User>>> GetAllUsers()
         {
-            return _userService.GetAllUsers();
+            var users = await _context.Users.Include(u => u.Role).ToListAsync();
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUserById(int id)
+        public async Task<ActionResult<User>> GetUserById(int id)
         {
-            return _userService.GetUserById(id);
+            var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
+        /**
+        * Creates a new user
+        * Remember that the id is automatically generated
+        */
         [HttpPost]
-        public ActionResult AddUser([FromBody] User newUser)
+        public async Task<IActionResult> CreateUser(CreateUserDto userDto)
         {
-            _userService.AddUser(newUser);
-             return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == userDto.RoleId);
+
+            if (role == null)
+            {
+                return BadRequest("Role not found");
+            }
+
+            var user = new User
+            {
+                Name = userDto.Name,
+                Username = userDto.Username,
+                Email = userDto.Email,
+                Password = userDto.Password,
+                Role = role
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateUser(int id, [FromBody] User user)
+        public async Task<ActionResult> UpdateUser(int id, User user)
         {
+
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
             try
             {
-                return Ok(_userService.UpdateUser(id, user));
+                await _context.SaveChangesAsync();
             }
-            catch (System.Exception e)
+            catch (DbUpdateConcurrencyException)
             {
-                return NotFound(e.Message);
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
+        }
+
+        private bool UserExists(int id)
+        {
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

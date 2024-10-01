@@ -14,12 +14,7 @@ Udvikling af et online-registreringssystem
 
 To start database
 ``` powershell
-docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=${secret_MG_password} -d postgres
-```
-
-To enter database
-```
-docker exec -it <container_id> psql -U postgres -W postgres
+docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=${env:secret_MG_password} -d postgres
 ```
 
 To send script to database container
@@ -29,7 +24,12 @@ docker cp <file> <container_name>:<path_on_container>
 
 Run script on container
 ```
-docker exec -it b53bfca70532 psql -U postgres -d postgres -f /Initial_setup.sql
+docker exec -it <container_id> psql -U postgres -d postgres -f /Initial_setup.sql
+```
+
+To enter database
+```
+docker exec -it <container_id> psql -U postgres -W postgres
 ```
 
 ### Backend
