@@ -1,15 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.Models
 {
-    [Table("users")] 
-    public class User
+    [Table("AspNetUsers")] 
+    public class User : IdentityUser<int>
     {
+
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
-        public int Id { get; set; }
+        public override int Id { get; set; }
         
         [Required]
         [Column("name")]
@@ -17,38 +19,28 @@ namespace backend.Models
 
         [Required]
         [Column("username")]
-        public string Username { get; set; }
+        public override string UserName { get; set; }
 
         [Required]
         [EmailAddress]
         [Column("email")]
-        public string Email { get; set; }
+        public override string Email { get; set; }
 
-        [Required]
-        [Column("password")]
-        public string Password { get; set; }
-
-        [Required]
-        [Column("role_id")]
-        public int RoleId { get; set; }
-
-        
-        [ForeignKey("RoleId")]
-        public Role Role { get; set; }
+        // Has many roles
+        [JsonIgnore]
+        public ICollection<Role>? UserRoles { get; set; }
 
         public User()
         {
         }
 
-        public User(int id, string name, string username, string email, string password, Role role)
+        public User(int id, string name, string username, string email, ICollection<Role> userRoles)
         {
             Id = id;
             Name = name;
-            Username = username;
+            UserName = username;
             Email = email;
-            Password = password;
-            Role = role;
-            RoleId = role.Id;
+            UserRoles = userRoles;
         }
 
     }

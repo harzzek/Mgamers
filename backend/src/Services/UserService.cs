@@ -44,16 +44,7 @@ namespace backend.Services
 
         public User UpdateUser(int id, User user)
         {
-            User existingUser = _users.FirstOrDefault(u => u.Id == id);
-            if (existingUser == null)
-            {
-                throw new System.Exception("User not found");
-            }
-            existingUser.Name = user.Name;
-            existingUser.Password = user.Password;
-            existingUser.Email = user.Email;
-            existingUser.Role = user.Role;
-            return existingUser;
+           return user;
         }
 
     }

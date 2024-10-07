@@ -21,14 +21,15 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetAllUsers()
         {
-            var users = await _context.Users.Include(u => u.Role).ToListAsync();
+            var users = await _context.Users.Include(u => u.UserRoles).ToListAsync();
+
             return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
@@ -55,10 +56,9 @@ namespace backend.Controllers
             var user = new User
             {
                 Name = userDto.Name,
-                Username = userDto.Username,
+                UserName = userDto.Username,
                 Email = userDto.Email,
-                Password = userDto.Password,
-                Role = role
+                UserRoles = new List<Role> { role }
             };
 
             _context.Users.Add(user);

@@ -1,10 +1,12 @@
 using backend.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
-public class ApplicationDbContext : DbContext
-{
+public class ApplicationDbContext : IdentityDbContext<User, Role, int>
+{ 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -19,9 +21,8 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
-            .HasOne(u => u.Role)
-            .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId);
+            .HasMany(u => u.UserRoles)
+            .WithMany(r => r.Users);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -1,18 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.Models
 {
-    [Table("roles")]
-    public class Role
+    [Table("AspNetRoles")]
+    public class Role: IdentityRole<int>
     {
         [Key]
         [Column("id")]
-        public int Id { get; set; }
-        [Required]
+        public override int Id { get; set; }
+        
         [Column("name")]
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         [JsonIgnore]
         public ICollection<User>? Users { get; set; }
@@ -23,8 +24,8 @@ namespace backend.Models
 
         public Role(int id, string name)
         {
-            this.Id = id;
-            this.Name = name;
+            Id = id;
+            Name = name;
         }
     }
 }
