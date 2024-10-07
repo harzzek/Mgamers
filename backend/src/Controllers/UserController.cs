@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,17 +20,17 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<List<User>>> GetAllUsers()
         {
-            var users = await _context.Users.Include(u => u.UserRoles).ToListAsync();
-
+            var users = await _context.Users.ToListAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _context.Users.Include(u => u.UserRoles).FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
@@ -37,6 +38,7 @@ namespace backend.Controllers
             }
 
             return Ok(user);
+
         }
 
         /**
@@ -58,7 +60,6 @@ namespace backend.Controllers
                 Name = userDto.Name,
                 UserName = userDto.Username,
                 Email = userDto.Email,
-                UserRoles = new List<Role> { role }
             };
 
             _context.Users.Add(user);

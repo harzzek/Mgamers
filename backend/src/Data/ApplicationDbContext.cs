@@ -20,9 +20,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.UserRoles)
-            .WithMany(r => r.Users);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -26,21 +26,16 @@ namespace backend.Models
         [Column("email")]
         public override string Email { get; set; }
 
-        // Has many roles
-        [JsonIgnore]
-        public ICollection<Role>? UserRoles { get; set; }
-
         public User()
         {
         }
 
-        public User(int id, string name, string username, string email, ICollection<Role> userRoles)
+        public User(int id, string name, string username, string email)
         {
             Id = id;
             Name = name;
             UserName = username;
             Email = email;
-            UserRoles = userRoles;
         }
 
     }

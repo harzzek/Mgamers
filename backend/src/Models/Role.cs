@@ -15,9 +15,6 @@ namespace backend.Models
         [Column("name")]
         public override string Name { get; set; }
 
-        [JsonIgnore]
-        public ICollection<User>? Users { get; set; }
-
         public Role()
         {
         }
