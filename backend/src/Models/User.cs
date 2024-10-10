@@ -26,6 +26,10 @@ namespace backend.Models
         [Column("email")]
         public override string Email { get; set; }
 
+        [Required]
+        [Column("birthdate")]
+        public string Birthdate { get; set; }
+
         public User()
         {
         }

@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Navbar from "./components/navbar";
-import WeatherData from "./components/WeatherData";
+import Navbar from "./components/common/navbar";
 
 const Home: React.FC = () => {
 
@@ -16,8 +15,6 @@ const Home: React.FC = () => {
           <div>
             <h1>Header</h1>
             <p>Paragraph</p>
-
-            <WeatherData />
           </div>
         </div>
       </div>

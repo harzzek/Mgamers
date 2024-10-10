@@ -41,33 +41,6 @@ namespace backend.Controllers
 
         }
 
-        /**
-        * Creates a new user
-        * Remember that the id is automatically generated
-        */
-        [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserDto userDto)
-        {
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == userDto.RoleId);
-
-            if (role == null)
-            {
-                return BadRequest("Role not found");
-            }
-
-            var user = new User
-            {
-                Name = userDto.Name,
-                UserName = userDto.Username,
-                Email = userDto.Email,
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
-        }
-
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUser(int id, User user)
         {

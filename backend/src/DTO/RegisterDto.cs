@@ -15,4 +15,7 @@ public class RegisterDTO{
     [Required]
     public string Password { get; set; }
 
+    [Required]
+    public string Birthdate { get; set; }
+
 }
