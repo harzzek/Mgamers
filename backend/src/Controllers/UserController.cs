@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,16 +20,17 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<List<User>>> GetAllUsers()
         {
-            var users = await _context.Users.Include(u => u.Role).ToListAsync();
+            var users = await _context.Users.ToListAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
@@ -36,35 +38,7 @@ namespace backend.Controllers
             }
 
             return Ok(user);
-        }
 
-        /**
-        * Creates a new user
-        * Remember that the id is automatically generated
-        */
-        [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserDto userDto)
-        {
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == userDto.RoleId);
-
-            if (role == null)
-            {
-                return BadRequest("Role not found");
-            }
-
-            var user = new User
-            {
-                Name = userDto.Name,
-                Username = userDto.Username,
-                Email = userDto.Email,
-                Password = userDto.Password,
-                Role = role
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]

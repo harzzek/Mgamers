@@ -12,6 +12,8 @@ Udvikling af et online-registreringssystem
 
 ### Database
 
+Go to the database subfolder under database/scripts
+
 To start database
 ``` powershell
 docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=${env:secret_MG_password} -d postgres
@@ -31,6 +33,19 @@ To enter database
 ```
 docker exec -it <container_id> psql -U postgres -W postgres
 ```
+
+#### UPDATED DATABASE MIGRATIONS
+When you change models use the following
+
+To use Microsoft Identity
+
+```
+dotnet ef migrations remove
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+Just so i dont have to deal with all the hashing.
 
 ### Backend
 
