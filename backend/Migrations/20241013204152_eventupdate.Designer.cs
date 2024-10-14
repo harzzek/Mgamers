@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241013204152_eventupdate")]
+    partial class eventupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,20 +151,15 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("date");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
-
-                    b.Property<string>("EndDate")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("end_date");
-
-                    b.Property<string>("EndTime")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("end_time");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -173,15 +171,10 @@ namespace backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("StartDate")
+                    b.Property<string>("Time")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("start_date");
-
-                    b.Property<string>("StartTime")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("start_time");
+                        .HasColumnName("time");
 
                     b.HasKey("Id");
 

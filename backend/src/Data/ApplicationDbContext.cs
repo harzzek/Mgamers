@@ -17,9 +17,15 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<Event> Events { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<Event>()
+            .HasMany(e => e.Registrations)
+            .WithMany(u => u.RegistratedEvents)
+            .UsingEntity(j => j.ToTable("registrations"));
 
         base.OnModelCreating(modelBuilder);
     }

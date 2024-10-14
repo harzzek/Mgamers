@@ -28,6 +28,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);

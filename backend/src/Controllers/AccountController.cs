@@ -36,6 +36,7 @@ namespace backend.Controllers
                 Name = model.Name,
                 UserName = model.Username,
                 Email = model.Email,
+                Birthdate = model.Birthdate
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

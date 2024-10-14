@@ -1,24 +1,62 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace backend.Models
 {
+    [Table("events")]
     public class Event
     {
+        [Key]
+        [Column("id")]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime Date { get; set; }
-        public string Location { get; set; }
-        public int Capacity { get; set; }
-        public List<User> Registered { get; set; }
 
-        public Event(int id, string name, string description, DateTime date, string location, int capacity, List<User> registered)
+        [Required]
+        [Column("name")]
+        public string Name { get; set; }
+
+        [Column("description")]
+        public string Description { get; set; }
+
+        [Required]
+        [Column("location")]
+        public string Location { get; set; }
+
+        [Required]
+        [Column("start_date")]
+        public string StartDate { get; set; }
+
+        [Required]
+        [Column("start_time")]
+        public string StartTime { get; set; }
+
+        [Required]
+        [Column("end_date")]
+        public string EndDate { get; set; }
+
+        [Required]
+        [Column("end_time")]
+        public string EndTime { get; set; }
+
+        [ForeignKey("UserId")]
+        public List<User> Registrations { get; set; } = new List<User>();
+
+        public Event()
         {
+
+        }
+
+        public Event(int id, string name, string description, string location, string startDate, string startTime, string endDate, string endTime, List<User> registrations){
             Id = id;
             Name = name;
             Description = description;
-            Date = date;
             Location = location;
-            Capacity = capacity;
-            Registered = registered;
+            StartDate = startDate;
+            StartTime = startTime;
+            EndDate = endDate;
+            EndTime = endTime;
+            Registrations = registrations;
+
         }
+
     }
 }

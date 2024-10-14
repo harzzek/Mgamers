@@ -30,16 +30,23 @@ namespace backend.Models
         [Column("birthdate")]
         public string Birthdate { get; set; }
 
+        [ForeignKey("EventId")]
+        public List<Event> RegistratedEvents { get; set; } = new List<Event>();
+
         public User()
         {
+
         }
 
-        public User(int id, string name, string username, string email)
+        public User(int id, string name, string username, string email, string birthdate, List<Event> registratedEvents)
         {
             Id = id;
             Name = name;
             UserName = username;
             Email = email;
+            Birthdate = birthdate;
+            RegistratedEvents = registratedEvents;
+
         }
 
     }
