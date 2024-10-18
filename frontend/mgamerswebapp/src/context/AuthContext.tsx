@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useEffect } from 'react';
-import { login as loginService, logout as logoutService } from '../app/services/authService';
+import { login as loginService, logout as logoutService } from '../services/authService';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -24,7 +24,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // On mount, check if there's a token in localStorage
     const token = localStorage.getItem('mgamersToken');
+
     if (token) {
+      // If there is, set the token and isAuthenticated to true if it is not expired
+
       setUserToken(token);
       setIsAuthenticated(true);
     }

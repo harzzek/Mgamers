@@ -17,3 +17,15 @@ export const logout = () => {
   // Remove the token from localStorage
   localStorage.removeItem('mgamersToken');
 };
+
+
+export const register = async (name: string, username: string, password: string, email: string, birthdate: string) => {
+  const response = await axios.post(`${API_URL}/Register`, {
+    name,
+    username,
+    password,
+    email,
+    birthdate,
+  });
+  return response.data;
+}

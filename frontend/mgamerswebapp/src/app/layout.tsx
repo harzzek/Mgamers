@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./styles/globals.css";
+import "../styles/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import Navbar from "./components/common/navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,13 +25,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="mx-auto max-w-7xl">
+        <div>
           <AuthProvider>
+            <Navbar/>
             {children}
           </AuthProvider>
         </div>

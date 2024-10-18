@@ -2,15 +2,17 @@
 
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, IdentificationIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import LoginModal from '../modals/LoginModal'
 import { AuthContext } from '@/context/AuthContext';
+import { usePathname } from 'next/navigation';
+import RegisterModal from '../modals/RegisterModal';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
+  { name: 'Arrangementer', href: '/events' },
+  { name: 'Brugere', href: '/users' },
+  { name: 'About', href: '#' },
+  { name: 'Guides', href: '#' },
 ]
 
 function classNames(...classes: string[]) {
@@ -19,12 +21,17 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const { isAuthenticated, logout } = useContext(AuthContext);
+  const pathname = usePathname();
 
+  const isCurrentPage = (href: string) => {
+    return pathname === href;
+  }
+    
   const handleLogout = () => {
     logout();
   }
-
   return (
     <>
       <Disclosure as="nav" className="bg-gray-800">
@@ -41,11 +48,14 @@ export default function Navbar() {
             </div>
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
               <div className="flex flex-shrink-0 items-center">
-                <img
-                  alt="Your Company"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                  className="h-8 w-auto"
-                />
+                <a href="/">
+                  <img
+
+                    alt="Your Company"
+                    src="../../favicon.ico"
+                    className="h-8 w-auto"
+                  />
+                </a>
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
@@ -53,9 +63,9 @@ export default function Navbar() {
                     <a
                       key={item.name}
                       href={item.href}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={item.name  ? 'page' : undefined}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        isCurrentPage(item.href) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'rounded-md px-3 py-2 text-sm font-medium',
                       )}
                     >
@@ -68,9 +78,9 @@ export default function Navbar() {
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
               {/* Profile dropdown */}
-              <Menu as="div" className="relative ml-3">
+              <Menu as="div" className="relative ml-3 shadow-sm">
                 <div>
-                  <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-950">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <IdentificationIcon aria-hidden="true" className="h-6 w-6" />
@@ -78,38 +88,43 @@ export default function Navbar() {
                 </div>
                 <MenuItems
                   transition
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md border-slate-950 bg-slate-800 py-1 shadow-lg drop-shadow-sm ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   {isAuthenticated ? (
                     <>
                       <MenuItem>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        <a href="#" className="block px-4 py-2 text-sm text-gray-300 data-[focus]:bg-gray-700">
                           Your Profile
-                        </a>
-                      </MenuItem>
-                      <MenuItem>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                          Settings
                         </a>
                       </MenuItem>
                       <MenuItem>
                         <a
                           onClick={handleLogout}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 cursor-pointer"
+                          className="block px-4 py-2 text-sm text-gray-300 data-[focus]:bg-gray-700 cursor-pointer"
                         >
                           Sign out
                         </a>
                       </MenuItem>
                     </>
                   ) : (
-                    <MenuItem>
-                      <a
-                        onClick={() => setIsLoginModalOpen(true)}
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 cursor-pointer"
-                      >
-                        Login
-                      </a>
-                    </MenuItem>
+                    <>
+                      <MenuItem>
+                        <a 
+                          onClick={() => setIsRegisterModalOpen(true)} 
+                          className="block px-4 py-2 text-sm text-gray-300 data-[focus]:bg-gray-700 cursor-pointer"
+                        >
+                          Opret konto
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          onClick={() => setIsLoginModalOpen(true)}
+                          className="block px-4 py-2 text-sm text-gray-300 data-[focus]:bg-gray-700 cursor-pointer"
+                        >
+                          Login
+                        </a>
+                      </MenuItem>
+                    </>
                   )}
                 </MenuItems>
               </Menu>
@@ -117,25 +132,9 @@ export default function Navbar() {
           </div>
         </div>
 
-        <DisclosurePanel className="sm:hidden">
-          <div className="space-y-1 px-2 pb-3 pt-2">
-            {navigation.map((item) => (
-              <DisclosureButton
-                key={item.name}
-                as="a"
-                href={item.href}
-                aria-current={item.current ? 'page' : undefined}
-                className={classNames(
-                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'block rounded-md px-3 py-2 text-base font-medium',
-                )}
-              >
-                {item.name}
-              </DisclosureButton>
-            ))}
-          </div>
-        </DisclosurePanel>
+        
       </Disclosure>
+      <RegisterModal isOpen={isRegisterModalOpen} onClose={() => setIsRegisterModalOpen(false)} />
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </>
   );

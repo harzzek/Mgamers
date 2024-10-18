@@ -1,20 +1,11 @@
-import Image from "next/image";
-import Navbar from "./components/common/navbar";
-
 const Home: React.FC = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="w-full aspect-auto">
         <div className="">
           <div>
-            This is a start
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </div>
-          <div>
-            <h1>Header</h1>
-            <p>Paragraph</p>
+            home
           </div>
         </div>
       </div>
