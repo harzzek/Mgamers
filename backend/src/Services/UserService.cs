@@ -1,30 +1,60 @@
+using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace backend.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private List<User> _users = new List<User>();
 
-        public UserService()
-        {
+        private readonly UserManager<User> _userManager;
 
+        public UserService(UserManager<User> userManager)
+        {
+            _userManager = userManager;
         }
 
-        public List<User> GetAllUsers()
+        public async Task<List<UserDto>> GetAllUsers()
         {
-            return _users;
-        }
+            List<User> dbusers = await _userManager.Users.ToListAsync();
 
-        public User GetUserById(int id)
-        {
-            User user = _users.FirstOrDefault(u => u.Id == id);
-            if (user == null)
+            List<UserDto> users = new List<UserDto>();
+
+            foreach (User user in dbusers)
             {
-                throw new System.Exception("User not found");
+                users.Add(new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Birthdate = user.Birthdate,
+                    Roles = (await _userManager.GetRolesAsync(user)).Select(roleName => new Role { Name = roleName }).ToList()
+                });
             }
+
+
+            return users;
+        }
+
+        public async Task<UserDto> GetUserById(int id)
+        {
+            User dbuser = await _userManager.FindByIdAsync(id.ToString());
+
+            UserDto user = new UserDto
+            {
+                Id = dbuser.Id,
+                Username = dbuser.UserName,
+                Name = dbuser.Name,
+                Email = dbuser.Email,
+                Birthdate = dbuser.Birthdate,
+                Roles = (await _userManager.GetRolesAsync(dbuser)).Select(roleName => new Role { Name = roleName }).ToList()
+            };
+
             return user;
         }
 

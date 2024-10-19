@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useState, useEffect } from 'react';
-import { login as loginService, logout as logoutService } from '../services/authService';
+import { login as loginStore, logout as logoutStore } from '../stores/authStore';
+import axiosInstance from '@/stores/axiosInstance';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -30,12 +31,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setUserToken(token);
       setIsAuthenticated(true);
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
   }, []);
 
   const login = async (username: string, password: string, rememberMe: boolean) => {
     try {
-      const data = await loginService(username, password, rememberMe);
+      const data = await loginStore(username, password, rememberMe);
       const token = data.returnObject.usertoken;
 
       setUserToken(token);
@@ -43,6 +45,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       // Store the token in localStorage
       localStorage.setItem('mgamersToken', token);
+
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } catch (error) {
       throw error;
     }
@@ -51,7 +55,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUserToken(null);
     setIsAuthenticated(false);
-    logoutService();
+    logoutStore();
+
+    delete axiosInstance.defaults.headers.common['Authorization'];
   };
 
   return (

@@ -3,7 +3,7 @@
 import {useContext, useState} from 'react';
 import Modal from '../common/Modal';
 import RegisterForm from '../forms/RegisterForm';
-import { register as registerService } from '@/services/authService';
+import { register as registerService } from '@/stores/authStore';
 
 interface RegistermodalProps {
     isOpen: boolean;

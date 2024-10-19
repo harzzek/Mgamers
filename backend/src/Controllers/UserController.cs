@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using backend.Interfaces;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -13,17 +14,20 @@ namespace backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserService _userService;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<ActionResult<List<UserDto>>> GetAllUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            List<UserDto> users = await _userService.GetAllUsers();
+            //var users = await _context.Users.ToListAsync();
             return Ok(users);
         }
 
@@ -31,7 +35,7 @@ namespace backend.Controllers
         [Authorize(Roles = "User")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _userService.GetUserById(id);
 
             if (user == null)
             {

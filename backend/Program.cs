@@ -41,7 +41,7 @@ builder.Services.AddIdentity<User, Role>(options =>{
     .AddDefaultTokenProviders();
 
 
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 // Add services to the container.
 builder.Services.AddControllers();

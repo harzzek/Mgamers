@@ -1,11 +1,12 @@
 // src/app/services/authService.ts
 
 import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 const API_URL = 'http://localhost:8080/api/Account';
 
 export const login = async (username: string, password: string, rememberMe: boolean) => {
-  const response = await axios.post(`${API_URL}/Login`, {
+  const response = await axiosInstance.post(`${API_URL}/Login`, {
     username,
     password,
     rememberMe,
