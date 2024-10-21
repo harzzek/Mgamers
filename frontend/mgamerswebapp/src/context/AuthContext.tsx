@@ -1,50 +1,76 @@
 "use client";
 
-import React, { createContext, useState, useEffect } from 'react';
-import { login as loginStore, logout as logoutStore } from '../stores/authStore';
+import React, { createContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { login as loginStore, logout as logoutStore, authenticateUserToken } from '../stores/authStore';
 import axiosInstance from '@/stores/axiosInstance';
 
+interface User {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  birthdate: string;
+  roles: string[];
+}
+
 interface AuthContextProps {
-  isAuthenticated: boolean;
   userToken: string | null;
+  user: User | null;
   login: (username: string, password: string, rememberMe: boolean) => Promise<void>;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  isAuthenticated: false,
   userToken: null,
-  login: async () => {},
-  logout: () => {},
+  user: null,
+  login: async () => { },
+  logout: () => { },
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userToken, setUserToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
+  useEffect( () => {
     // On mount, check if there's a token in localStorage
     const token = localStorage.getItem('mgamersToken');
+    const user = localStorage.getItem('mgamersUser');
 
-    if (token) {
-      // If there is, set the token and isAuthenticated to true if it is not expired
+    if (token && user) {
+      // If there is, set the token and user in state
 
       setUserToken(token);
-      setIsAuthenticated(true);
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      const fetchUser = async () => {
+        console.log('authenticating user token');
+        try {
+          const response = await authenticateUserToken();
+          setUser(response.data.user);
+        } catch (error) {
+          console.error(error);
+          logout();
+        }
+      };
+
+      fetchUser();
     }
+
+    
+
   }, []);
 
   const login = async (username: string, password: string, rememberMe: boolean) => {
     try {
       const data = await loginStore(username, password, rememberMe);
       const token = data.returnObject.usertoken;
+      const user = data.user;
 
       setUserToken(token);
-      setIsAuthenticated(true);
+      setUser(user);
 
       // Store the token in localStorage
       localStorage.setItem('mgamersToken', token);
+      localStorage.setItem('mgamersUser', JSON.stringify(user));
 
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } catch (error) {
@@ -54,14 +80,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUserToken(null);
-    setIsAuthenticated(false);
+    setUser(null);
     logoutStore();
 
     delete axiosInstance.defaults.headers.common['Authorization'];
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userToken, login, logout }}>
+    <AuthContext.Provider value={{ user, userToken, login, logout} }>
       {children}
     </AuthContext.Provider>
   );

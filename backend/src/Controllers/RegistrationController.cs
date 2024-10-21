@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.DTO;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,14 @@ namespace backend.Controllers
         [HttpPost]
         [Authorize(Roles = "User")]
         public async Task<ActionResult<Event>> RegisterForEvent([FromBody] RegisterForEventDto dto){
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(userId == null || userId.Value != dto.UserId.ToString()){
+                return BadRequest("User not found");
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.UserId);
+
             var eventItem = await _context.Events.FirstOrDefaultAsync(e => e.Id == dto.EventId);
 
             if(user == null || eventItem == null){

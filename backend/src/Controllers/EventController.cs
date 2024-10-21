@@ -1,3 +1,4 @@
+using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,11 @@ namespace backend.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public EventController(ApplicationDbContext context){
+        private readonly IEventService _eventService;
+
+        public EventController(ApplicationDbContext context, IEventService eventService){
             _context = context;
+            _eventService = eventService;
         }
 
         [HttpGet]
@@ -24,15 +28,19 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize (Roles = "Guest")]
-        public async Task<ActionResult<Event>> GetEventById(int id){
-            var eventItem = await _context.Events.FirstOrDefaultAsync(e => e.Id == id);
+        [Authorize (Roles = "User")]
+        public async Task<ActionResult<EventDetailsDTO>> GetEventById(int id){
+            var eventItem = await _context.Events
+                .Include(x => x.Registrations)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            EventDetailsDTO sEventItem = await _eventService.GetEventById(eventItem);
 
             if(eventItem == null){
                 return NotFound();
             }
 
-            return Ok(eventItem);
+            return Ok(sEventItem);
         }
 
         [HttpPost]

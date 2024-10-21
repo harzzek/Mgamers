@@ -30,3 +30,8 @@ export const register = async (name: string, username: string, password: string,
   });
   return response.data;
 }
+
+export const authenticateUserToken = async () =>{
+  const response = await axiosInstance.get(`${API_URL}/UserTokenValidation`);
+  return response;
+}

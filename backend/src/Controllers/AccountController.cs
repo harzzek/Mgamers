@@ -17,11 +17,14 @@ namespace backend.Controllers
 
         private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
+        private readonly ApplicationDbContext _context;
+
+        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         // POST: api/Account/Register
@@ -81,7 +84,7 @@ namespace backend.Controllers
                 expiration = "7 days"
             };
 
-            return Ok(new { message = "Login successful", returnObject });
+            return Ok(new { message = "Login successful", returnObject, user });
         }
 
         // POST: api/Account/Logout
@@ -90,5 +93,34 @@ namespace backend.Controllers
         {
             return Ok(new { message = "Logout successful" });
         }
+
+        [HttpGet("UserTokenValidation")]
+        public async Task<IActionResult> UserTokenValidation()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return BadRequest(new { message = "Invalid or missing token" });
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "User not found" });
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                message = "Token is valid",
+                user = new { user.Id, user.UserName, user.Email, roles = roles }
+            });
+        }
+
+
+
     }
 }

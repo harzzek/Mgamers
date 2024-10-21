@@ -27,6 +27,11 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
             .WithMany(u => u.RegistratedEvents)
             .UsingEntity(j => j.ToTable("registrations"));
 
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.RegistratedEvents)
+            .WithMany(e => e.Registrations)
+            .UsingEntity(j => j.ToTable("registrations"));
+
         base.OnModelCreating(modelBuilder);
     }
 }

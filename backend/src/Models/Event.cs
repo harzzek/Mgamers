@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace backend.Models
 {
@@ -37,7 +38,8 @@ namespace backend.Models
         [Column("end_time")]
         public string EndTime { get; set; }
 
-        [ForeignKey("UserId")]
+        [ForeignKey("EventId")]
+        [JsonIgnore]
         public List<User> Registrations { get; set; } = new List<User>();
 
         public Event()

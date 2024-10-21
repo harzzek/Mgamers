@@ -30,7 +30,8 @@ namespace backend.Models
         [Column("birthdate")]
         public string Birthdate { get; set; }
 
-        [ForeignKey("EventId")]
+        [ForeignKey("UserId")]
+        [JsonIgnore]
         public List<Event> RegistratedEvents { get; set; } = new List<Event>();
 
         public User()
