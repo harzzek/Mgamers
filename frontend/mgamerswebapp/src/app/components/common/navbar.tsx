@@ -11,8 +11,9 @@ import RegisterModal from '../modals/RegisterModal';
 const navigation = [
   { name: 'Arrangementer', href: '/events' },
   { name: 'Brugere', href: '/users' },
-  { name: 'About', href: '#' },
+  { name: 'Om os', href: '#' },
   { name: 'Guides', href: '#' },
+  
 ]
 
 function classNames(...classes: string[]) {

@@ -14,24 +14,18 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     return (
         <>
             <div
-                className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-gray-300 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
                 onClick={() => setIsOpen(true)}
             >
                 <div className="grid grid-flow-row grid-cols-2 auto-rows-max">
                     <div className="p-4">
 
                     
-                    <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
+                    <h2 className="text-xl text-gray-800 font-semibold mb-2">{event.name}</h2>
                     <p className="text-gray-600 mb-1">
-                        <span>{event.date}</span> | <span>{event.location}</span>
+                        <span>{event.startDate}</span> | <span>{event.endDate}</span>
                     </p>
-                    <p className="text-gray-700 line-clamp-3">{event.description}</p>
-                    </div>
-
-                    <div className='p-12'>
-                        <Button className="rounded bg-sky-600 py-2 px-4 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700">
-                            Register
-                        </Button>
+                    <p className="text-gray-700 line-clamp-3">{event.location}</p>
                     </div>
                 </div>
             </div>

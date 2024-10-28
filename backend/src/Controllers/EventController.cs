@@ -21,7 +21,6 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        [Authorize (Roles = "Guest")]
         public async Task<ActionResult<List<Event>>> GetAllEvents(){
             var events = await _context.Events.ToListAsync();
             return Ok(events);

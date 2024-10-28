@@ -2,11 +2,13 @@ import { User } from "./user";
 
 export interface Event {
     id: number;
-    title: string;
-    date: string;
-    location: string;
+    name: string;
     description: string;
-    imageUrl?: string;
+    startDate: String;
+    endDate: String;
+    startTime: string;
+    endTime: string;
+    location: string;
     participants: User[];
     // Add other event properties as needed
   }
