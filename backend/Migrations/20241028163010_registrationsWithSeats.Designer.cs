@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241028163010_registrationsWithSeats")]
+    partial class registrationsWithSeats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,8 +194,7 @@ namespace backend.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("SeatId")
-                        .IsUnique();
+                    b.HasIndex("SeatId");
 
                     b.ToTable("registrations");
                 });
@@ -242,9 +244,15 @@ namespace backend.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("table_id");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TableId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("seats");
                 });
@@ -262,11 +270,18 @@ namespace backend.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("event_id");
 
+                    b.Property<int>("event_id")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("tables");
+                    b.ToTable("tables", t =>
+                        {
+                            t.Property("event_id")
+                                .HasColumnName("event_id1");
+                        });
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
@@ -411,8 +426,8 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.HasOne("backend.Models.Seat", "Seat")
-                        .WithOne("Registration")
-                        .HasForeignKey("backend.Models.Registration", "SeatId")
+                        .WithMany("Registrations")
+                        .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -437,7 +452,15 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("backend.Models.User", "User")
+                        .WithMany("Seats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.Navigation("Table");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Models.Table", b =>
@@ -460,8 +483,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Seat", b =>
                 {
-                    b.Navigation("Registration")
-                        .IsRequired();
+                    b.Navigation("Registrations");
                 });
 
             modelBuilder.Entity("backend.Models.Table", b =>
@@ -472,6 +494,8 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.User", b =>
                 {
                     b.Navigation("Registrations");
+
+                    b.Navigation("Seats");
                 });
 #pragma warning restore 612, 618
         }

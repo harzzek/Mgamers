@@ -7,8 +7,6 @@ namespace backend.Services
     public class EventService : IEventService
     {
 
-        private List<Event> events = new List<Event>();
-
         private readonly ApplicationDbContext _context;
 
         public EventService( ApplicationDbContext context)
@@ -53,17 +51,27 @@ namespace backend.Services
                 StartTime = eventItem.StartTime,
                 EndDate = eventItem.EndDate,
                 EndTime = eventItem.EndTime,
-                Participants = eventItem.Registrations.Select(x => new UserDto
-                {
-                    Id = x.Id,
-                    Username = x.UserName,
-                    Name = x.Name,
-                    Email = x.Email,
-                    Birthdate = x.Birthdate,
-                }).ToList()
+                Participants = eventItem.Registrations
             };
 
             return dtoEvent;
+        }
+
+        public async Task<Event> CreateEvent(CreateEventDto eventItem)
+        {
+            Event newEvent = new Event{
+                Name = eventItem.Name,
+                Description = eventItem.Description,
+                Location = eventItem.Location,
+                StartDate = eventItem.StartDate,
+                StartTime = eventItem.StartTime,
+                EndDate = eventItem.EndDate,
+                EndTime = eventItem.EndTime
+            };
+
+            _context.Events.Add(newEvent);
+            await _context.SaveChangesAsync();
+            return newEvent;
         }
     }
 }

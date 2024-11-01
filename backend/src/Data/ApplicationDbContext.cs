@@ -18,19 +18,48 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Event> Events { get; set; }
+    public DbSet<Table> Tables { get; set; }
+    public DbSet<Seat> Seats { get; set; }
+    public DbSet<Registration> Registrations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Registration>()
+            .HasKey(r => new { r.UserId, r.EventId , r.SeatId });
+
+        modelBuilder.Entity<Registration>()
+            .HasOne(r => r.User)
+            .WithMany(u => u.Registrations)
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Registration>()
+            .HasOne(r => r.Event)
+            .WithMany(e => e.Registrations)
+            .HasForeignKey(e => e.EventId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Registration>()
+            .HasOne(r => r.Seat)
+            .WithOne(s => s.Registration)
+            .HasForeignKey<Registration>(r => r.SeatId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Seat>()
+            .HasOne(s => s.Table)
+            .WithMany(t => t.Seats)
+            .HasForeignKey(s => s.TableId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Event>()
-            .HasMany(e => e.Registrations)
-            .WithMany(u => u.RegistratedEvents)
-            .UsingEntity(j => j.ToTable("registrations"));
+            .HasMany(e => e.Tables) 
+            .WithOne(t => t.Event)
+            .HasForeignKey(t => t.EventId)
+            .IsRequired();
 
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.RegistratedEvents)
-            .WithMany(e => e.Registrations)
-            .UsingEntity(j => j.ToTable("registrations"));
+        modelBuilder.Entity<Registration>()
+            .HasIndex(r => r.SeatId)
+            .IsUnique();
 
         base.OnModelCreating(modelBuilder);
     }

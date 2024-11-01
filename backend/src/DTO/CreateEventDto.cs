@@ -8,4 +8,6 @@ public class CreateEventDto{
     public string EndDate { get; set; }
     public string EndTime { get; set; }
 
+    public int TableAmount { get; set; }
+
 }

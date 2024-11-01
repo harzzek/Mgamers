@@ -36,6 +36,6 @@ public class EventDetailsDTO
     public string EndTime { get; set; }
 
     [ForeignKey("UserId")]
-    public List<UserDto> Participants { get; set; } = new List<UserDto>();
+    public List<Registration> Participants { get; set; } = new List<Registration>();
 
 }
