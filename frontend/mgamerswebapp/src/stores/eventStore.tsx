@@ -14,7 +14,7 @@ export const fetchEventById = async (id: number) => {
 };
 
 
-export const createEvent = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string }) => {
+export const createEvent = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string, tableAmount: number }) => {
     const response = await axiosInstance.post(`${API_URL}`, data);
     return response.data;
 };

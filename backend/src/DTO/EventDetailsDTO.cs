@@ -38,4 +38,7 @@ public class EventDetailsDTO
     [ForeignKey("UserId")]
     public List<Registration> Participants { get; set; } = new List<Registration>();
 
+    [ForeignKey("EventId")]
+    public List<TableDto> Tables { get; set; } = new List<TableDto>();
+
 }

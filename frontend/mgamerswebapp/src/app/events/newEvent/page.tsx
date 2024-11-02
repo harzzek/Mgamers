@@ -9,7 +9,7 @@ export default function NewEvent() {
     const [error, setErrorMessage] = useState("");
     const [created , setCreated] = useState(false);
 
-    const handleSubmit = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string }) => {
+    const handleSubmit = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string, tableAmount: number }) => {
         try {
             await createEvent(data);
             setCreated(true);

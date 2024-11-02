@@ -50,7 +50,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
             .WithMany(t => t.Seats)
             .HasForeignKey(s => s.TableId)
             .OnDelete(DeleteBehavior.Cascade);
-
+        
         modelBuilder.Entity<Event>()
             .HasMany(e => e.Tables) 
             .WithOne(t => t.Event)

@@ -31,7 +31,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
             } finally {
                 setLoading(false);
             }
-        };
+        }; 
         getEvent();
 
     }, []);
@@ -72,8 +72,8 @@ export default function EventDetails({ params }: EventDetailsProps) {
 
 
                 <div>
-                    <h2>{event?.title}</h2>
-                    <p>{event?.date}</p>
+                    <h2>{event?.name}</h2>
+                    <p>{event?.startDate}</p>
                     <p>{event?.location}</p>
                     <p>{event?.description}</p>
                 </div>
@@ -94,6 +94,12 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     </button>
 
                 </div>
+            </div>
+
+            <div>
+                <svg width={500} height={500}>
+                    
+                </svg>
             </div>
 
 

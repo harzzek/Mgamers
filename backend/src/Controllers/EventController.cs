@@ -29,17 +29,10 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         [Authorize (Roles = "User")]
         public async Task<ActionResult<EventDetailsDTO>> GetEventById(int id){
-            var eventItem = await _context.Events
-                .Include(x => x.Registrations)
-                .FirstOrDefaultAsync(x => x.Id == id);
 
-            EventDetailsDTO sEventItem = await _eventService.GetEventById(eventItem);
+            EventDetailsDTO eventItem = await _eventService.GetEventById(id);
 
-            if(eventItem == null){
-                return NotFound();
-            }
-
-            return Ok(sEventItem);
+            return Ok(eventItem);
         }
 
         [HttpPost]

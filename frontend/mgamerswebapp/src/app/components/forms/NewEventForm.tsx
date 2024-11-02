@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 interface NewEventFormProps {
-    onSubmit: (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string }) => void;
+    onSubmit: (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string; tableAmount: number; }) => void;
 }
 
 export default function NewEventForm({ onSubmit }: NewEventFormProps) {
@@ -14,13 +14,14 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
     const [endDate, setEndDate] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const [tables, setTables] = useState(0);
 
     const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitted(true);
-        onSubmit({ name, description, location, startDate, endDate, startTime, endTime });
+        onSubmit({ name, description, location, startDate, endDate, startTime, endTime, tableAmount: tables });
     }
 
     return (
@@ -98,6 +99,17 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
                     className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
+                    required
+                />
+            </div>
+
+            <div className="mt-2">
+                <label>Tables</label>
+                <input
+                    type="number"
+                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    value={tables}
+                    onChange={(e) => setTables(parseInt(e.target.value))}
                     required
                 />
             </div>

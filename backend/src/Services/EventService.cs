@@ -38,23 +38,37 @@ namespace backend.Services
             return events;
         }
 
-        public async Task<EventDetailsDTO> GetEventById(Event eventItem)
+        public async Task<EventDetailsDTO> GetEventById(int eventId)
         {
+            var eventItem = await _context.Events
+                .Where(e => e.Id == eventId)
+                .Select(e => new EventDetailsDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Description = e.Description,
+                    Location = e.Location,
+                    StartDate = e.StartDate,
+                    StartTime = e.StartTime,
+                    EndDate = e.EndDate,
+                    EndTime = e.EndTime,
+                    Participants = e.Registrations.Select(r => new Registration{
+                        UserId = r.UserId,
+                        EventId = r.EventId,
+                        SeatId = r.SeatId
+                    }).ToList(),
+                    Tables = e.Tables.Select(t => new TableDto{
+                        Id = t.Id,
+                        EventId = t.EventId,
+                        Seats = t.Seats.Select(s => new Seat{
+                            Id = s.Id,
+                            TableId = s.TableId,
+                        }).ToList()
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
 
-            EventDetailsDTO dtoEvent = new EventDetailsDTO
-            {
-                Id = eventItem.Id,
-                Name = eventItem.Name,
-                Description = eventItem.Description,
-                Location = eventItem.Location,
-                StartDate = eventItem.StartDate,
-                StartTime = eventItem.StartTime,
-                EndDate = eventItem.EndDate,
-                EndTime = eventItem.EndTime,
-                Participants = eventItem.Registrations
-            };
-
-            return dtoEvent;
+            return eventItem;
         }
 
         public async Task<Event> CreateEvent(CreateEventDto eventItem)
