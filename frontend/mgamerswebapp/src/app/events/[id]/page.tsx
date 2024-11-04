@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useContext, use } from 'react';
-import { fetchEventById, registerForEvent } from '@/stores/eventStore';
+import { fetchEventById, registerForEvent, unregisterFromEvent } from '@/stores/eventStore';
 import { Event, registration, Table as EventTable } from '../interfaces/event';
 import { AuthContext } from '@/context/AuthContext';
 import { TableSvg } from './components/TableSvg';
@@ -10,7 +10,6 @@ import {
     HORIZONTAL_SPACING,
     VERTICAL_SPACING,
 } from './constants/layout';
-import { get } from 'http';
 
 interface EventDetailsProps {
     params: {
@@ -32,57 +31,87 @@ export default function EventDetails({ params }: EventDetailsProps) {
     const svgHeight = totalRows * TABLE_HEIGHT + (totalRows - 1) * VERTICAL_SPACING;
 
     useEffect(() => {
+        fetchEvent();
+    }, [params.id]);
 
-        const getEvent = async () => {
-            try {
-                console.log('Fetching event...');
-                const fetchedEvent = await fetchEventById(params.id);
+    const fetchEvent = async () => {
+        try {
+            console.log('Fetching event...');
+            const fetchedEvent = await fetchEventById(params.id);
 
-                fetchedEvent.participants.forEach((participant: registration) => {
-                    const seatId = participant.seatId;
-                    fetchedEvent.tables.forEach((table: EventTable) => {
-                        table.seats.forEach(seat => {
-                            if (seat.id === seatId) {
-                                seat.occupied = true;
-                                seat.user = participant.user;
-                            }
-                        });
+            fetchedEvent.participants.forEach((participant: registration) => {
+                const seatId = participant.seatId;
+                fetchedEvent.tables.forEach((table: EventTable) => {
+                    table.seats.forEach(seat => {
+                        if (seat.id === seatId) {
+                            seat.occupied = true;
+                            seat.user = participant.user;
+                        }
                     });
                 });
+            });
 
-                setEvent(fetchedEvent);
-            } catch (err) {
-                console.error(err);
-                setError('Failed to fetch event.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        getEvent();
+            setEvent(fetchedEvent);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch event.');
+        } finally {
+            setLoading(false);
+        }
 
-    }, [params.id]);
+        
+    }
 
 
     const handleRegister = async () => {
+        if (seatIds.length === 0) {
+            setError('No seats selected.');
+
+        } else if (seatIds.length > 2) {
+            setError('Only two seat can be selected.');
+
+        } else {
+            try {
+                setRegistered(true);
+                if (authUser && event) {
+                    const data = await registerForEvent(event.id, authUser.id, seatIds);
+                    console.log('Registered for event.', data);
+                    fetchEvent();
+                } else {
+                    console.error('User or event not found.');
+                }
+            } catch (err) {
+                console.error(err);
+                setError('Failed to register for event.');
+            }
+
+        }
+
+    }
+
+    const handleUnregister = async () => {
         try {
-            setRegistered(true);
+            setRegistered(false);
             if (authUser && event) {
-                setEvent(event);
-                const data = await registerForEvent(event.id, authUser.id, seatIds);
-                console.log('Registered for event.', data);
+                const data = await unregisterFromEvent(event.id, authUser.id);
+                console.log('Unregistered from event.', data);
+                fetchEvent();
             } else {
                 console.error('User or event not found.');
             }
+
+
         } catch (err) {
             console.error(err);
-            setError('Failed to register for event.');
+            setError('Failed to unregister from event.');
         }
+
     }
 
     const onSeatClick = (seatId: number) => {
 
         if (seatIds.includes(seatId)) {
-            seatIds.splice(seatIds.indexOf(seatId));
+            seatIds.splice(seatIds.indexOf(seatId), 1);
         } else {
             seatIds.push(seatId);
         }
@@ -121,12 +150,13 @@ export default function EventDetails({ params }: EventDetailsProps) {
     if (loading) {
         return <div>Loading event...</div>;
     }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
     return (
         <div className='container mx-auto px-4 py-8'>
+            { error &&
+                <div className="mb-4 text-sm text-red-600">
+                    {error}
+                </div>
+            }
             <h1>Event Details</h1>
             <div className='grid grid-flow-row grid-cols-2 auto-rows-max'>
                 <div>
@@ -146,7 +176,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                         }
                         )}
                     </ul>
-                    
+
 
                 </div>
             </div>
@@ -159,19 +189,32 @@ export default function EventDetails({ params }: EventDetailsProps) {
                         const x = calculateTablePositionX(index);
                         const y = calculateTablePositionY(index);
                         return (
-                            <TableSvg key={table.id} table={table} x={x} y={y} width={TABLE_WIDTH} height={TABLE_HEIGHT} tableindex={index} onSeatClick={onSeatClick} />
+                            <TableSvg key={table.id} table={table} x={x} y={y} width={TABLE_WIDTH} height={TABLE_HEIGHT} tableindex={index} onSeatClick={onSeatClick} eventid={event.id} fetchEvent={fetchEvent} />
                         )
                     })}
                 </svg>
             </div>
 
-            <button
-                type="submit"
-                onClick={handleRegister}
-                disabled={registered || !isRegistered()}
-                className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
-                Register
-            </button>
+            {isRegistered() ?
+                <button
+                    type="submit"
+                    onClick={handleRegister}
+                    disabled={registered}
+                    className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
+                    Register
+                </button>
+                :
+                <button
+                    type="submit"
+                    onClick={handleUnregister}
+                    disabled={registered!}
+                    className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-red-500 text-white font-semibold p-2 rounded-md hover:bg-red-300">
+                    Unregister
+                </button>
+
+            }
+
+
 
 
         </div>

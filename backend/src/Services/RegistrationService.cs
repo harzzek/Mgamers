@@ -122,11 +122,13 @@ namespace backend.Services
 
             var eventItem = await _context.Events.FirstOrDefaultAsync(e => e.Id == registrationItem.EventId);  
             eventItem.Registrations = await _context.Registrations.Where(r => r.EventId == eventItem.Id).ToListAsync();
+            eventItem.Tables = await _context.Tables.Where(t => t.EventId == eventItem.Id).ToListAsync();
+            eventItem.Tables.ForEach(t => t.Seats = _context.Seats.Where(s => s.TableId == t.Id).ToList());
 
             var registrations = eventItem.Registrations;
             var seats = await _context.Seats.Where(s => registrationItem.SeatIds.Contains(s.Id)).ToListAsync();
 
-            //Check if the seats are at the same table
+            //Check if the seats are at the same table if there are more than one seat
             if( seats.Count > 1){
                 if (seats[0].TableId != seats[1].TableId)
                 {
@@ -137,6 +139,11 @@ namespace backend.Services
             //Check if the user already has a registration for the event
             foreach (Registration registration in registrations)
             {
+                //Skip if the its on the same table
+                if (registration.Seat.TableId == seats[0].TableId)
+                {
+                    continue;
+                }
                 if (registration.UserId == registrationItem.UserId)
                 {
                     return false;

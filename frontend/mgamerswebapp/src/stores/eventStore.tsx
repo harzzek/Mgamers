@@ -23,3 +23,14 @@ export const registerForEvent = async (eventId: number, userId: number, seatids:
     const response = await axiosInstance.post(`http://localhost:8080/api/Registration`, { userId, eventId, seatids });
     return response.data;
 };
+
+export const unregisterFromEvent = async (eventId: number, userId: number) => {
+    const response = await axiosInstance.delete(`http://localhost:8080/api/Registration`, { data: { userId, eventId } });
+    return response.data;
+
+};
+
+export const extendSeat = async (userId: number, eventId: number, seatIds: number[]) => {
+    const response = await axiosInstance.post(`http://localhost:8080/api/Registration/admin`, {userId, eventId, seatIds});
+    return response.data;
+}

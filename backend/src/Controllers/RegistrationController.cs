@@ -39,7 +39,7 @@ namespace backend.Controllers
             var seats = await _context.Seats.Where(s => dto.SeatIds.Contains(s.Id)).ToListAsync();
 
             if(seats.Count != dto.SeatIds.Count || seats.Count == 0 || seats.Count > 2){
-                return BadRequest("Seat not found");
+                return BadRequest("Too many seats or no seats found");
             }
 
             if(user == null || eventItem == null || seats == null){
@@ -53,6 +53,33 @@ namespace backend.Controllers
             }
 
             return Ok("User assigned to event: " + eventItem);
+        }
+
+        [HttpPost("admin")]
+        [Authorize (Roles = "Admin")]
+        public async Task <ActionResult<Event>> AdminExtendSeat([FromBody] RegisterForEventDto dto){
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.UserId);
+
+            var eventItem = await _context.Events.FirstOrDefaultAsync(e => e.Id == dto.EventId);
+
+            var seats = await _context.Seats.Where(s => dto.SeatIds.Contains(s.Id)).ToListAsync();
+
+            if(seats.Count != dto.SeatIds.Count || seats.Count == 0 || seats.Count > 2){
+                return BadRequest("Too many seats or no seats found");
+            }
+
+            if(user == null || eventItem == null || seats == null){
+                return NotFound();
+            }
+
+            var isCreated = await _registrationService.CreateRegistration(dto);
+
+            if(isCreated == null){
+                return BadRequest("Registration failed");
+            }
+
+            return Ok("User assigned to event: " + isCreated);
+            
         }
 
         [HttpGet("{id}")]
