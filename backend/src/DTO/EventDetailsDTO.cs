@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.DTO;
 using backend.Models;
 
 public class EventDetailsDTO
@@ -36,7 +37,7 @@ public class EventDetailsDTO
     public string EndTime { get; set; }
 
     [ForeignKey("UserId")]
-    public List<Registration> Participants { get; set; } = new List<Registration>();
+    public List<RegistrationDto> Participants { get; set; } = new List<RegistrationDto>();
 
     [ForeignKey("EventId")]
     public List<TableDto> Tables { get; set; } = new List<TableDto>();

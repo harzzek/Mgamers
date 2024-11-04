@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -52,10 +53,14 @@ namespace backend.Services
                     StartTime = e.StartTime,
                     EndDate = e.EndDate,
                     EndTime = e.EndTime,
-                    Participants = e.Registrations.Select(r => new Registration{
+                    Participants = e.Registrations.Select(r => new RegistrationDto{
                         UserId = r.UserId,
                         EventId = r.EventId,
-                        SeatId = r.SeatId
+                        SeatId = r.SeatId,
+                        User = new SimpleUserDto{
+                            Id = r.User.Id,
+                            Username = r.User.UserName,
+                        }
                     }).ToList(),
                     Tables = e.Tables.Select(t => new TableDto{
                         Id = t.Id,

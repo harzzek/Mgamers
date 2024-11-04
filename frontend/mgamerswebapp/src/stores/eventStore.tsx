@@ -19,7 +19,7 @@ export const createEvent = async (data: { name: string; description: string; loc
     return response.data;
 };
 
-export const registerForEvent = async (eventId: number, userId: number) => {
-    const response = await axiosInstance.post(`http://localhost:8080/api/Registration`, { userId, eventId });
+export const registerForEvent = async (eventId: number, userId: number, seatids: number[]) => {
+    const response = await axiosInstance.post(`http://localhost:8080/api/Registration`, { userId, eventId, seatids });
     return response.data;
 };

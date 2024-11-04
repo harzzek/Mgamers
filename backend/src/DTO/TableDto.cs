@@ -13,6 +13,7 @@ public class TableDto
 
     [ForeignKey("table_id")]
     public List<Seat> Seats { get; set; } = new List<Seat>();
+    
     public TableDto()
     {
     }
