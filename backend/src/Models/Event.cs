@@ -38,16 +38,18 @@ namespace backend.Models
         [Column("end_time")]
         public string EndTime { get; set; }
 
-        [ForeignKey("EventId")]
         [JsonIgnore]
-        public List<User> Registrations { get; set; } = new List<User>();
+        public List<Table> Tables { get; set; } = new List<Table>();
+
+        [JsonIgnore]
+        public List<Registration> Registrations { get; set; } = new List<Registration>();
 
         public Event()
         {
 
         }
 
-        public Event(int id, string name, string description, string location, string startDate, string startTime, string endDate, string endTime, List<User> registrations){
+        public Event(int id, string name, string description, string location, string startDate, string startTime, string endDate, string endTime, List<Registration> registrations){
             Id = id;
             Name = name;
             Description = description;

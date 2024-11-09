@@ -14,12 +14,23 @@ export const fetchEventById = async (id: number) => {
 };
 
 
-export const createEvent = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string }) => {
+export const createEvent = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string, tableAmount: number }) => {
     const response = await axiosInstance.post(`${API_URL}`, data);
     return response.data;
 };
 
-export const registerForEvent = async (eventId: number, userId: number) => {
-    const response = await axiosInstance.post(`http://localhost:8080/api/Registration`, { userId, eventId });
+export const registerForEvent = async (eventId: number, userId: number, seatids: number[]) => {
+    const response = await axiosInstance.post(`http://localhost:8080/api/Registration`, { userId, eventId, seatids });
     return response.data;
 };
+
+export const unregisterFromEvent = async (eventId: number, userId: number) => {
+    const response = await axiosInstance.delete(`http://localhost:8080/api/Registration`, { data: { userId, eventId } });
+    return response.data;
+
+};
+
+export const extendSeat = async (userId: number, eventId: number, seatIds: number[]) => {
+    const response = await axiosInstance.post(`http://localhost:8080/api/Registration/admin`, {userId, eventId, seatIds});
+    return response.data;
+}

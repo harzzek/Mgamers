@@ -84,7 +84,9 @@ namespace backend.Controllers
                 expiration = "7 days"
             };
 
-            return Ok(new { message = "Login successful", returnObject, user });
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new { message = "Login successful", returnObject, user = new {user.Id, user.UserName, user.Email, roles} });
         }
 
         // POST: api/Account/Logout

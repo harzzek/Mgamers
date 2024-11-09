@@ -7,7 +7,7 @@ namespace backend.Interfaces
 
         Task<List<EventDto>> GetAllEvents();
 
-        Task<EventDetailsDTO> GetEventById(Event eventItem);
+        Task<EventDetailsDTO> GetEventById(int eventId);
         
     }
 }
