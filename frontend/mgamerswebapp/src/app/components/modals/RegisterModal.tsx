@@ -1,6 +1,6 @@
 "use client";
 
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import Modal from '../common/Modal';
 import RegisterForm from '../forms/RegisterForm';
 import { register as registerService } from '@/stores/authStore';
@@ -20,6 +20,7 @@ export default function RegisterModal( {isOpen, onClose}: RegistermodalProps) {
             await registerService(data.name, data.username, data.password, data.email, data.birthday);
             onClose();
         } catch (error) {
+            console.error(error);
             setErrorMessage('Error registering');
         }
     }

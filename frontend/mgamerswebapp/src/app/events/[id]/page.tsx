@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useContext, use } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { fetchEventById, registerForEvent, unregisterFromEvent } from '@/stores/eventStore';
 import { Event, registration, Table as EventTable } from '../interfaces/event';
 import { AuthContext } from '@/context/AuthContext';
@@ -21,7 +21,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
     const [event, setEvent] = useState<Event | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const { user: authUser, userToken } = useContext(AuthContext);
+    const { user: authUser } = useContext(AuthContext);
     const [registered, setRegistered] = useState<boolean>(false);
     const [seatIds, setSeatIds] = useState<number[]>([]);
 

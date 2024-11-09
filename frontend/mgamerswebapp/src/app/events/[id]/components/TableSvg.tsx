@@ -1,6 +1,6 @@
 'use client'
-import { useEffect, useState, useContext } from 'react';
-import { registration, Table } from '../../interfaces/event';
+import { useContext } from 'react';
+import { Table } from '../../interfaces/event';
 import { Seat } from '../../interfaces/event';
 import { SeatSvg } from './SeatSvg';
 import {
@@ -10,7 +10,6 @@ import {
     SEAT_HEIGHT,
     TABLE_WIDTH,
     SEAT_VERTICAL_GAP,
-    TABLE_HEIGHT
 } from '../constants/layout';
 import { AuthContext } from '@/context/AuthContext';
 import { extendSeat } from '@/stores/eventStore';
@@ -66,7 +65,6 @@ export const TableSvg = (table: TableSvgProps) => {
     }
 
     const calculateSeatPositionY = (seat : Seat) => {
-        const seats = table.table.seats;
         // Because we dont know which seat is first in the array then we need to check if the seat is odd or even.
         // Uneven is always the top seat
         if(seat.id % 2 == 1){

@@ -1,8 +1,8 @@
 "use client";
 
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Disclosure, DisclosureButton, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, IdentificationIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import LoginModal from '../modals/LoginModal'
 import { AuthContext } from '@/context/AuthContext';
 import { usePathname } from 'next/navigation';

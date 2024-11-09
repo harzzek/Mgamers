@@ -1,8 +1,7 @@
 'use client';
 import React, {useEffect, useState} from 'react';
 import UserCard from './components/UserCard';
-import { fetchUsers , fetchUserById } from '@/stores/userStore';
-import { AuthContext } from '@/context/AuthContext';
+import { fetchUsers  } from '@/stores/userStore';
 
 interface Role {
     id: number;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { login as loginStore, logout as logoutStore, authenticateUserToken } from '../stores/authStore';
 import axiosInstance from '@/stores/axiosInstance';
 

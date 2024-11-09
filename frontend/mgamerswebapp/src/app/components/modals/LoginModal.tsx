@@ -1,7 +1,5 @@
 "use client";
-
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { Fragment, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import Modal from '../common/Modal';
 import LoginForm from '../forms/LoginForm';
@@ -22,7 +20,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       // Close the modal
       onClose();
     } catch (error) {
-      setErrorMessage('Invalid username or password');
+      console.error(error);
+      setErrorMessage('Invalid username or password:');
     }
   }
 

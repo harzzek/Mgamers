@@ -1,11 +1,11 @@
-import { ParticipantUser, User } from "./user";
+import { ParticipantUser } from "./user";
 
 export interface Event {
     id: number;
     name: string;
     description: string;
-    startDate: String;
-    endDate: String;
+    startDate: string;
+    endDate: string;
     startTime: string;
     endTime: string;
     location: string;

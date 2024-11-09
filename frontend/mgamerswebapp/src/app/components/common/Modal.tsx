@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 
 interface ModalProps {
     isOpen: boolean;

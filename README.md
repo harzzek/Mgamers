@@ -3,6 +3,8 @@ Udvikling af et online-registreringssystem
 
 ## Setup
 
+### TODO .env file
+
 ### Installations needed
 
 - Node version
@@ -93,4 +95,4 @@ docker build -t my-nextjs-app .
 docker run -d -p 5000:8080 --name mgamersWeb my-nextjs-app
 ```
 
-Once build run the container for port 3000.
+Once build run the container for port 5000.

@@ -1,5 +1,5 @@
 'use client';
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import EventCard from "./components/EventCard";
 import { Event } from "./interfaces/event";
 import { fetchEvents } from "@/stores/eventStore";

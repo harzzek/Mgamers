@@ -2,7 +2,6 @@ import React from 'react';
 import { Seat } from '../../interfaces/event';
 import {
     SEAT_WIDTH,
-    SEAT_HEIGHT,
 } from '../constants/layout';
 
 interface SeatSvgProps {

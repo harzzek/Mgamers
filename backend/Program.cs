@@ -11,10 +11,10 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>{
-    options.AddPolicy("AllowSpecificOrigin",
+    options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000") // Adjust this to match your Next.js frontend URL and port
+            builder.AllowAnyOrigin() // Adjust this to match your Next.js frontend URL and port
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -116,17 +116,17 @@ using (var scope = app.Services.CreateScope())
 
 }
 
-app.UseCors("AllowSpecificOrigin");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
 }
 
 //app.UseHttpsRedirection(); For production
-
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 

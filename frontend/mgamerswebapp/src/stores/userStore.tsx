@@ -1,4 +1,3 @@
-import axios from 'axios';
 import axiosInstance from './axiosInstance';
 
 const API_URL = 'http://localhost:8080/api/User';

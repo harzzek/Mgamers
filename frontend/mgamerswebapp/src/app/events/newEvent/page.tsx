@@ -15,6 +15,7 @@ export default function NewEvent() {
             setCreated(true);
             console.log(data);
         } catch (error) {
+            console.error(error);
             setErrorMessage("Failed to create event.");
         }
     }

@@ -1,21 +1,18 @@
 // components/EventCard.tsx
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Event } from '../interfaces/event';
-import { Button, Description, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 
 interface EventCardProps {
     event: Event;
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
-    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
             <div
                 className="bg-gray-300 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-                onClick={() => setIsOpen(true)}
             >
                 <div className="grid grid-flow-row grid-cols-2 auto-rows-max">
                     <div className="p-4">
