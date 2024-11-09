@@ -81,6 +81,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     console.error('User or event not found.');
                 }
             } catch (err) {
+                setRegistered(false);
                 console.error(err);
                 setError('Failed to register for event.');
             }
