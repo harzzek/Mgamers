@@ -90,6 +90,54 @@ namespace backend.Controllers
             }
         }
 
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                // Do not reveal that the user does not exist or is not confirmed
+                return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
+            }
+
+            // Generate password reset token
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // Build the password reset link
+            var resetLink = Url.Action(
+                nameof(ResetPassword),
+                "Account",
+                new { token, email = user.Email },
+                Request.Scheme);
+
+            // Send the email
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                "Reset Password",
+                $"Please reset your password by clicking this link: {resetLink}");
+
+            return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
+        }
+
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Do not reveal that the user does not exist
+                return BadRequest(new { message = "Invalid request." });
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Password has been reset successfully." });
+            }
+
+            return BadRequest(result.Errors);
+        }
+
         // POST: api/Account/Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)

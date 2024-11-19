@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 using backend.Interfaces;
 using backend.Models;
 using backend.Services;
@@ -47,18 +48,27 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUser(int id, User user)
+        [Authorize (Roles = "Guest")]
+        public async Task<ActionResult> UpdateUser(int id, UpdateUserDto dto)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
 
-            if (id != user.Id)
+            User dbuser = await _context.Users.FindAsync(id);
+
+            if (dbuser == null)
             {
-                return BadRequest();
+                return NotFound();
+            }
+            
+            if(userId == null || userId.Value != dbuser.Id.ToString()){
+                return BadRequest("User not found");
             }
 
-            _context.Entry(user).State = EntityState.Modified;
             try
             {
-                await _context.SaveChangesAsync();
+                User updatedUser = await _userService.UpdateUser(id, dto);
+
+                return Ok(updatedUser.Name);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,8 +81,6 @@ namespace backend.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         private bool UserExists(int id)
