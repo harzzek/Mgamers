@@ -3,7 +3,9 @@ Udvikling af et online-registreringssystem
 
 ## Setup
 
-### TODO .env file
+### .env file
+
+
 
 ### Installations needed
 
@@ -96,3 +98,13 @@ docker run -d -p 5000:8080 --name mgamersWeb my-nextjs-app
 ```
 
 Once build run the container for port 5000.
+
+### Mail server
+
+The production enviroment the users do not need to confirm themselves through mail service yet.
+
+The development server uses mailhog to mime a user confirmation of their account.
+Run the following:
+```
+docker run -d -p 1025:1025 -p 8025:8025 mailhog/mailhog
+```

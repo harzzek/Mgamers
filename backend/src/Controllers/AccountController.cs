@@ -3,6 +3,7 @@ using System.Security.Claims;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -19,12 +20,15 @@ namespace backend.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDbContext context)
+        private readonly IEmailSender _emailSender;
+
+        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDbContext context, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _context = context;
+            _emailSender = emailSender;
         }
 
         // POST: api/Account/Register
@@ -46,15 +50,44 @@ namespace backend.Controllers
 
             if (result.Succeeded)
             {
+                //Generate email confirmation token
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                //Build the confirmation link
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+
+                await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
+
                 // Add user to the default role
                 var role = await _userManager.AddToRoleAsync(user, "Guest");
-                if(role.Succeeded){
+                if (role.Succeeded)
+                {
                     return Ok(new { message = "User created successfully:" });
                 }
-                
+
+            }
+            return BadRequest(result.Errors);
+        }
+        // AccountController.cs
+
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return BadRequest("Invalid email address.");
             }
 
-            return BadRequest(result.Errors);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return Ok("Email confirmed successfully.");
+            }
+            else
+            {
+                return BadRequest("Email confirmation failed.");
+            }
         }
 
         // POST: api/Account/Login
@@ -62,7 +95,8 @@ namespace backend.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
 
-            if (!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -86,7 +120,7 @@ namespace backend.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            return Ok(new { message = "Login successful", returnObject, user = new {user.Id, user.UserName, user.Email, roles} });
+            return Ok(new { message = "Login successful", returnObject, user = new { user.Id, user.UserName, user.Email, roles } });
         }
 
         // POST: api/Account/Logout

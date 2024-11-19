@@ -73,6 +73,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('mgamersUser', JSON.stringify(user));
 
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
+      window.location.reload();
     } catch (error) {
       throw error;
     }

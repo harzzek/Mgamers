@@ -49,7 +49,7 @@ namespace backend.Controllers
             var isCreated = await _registrationService.CreateRegistration(dto);
 
             if(isCreated == null){
-                return BadRequest("Registration failed");
+                return BadRequest("Registration failed, make sure you have marked two adjacent seats. (If you choose two).");
             }
 
             return Ok("User assigned to event: " + eventItem);

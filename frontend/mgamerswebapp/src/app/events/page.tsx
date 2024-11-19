@@ -46,17 +46,9 @@ const EventsPage: React.FC = () => {
 
     return (
         <div className="container mx-auto px-4 py-8 bg-slate-700">
-            <div className="grid grid-flow-row grid-cols-3 ">
-                <div className="p-4 col-span-2">
-                    <h1 className="text-4xl font-bold mb-8 text-center">Upcoming Events</h1>
-                </div>
-                <div className="p-4 text-center col-span-1">
-                    {isAdmin() && (
-                        <a href="/events/newEvent" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Event</a>
-                    )}
-                </div>
-                <p className="text-lg text-center">Check out the upcoming events hosted by our community.</p>
-            </div>
+            <h1 className="text-4xl font-bold mb-8 text-center">Kommende Arrangementer</h1>
+            <p className="text-lg text-center">Se vores kommende arrangementer.</p>
+
             <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {events.map((event) => (
                     <a href={`events/${event.id}`} key={event.id}>
@@ -64,6 +56,14 @@ const EventsPage: React.FC = () => {
                     </a>
                 ))}
             </div>
+
+            {isAdmin() && (
+                <a
+                    href="/events/newEvent"
+                    className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg">
+                    + Opret event
+                </a>
+            )}
         </div>
     );
 }

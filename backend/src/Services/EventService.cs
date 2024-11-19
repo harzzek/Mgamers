@@ -10,14 +10,14 @@ namespace backend.Services
 
         private readonly ApplicationDbContext _context;
 
-        public EventService( ApplicationDbContext context)
+        public EventService(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<List<EventDto>> GetAllEvents()
         {
-            List <Event> dbEvents = await _context.Events.ToListAsync();
+            List<Event> dbEvents = await _context.Events.ToListAsync();
 
             List<EventDto> events = new List<EventDto>();
 
@@ -53,19 +53,23 @@ namespace backend.Services
                     StartTime = e.StartTime,
                     EndDate = e.EndDate,
                     EndTime = e.EndTime,
-                    Participants = e.Registrations.Select(r => new RegistrationDto{
+                    Participants = e.Registrations.Select(r => new RegistrationDto
+                    {
                         UserId = r.UserId,
                         EventId = r.EventId,
                         SeatId = r.SeatId,
-                        User = new SimpleUserDto{
+                        User = new SimpleUserDto
+                        {
                             Id = r.User.Id,
                             Username = r.User.UserName,
                         }
                     }).ToList(),
-                    Tables = e.Tables.Select(t => new TableDto{
+                    Tables = e.Tables.Select(t => new TableDto
+                    {
                         Id = t.Id,
                         EventId = t.EventId,
-                        Seats = t.Seats.Select(s => new Seat{
+                        Seats = t.Seats.Select(s => new Seat
+                        {
                             Id = s.Id,
                             TableId = s.TableId,
                         }).ToList()
@@ -76,20 +80,44 @@ namespace backend.Services
             return eventItem;
         }
 
-        public async Task<Event> CreateEvent(CreateEventDto eventItem)
+        public async Task<Event> CreateEvent(CreateEventDto dto)
         {
-            Event newEvent = new Event{
-                Name = eventItem.Name,
-                Description = eventItem.Description,
-                Location = eventItem.Location,
-                StartDate = eventItem.StartDate,
-                StartTime = eventItem.StartTime,
-                EndDate = eventItem.EndDate,
-                EndTime = eventItem.EndTime
+
+            List<Table> tables = new List<Table>();
+            List<Seat> seats = new List<Seat>();
+
+            var newEvent = new Event{
+                Name = dto.Name,
+                Description = dto.Description,
+                Location = dto.Location,
+                StartDate = dto.StartDate,
+                StartTime = dto.StartTime,
+                EndDate = dto.EndDate,
+                EndTime = dto.EndTime,
             };
 
-            _context.Events.Add(newEvent);
+            for(int i = 0; i < dto.TableAmount; i++){
+                var newTable = new Table{
+                    Event = newEvent,
+                };
+
+                tables.Add(newTable);
+            }
+
+            foreach(Table table in tables){
+                for(int i = 0; i < 2; i++){
+                    var newSeat = new Seat{
+                        Table = table,
+                    };
+                    seats.Add(newSeat);
+                }
+            }
+
+            await _context.Tables.AddRangeAsync(tables);
+            await _context.Seats.AddRangeAsync(seats);
+            await _context.Events.AddAsync(newEvent);
             await _context.SaveChangesAsync();
+
             return newEvent;
         }
     }

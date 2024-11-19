@@ -1,3 +1,4 @@
+using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -37,44 +38,37 @@ namespace backend.Controllers
 
         [HttpPost]
         [Authorize (Roles = "Admin")]
-        public async Task<ActionResult<Event>> CreateEvent([FromBody] CreateEventDto eventItem){
+        public async Task<ActionResult<Event>> CreateEvent([FromBody] CreateEventDto eventItem){            
 
-            List<Table> tables = new List<Table>();
-            List<Seat> seats = new List<Seat>();
-
-            var newEvent = new Event{
-                Name = eventItem.Name,
-                Description = eventItem.Description,
-                Location = eventItem.Location,
-                StartDate = eventItem.StartDate,
-                StartTime = eventItem.StartTime,
-                EndDate = eventItem.EndDate,
-                EndTime = eventItem.EndTime,
-            };
-
-            for(int i = 0; i < eventItem.TableAmount; i++){
-                var newTable = new Table{
-                    Event = newEvent,
-                };
-
-                tables.Add(newTable);
+            if(!DateTime.TryParseExact(eventItem.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate)){
+                return BadRequest("Start dato er ikke valid");
             }
 
-            foreach(Table table in tables){
-                for(int i = 0; i < 2; i++){
-                    var newSeat = new Seat{
-                        Table = table,
-                    };
-                    seats.Add(newSeat);
+            if(!DateTime.TryParseExact(eventItem.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate)){
+                return BadRequest("Slut dato er ikke valid");
+            }
+
+            if (startDate > endDate){
+                return BadRequest("Startdato må ikke være efter slutdato.");
+            }
+
+            if (!TimeSpan.TryParseExact(eventItem.StartTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan startTime)){
+                return BadRequest("Start tid ikke gyldig");
+            }
+
+            if (!TimeSpan.TryParseExact(eventItem.EndTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan endTime)){
+                return BadRequest("Slut tid ikke gyldig");
+            }
+
+            if (startDate == endDate){
+                if(startTime > endTime){
+                    return BadRequest("Tider er ikke gyldig for samme dato");
                 }
             }
 
-            await _context.Tables.AddRangeAsync(tables);
-            await _context.Seats.AddRangeAsync(seats);
-            await _context.Events.AddAsync(newEvent);
-            await _context.SaveChangesAsync();
+            Event createdEvent = await _eventService.CreateEvent(eventItem);
 
-            return Ok(newEvent);
+            return Ok(createdEvent);
         }
 
 
