@@ -10,14 +10,14 @@ namespace backend.Services
 
         private readonly ApplicationDbContext _context;
 
-        public EventService( ApplicationDbContext context)
+        public EventService(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<List<EventDto>> GetAllEvents()
         {
-            List <Event> dbEvents = await _context.Events.ToListAsync();
+            List<Event> dbEvents = await _context.Events.ToListAsync();
 
             List<EventDto> events = new List<EventDto>();
 
@@ -53,19 +53,23 @@ namespace backend.Services
                     StartTime = e.StartTime,
                     EndDate = e.EndDate,
                     EndTime = e.EndTime,
-                    Participants = e.Registrations.Select(r => new RegistrationDto{
+                    Participants = e.Registrations.Select(r => new RegistrationDto
+                    {
                         UserId = r.UserId,
                         EventId = r.EventId,
                         SeatId = r.SeatId,
-                        User = new SimpleUserDto{
+                        User = new SimpleUserDto
+                        {
                             Id = r.User.Id,
                             Username = r.User.UserName,
                         }
                     }).ToList(),
-                    Tables = e.Tables.Select(t => new TableDto{
+                    Tables = e.Tables.Select(t => new TableDto
+                    {
                         Id = t.Id,
                         EventId = t.EventId,
-                        Seats = t.Seats.Select(s => new Seat{
+                        Seats = t.Seats.Select(s => new Seat
+                        {
                             Id = s.Id,
                             TableId = s.TableId,
                         }).ToList()
@@ -117,6 +121,7 @@ namespace backend.Services
 
             await _context.Events.AddAsync(newEvent);
             await _context.SaveChangesAsync();
+
             return newEvent;
         }
     }

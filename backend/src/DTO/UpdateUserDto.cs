@@ -2,11 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using backend.Models;
 
-public class SimpleUserDto{
+public class UpdateUserDto{
 
-    [Key]
-    public int Id { get; set; }
-    [Required]
+
     public string Username { get; set; }
 
+    public string Name { get; set; }
+
+    public string Birthdate { get; set; }
 }

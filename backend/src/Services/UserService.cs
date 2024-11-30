@@ -13,9 +13,12 @@ namespace backend.Services
 
         private readonly UserManager<User> _userManager;
 
-        public UserService(UserManager<User> userManager)
+        private readonly ApplicationDbContext _context;
+
+        public UserService(UserManager<User> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<List<UserDto>> GetAllUsers()
@@ -57,26 +60,34 @@ namespace backend.Services
 
             return user;
         }
-
-        public User AddUser(User user)
+        public async Task<User> UpdateUser(int id, UpdateUserDto dto)
         {
-            user.Id = _users.Count + 1;
-            _users.Add(user);
-            return user;
+            User dbuser = await _userManager.FindByIdAsync(id.ToString());
+
+            if (dbuser == null)
+            {
+                return null;
+            }
+
+            if(dto.Name != null && dto.Name != dbuser.Name)
+            {
+                dbuser.Name = dto.Name;
+            }
+
+            if(dto.Birthdate != null && dto.Birthdate != dbuser.Birthdate)
+            {
+                dbuser.Birthdate = dto.Birthdate;
+            }
+
+            if(dto.Username != null && dto.Username != dbuser.UserName)
+            {
+                dbuser.UserName = dto.Username;
+            }
+
+            await _userManager.UpdateAsync(dbuser);
+
+            return dbuser;
         }
-
-        public User CreateUser(User user)
-        {
-            _users.Add(user);
-            return user;
-        }
-
-
-        public User UpdateUser(int id, User user)
-        {
-           return user;
-        }
-
     }
 
 

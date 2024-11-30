@@ -7,5 +7,7 @@ namespace backend.Interfaces
     {
         Task<List<UserDto>> GetAllUsers();
         Task<UserDto> GetUserById(int id);
+
+        Task<User> UpdateUser(int id, UpdateUserDto dto);
     }
 }

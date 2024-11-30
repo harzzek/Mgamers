@@ -25,10 +25,10 @@ export default function EventDetails({ params }: EventDetailsProps) {
     const [registered, setRegistered] = useState<boolean>(false);
     const [seatIds, setSeatIds] = useState<number[]>([]);
 
-    const totalRows = event && event.tables ? Math.ceil(event.tables.length / 2) : 0;
+    const totalRows = event && event.tables ? Math.ceil(event.tables.length / 4) : 1;
 
     const svgWidth = 4 * TABLE_WIDTH + 3 * HORIZONTAL_SPACING;
-    const svgHeight = totalRows * TABLE_HEIGHT + (totalRows - 1) * VERTICAL_SPACING;
+    const svgHeight = totalRows * TABLE_HEIGHT + totalRows * VERTICAL_SPACING + VERTICAL_SPACING;
 
     useEffect(() => {
         fetchEvent();
@@ -103,6 +103,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
 
 
         } catch (err) {
+            setRegistered(true);
             console.error(err);
             setError('Failed to unregister from event.');
         }
@@ -154,8 +155,10 @@ export default function EventDetails({ params }: EventDetailsProps) {
     return (
         <div className='container mx-auto px-4 py-8'>
             { error &&
-                <div className="mb-4 text-sm text-red-600">
-                    {error}
+                <div id="toast-top-right" className="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow top-30 right-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800" role="alert">
+                    <div className='ms-3 text-sm font-normal'>
+                        {error}
+                    </div>
                 </div>
             }
             <h1>Event Details</h1>
@@ -165,20 +168,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     <p>{event?.startDate}</p>
                     <p>{event?.location}</p>
                     <p>{event?.description}</p>
-                </div>
-
-                <div>
-                    <h2>Registrations</h2>
-                    <ul>
-                        {uniqueUsers?.map((user) => {
-                            return (
-                                <li key={user.id}>{user.username}</li>
-                            );
-                        }
-                        )}
-                    </ul>
-
-
                 </div>
             </div>
 
@@ -200,7 +189,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
                 <button
                     type="submit"
                     onClick={handleRegister}
-                    disabled={registered}
                     className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
                     Register
                 </button>
@@ -208,15 +196,10 @@ export default function EventDetails({ params }: EventDetailsProps) {
                 <button
                     type="submit"
                     onClick={handleUnregister}
-                    disabled={registered!}
                     className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-red-500 text-white font-semibold p-2 rounded-md hover:bg-red-300">
                     Unregister
                 </button>
-
             }
-
-
-
 
         </div>
     );

@@ -49,5 +49,9 @@ namespace backend.Models
 
         }
 
+        public static implicit operator User(IdentityResult v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

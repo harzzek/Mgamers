@@ -9,7 +9,7 @@ namespace backend.Interfaces
 
         Task<EventDetailsDTO> GetEventById(int eventId);
 
-        Task<Event> CreateEvent(CreateEventDto eventDto);
+        Task<Event> CreateEvent(CreateEventDto dto);
         
     }
 }
