@@ -28,7 +28,7 @@ namespace backend.Services
 
             if (!seatsAvailable)
             {
-                return null;
+                throw new Exception("Registration failed, make sure you have marked two adjacent seats. (If you choose two).");
             }
 
             if(registrationItem.SeatIds.Count > 1)
