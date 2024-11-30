@@ -187,12 +187,183 @@ public class EventServiceTest
             TableAmount = 1
         };
 
+        try{
+            var result = await eventService.CreateEvent(newEvent);
+        } catch (Exception e){
+            Assert.Equal("Start date cannot be after end date", e.Message);
+        }
+
+
+        var events = await eventService.GetAllEvents();
+        Assert.Empty(events);
+    }
+
+    [Fact]
+    public async Task CreateEventWithSameDates_ReturnsEvent(){
+
+        var context = GetMockDbContext("CreateEventWithSameDates");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "SameDatesEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "12:00",
+            EndDate = "2021-01-03",
+            EndTime = "13:00",
+            TableAmount = 1
+        };
+
         var result = await eventService.CreateEvent(newEvent);
 
-        Assert.Equal("InverseDatesEvent", result.Name);
+        Assert.Equal("SameDatesEvent", result.Name);
 
         var createdEvent = await eventService.GetEventById(result.Id);
-        Assert.Empty(createdEvent.Tables);
+        Assert.Equal("SameDatesEvent", createdEvent.Name);
     }
+
+    [Fact]
+    public async Task CreateEventWithSameDatesButInverseTimes_ReturnsError(){
+
+        var context = GetMockDbContext("CreateEventWithSameDatesButInverseTimes");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "SameDatesInverseTimesEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "13:00",
+            EndDate = "2021-01-03",
+            EndTime = "12:00",
+            TableAmount = 1
+        };
+
+        try{
+            var result = await eventService.CreateEvent(newEvent);
+        } catch (Exception e){
+            Assert.Equal("Start time cannot be after end time", e.Message);
+        }
+
+        var events = await eventService.GetAllEvents();
+        Assert.Empty(events);
+    }
+
+    [Fact]
+    public async Task CreateEventWithInvalidStartDate_ReturnsError(){
+
+        var context = GetMockDbContext("CreateEventWithInvalidStartDate");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "InvalidStartDateEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-32",
+            StartTime = "12:00",
+            EndDate = "2021-01-03",
+            EndTime = "13:00",
+            TableAmount = 1
+        };
+
+        try{
+            var result = await eventService.CreateEvent(newEvent);
+        } catch (Exception e){
+            Assert.Equal("Invalid start date", e.Message);
+        }
+
+        var events = await eventService.GetAllEvents();
+        Assert.Empty(events);
+    }
+
+    [Fact]
+    public async Task CreateEventWithInvalidEndDate_ReturnsError(){
+
+        var context = GetMockDbContext("CreateEventWithInvalidEndDate");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "InvalidEndDateEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "12:00",
+            EndDate = "2021-01-32",
+            EndTime = "13:00",
+            TableAmount = 1
+        };
+
+        try{
+            var result = await eventService.CreateEvent(newEvent);
+        } catch (Exception e){
+            Assert.Equal("Invalid end date", e.Message);
+        }
+
+        var events = await eventService.GetAllEvents();
+        Assert.Empty(events);
+    }
+
+
+    [Fact]
+    public async Task CreateEventWithInvalidStartTime_ReturnsError(){
+
+        var context = GetMockDbContext("CreateEventWithInvalidStartTime");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "InvalidStartTimeEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "25:00",
+            EndDate = "2021-01-03",
+            EndTime = "13:00",
+            TableAmount = 1
+        };
+
+        try{
+            var result = await eventService.CreateEvent(newEvent);
+        } catch (Exception e){
+            Assert.Equal("Invalid start time", e.Message);
+        }
+
+        var events = await eventService.GetAllEvents();
+        Assert.Empty(events);
+    }
+
+    [Fact]
+    public async Task CreateEventWithInvalidEndTime_ReturnsError(){
+
+        var context = GetMockDbContext("CreateEventWithInvalidEndTime");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "InvalidEndTimeEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "12:00",
+            EndDate = "2021-01-03",
+            EndTime = "25:00",
+            TableAmount = 1
+        };
+
+        try{
+            var result = await eventService.CreateEvent(newEvent);
+        } catch (Exception e){
+            Assert.Equal("Invalid end time", e.Message);
+        }
+
+        var events = await eventService.GetAllEvents();
+        Assert.Empty(events);
+    }
+
 
 }

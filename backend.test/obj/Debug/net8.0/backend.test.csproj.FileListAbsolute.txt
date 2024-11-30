@@ -139,3 +139,5 @@ D:\dev\BachelorProjekt\Mgamers\backend.test\obj\Debug\net8.0\refint\backend.test
 D:\dev\BachelorProjekt\Mgamers\backend.test\obj\Debug\net8.0\backend.test.pdb
 D:\dev\BachelorProjekt\Mgamers\backend.test\obj\Debug\net8.0\backend.test.genruntimeconfig.cache
 D:\dev\BachelorProjekt\Mgamers\backend.test\obj\Debug\net8.0\ref\backend.test.dll
+D:\dev\BachelorProjekt\Mgamers\backend.test\bin\Debug\net8.0\SendGrid.dll
+D:\dev\BachelorProjekt\Mgamers\backend.test\bin\Debug\net8.0\StarkbankEcdsa.dll

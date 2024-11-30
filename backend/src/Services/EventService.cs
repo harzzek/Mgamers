@@ -1,3 +1,4 @@
+using System.Globalization;
 using backend.DTO;
 using backend.Interfaces;
 using backend.Models;
@@ -84,6 +85,32 @@ namespace backend.Services
         {
             List<Table> tables = new List<Table>();
             List<Seat> seats = new List<Seat>();
+
+            if(!DateTime.TryParseExact(eventItem.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate)){
+                throw new Exception("Invalid start date");
+            }
+
+            if(!DateTime.TryParseExact(eventItem.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate)){
+                throw new Exception("Invalid end date");
+            }
+
+            if (startDate > endDate){
+                throw new Exception("Start date cannot be after end date");
+            }
+
+            if (!TimeSpan.TryParseExact(eventItem.StartTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan startTime)){
+                throw new Exception("Invalid start time");
+            }
+
+            if (!TimeSpan.TryParseExact(eventItem.EndTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan endTime)){
+                throw new Exception("Invalid end time");
+            }
+
+            if (startDate == endDate){
+                if(startTime > endTime){
+                    throw new Exception("Start time cannot be after end time");
+                }
+            }
 
             var newEvent = new Event{
                 Name = eventItem.Name,
