@@ -116,6 +116,7 @@ public class EventServiceTest
         Assert.Equal("Event 3", createdEvent.Name);
     }
 
+    [Fact]
     public async Task CreateEventWithZeroTables_ReturnsEvent(){
 
         var context = GetMockDbContext("CreateEventWithZeroTables");
@@ -133,12 +134,65 @@ public class EventServiceTest
             TableAmount = 0
         };
 
+    
         var result = await eventService.CreateEvent(newEvent);
-
         Assert.Equal("NoTablesEvent", result.Name);
+        
 
         var createdEvent = await eventService.GetEventById(result.Id);
         Assert.Equal("NoTablesEvent", createdEvent.Name);
+    }
+
+    [Fact]
+    public async Task CreateEventWithNegativeTables_ReturnsEventWithZeroTables(){
+
+        var context = GetMockDbContext("CreateEventWithNegativeTables");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "NegativeTablesEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "12:00",
+            EndDate = "2021-01-03",
+            EndTime = "13:00",
+            TableAmount = -1
+        };
+
+        var result = await eventService.CreateEvent(newEvent);
+
+        Assert.Equal("NegativeTablesEvent", result.Name);
+
+        var createdEvent = await eventService.GetEventById(result.Id);
+        Assert.Empty(createdEvent.Tables);
+    }
+
+    [Fact]
+    public async Task CreateEventWithInverseDates_ReturnsError(){
+
+        var context = GetMockDbContext("CreateEventWithInverseDates");
+        
+        var eventService = new EventService(context);
+        var newEvent = new CreateEventDto
+        {
+            Name = "InverseDatesEvent",
+            Description = "Description 3",
+            Location = "Location 3",
+            StartDate = "2021-01-03",
+            StartTime = "12:00",
+            EndDate = "2021-01-02",
+            EndTime = "13:00",
+            TableAmount = 1
+        };
+
+        var result = await eventService.CreateEvent(newEvent);
+
+        Assert.Equal("InverseDatesEvent", result.Name);
+
+        var createdEvent = await eventService.GetEventById(result.Id);
+        Assert.Empty(createdEvent.Tables);
     }
 
 }

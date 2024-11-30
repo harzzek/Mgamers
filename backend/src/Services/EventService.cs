@@ -99,17 +99,22 @@ namespace backend.Services
                 tables.Add(newTable);
             }
 
-            foreach(Table table in tables){
-                for(int i = 0; i < 2; i++){
-                    var newSeat = new Seat{
-                        Table = table,
-                    };
-                    seats.Add(newSeat);
+            if(eventItem.TableAmount > 0){
+                foreach (Table table in tables)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        var newSeat = new Seat
+                        {
+                            Table = table,
+                        };
+                        seats.Add(newSeat);
+                    }
                 }
+                await _context.Tables.AddRangeAsync(tables);
+                await _context.Seats.AddRangeAsync(seats);
             }
 
-            await _context.Tables.AddRangeAsync(tables);
-            await _context.Seats.AddRangeAsync(seats);
             await _context.Events.AddAsync(newEvent);
             await _context.SaveChangesAsync();
             return newEvent;
