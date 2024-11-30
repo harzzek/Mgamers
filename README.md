@@ -108,3 +108,12 @@ Run the following:
 ```
 docker run -d -p 1025:1025 -p 8025:8025 mailhog/mailhog
 ```
+## Testing
+
+For testing the application we use XUnit.
+Its placed within /backend.test.
+
+Go to the folder and run:
+```
+dotnet test
+```
