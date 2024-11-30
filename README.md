@@ -96,3 +96,14 @@ docker run -d -p 5000:8080 --name mgamersWeb my-nextjs-app
 ```
 
 Once build run the container for port 5000.
+
+
+## Testing
+
+For testing the application we use XUnit.
+Its placed within /backend.test.
+
+Go to the folder and run:
+```
+dotnet test
+```
