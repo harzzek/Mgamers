@@ -2,11 +2,6 @@
 Udvikling af et online-registreringssystem
 
 ## Setup
-
-### .env file
-
-
-
 ### Installations needed
 
 - Node version
@@ -117,3 +112,9 @@ Go to the folder and run:
 ```
 dotnet test
 ```
+
+## Deployment
+
+### .env file
+
+

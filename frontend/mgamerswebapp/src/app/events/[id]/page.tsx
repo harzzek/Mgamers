@@ -59,7 +59,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
             setLoading(false);
         }
 
-        
+
     }
 
 
@@ -154,7 +154,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
     }
     return (
         <div className='container mx-auto px-4 py-8'>
-            { error &&
+            {error &&
                 <div id="toast-top-right" className="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow top-30 right-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800" role="alert">
                     <div className='ms-3 text-sm font-normal'>
                         {error}
@@ -171,7 +171,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                 </div>
             </div>
 
-            <div >
+            <div className="flex flex-col items-center">
                 <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`}
                     preserveAspectRatio='xMidYMid meet'
                 >
@@ -183,23 +183,23 @@ export default function EventDetails({ params }: EventDetailsProps) {
                         )
                     })}
                 </svg>
-            </div>
 
-            {isRegistered() ?
-                <button
-                    type="submit"
-                    onClick={handleRegister}
-                    className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
-                    Register
-                </button>
-                :
-                <button
-                    type="submit"
-                    onClick={handleUnregister}
-                    className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-red-500 text-white font-semibold p-2 rounded-md hover:bg-red-300">
-                    Unregister
-                </button>
-            }
+                {isRegistered() ?
+                    <button
+                        type="submit"
+                        onClick={handleRegister}
+                        className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
+                        Register
+                    </button>
+                    :
+                    <button
+                        type="submit"
+                        onClick={handleUnregister}
+                        className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 bg-red-500 text-white font-semibold p-2 rounded-md hover:bg-red-300">
+                        Unregister
+                    </button>
+                }
+            </div>
 
         </div>
     );

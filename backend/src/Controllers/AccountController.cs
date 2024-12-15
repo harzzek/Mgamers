@@ -94,7 +94,7 @@ namespace backend.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            if (user == null)
             {
                 // Do not reveal that the user does not exist or is not confirmed
                 return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
@@ -102,6 +102,8 @@ namespace backend.Controllers
 
             // Generate password reset token
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            Console.WriteLine("token: " + token);
 
             // Build the password reset link
             var resetLink = Url.Action(
