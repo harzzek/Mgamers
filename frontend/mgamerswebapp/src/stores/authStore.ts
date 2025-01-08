@@ -3,10 +3,10 @@
 import axios from 'axios';
 import axiosInstance from './axiosInstance';
 
-const API_URL = 'http://localhost:8080/api/Account';
+const API_URL = 'http://87.59.249.95:8080/api/Account';
 
 export const login = async (username: string, password: string, rememberMe: boolean) => {
-  const response = await axiosInstance.post(`${API_URL}/Login`, {
+  const response = await axiosInstance.post(`${API_URL}}/Login`, {
     username,
     password,
     rememberMe,
