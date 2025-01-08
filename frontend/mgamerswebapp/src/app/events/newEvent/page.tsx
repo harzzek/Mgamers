@@ -14,9 +14,9 @@ export default function NewEvent() {
             await createEvent(data);
             setCreated(true);
             console.log(data);
-        } catch (response: any) {
-            console.error(response);
-            setErrorMessage(response.response.data as string);
+        } catch (error) {
+            console.error(error);
+            setErrorMessage("Error creating event.");
         }
     }
 

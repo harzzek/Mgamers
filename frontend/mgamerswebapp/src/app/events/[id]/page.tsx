@@ -22,7 +22,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const { user: authUser } = useContext(AuthContext);
-    const [registered, setRegistered] = useState<boolean>(false);
     const [seatIds, setSeatIds] = useState<number[]>([]);
 
     const totalRows = event && event.tables ? Math.ceil(event.tables.length / 4) : 1;
@@ -72,7 +71,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
 
         } else {
             try {
-                setRegistered(true);
                 if (authUser && event) {
                     const data = await registerForEvent(event.id, authUser.id, seatIds);
                     console.log('Registered for event.', data);
@@ -81,7 +79,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     console.error('User or event not found.');
                 }
             } catch (err) {
-                setRegistered(false);
+                
                 console.error(err);
                 setError('Failed to register for event.');
             }
@@ -92,7 +90,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
 
     const handleUnregister = async () => {
         try {
-            setRegistered(false);
             if (authUser && event) {
                 const data = await unregisterFromEvent(event.id, authUser.id);
                 console.log('Unregistered from event.', data);
@@ -103,7 +100,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
 
 
         } catch (err) {
-            setRegistered(true);
             console.error(err);
             setError('Failed to unregister from event.');
         }
@@ -145,8 +141,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
         const rowNumber = Math.floor(index / 4);
         return rowNumber * (TABLE_HEIGHT + VERTICAL_SPACING);
     }
-
-    const uniqueUsers = event?.participants.map((participant) => participant.user).filter((user, index, self) => self.findIndex(u => u.id === user.id) === index);
 
 
     if (loading) {
