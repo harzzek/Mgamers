@@ -1,8 +1,8 @@
 import axiosInstance from "./axiosInstance";
 
-const API_URL = "http://87.59.249.95:8080/api/Event";
+const API_URL = "/Event";
 
-const API_URL_REGISTRATION = "http://87.59.249.95:8080/api/Registration";
+const API_URL_REGISTRATION = "/Registration";
 
 export const fetchEvents = async () => {
     const response = await axiosInstance.get(`${API_URL}`);

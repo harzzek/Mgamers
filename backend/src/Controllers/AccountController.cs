@@ -22,13 +22,18 @@ namespace backend.Controllers
 
         private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDbContext context, IEmailSender emailSender)
+        private readonly IAccountService _accountService;
+
+        
+
+        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDbContext context, IEmailSender emailSender, IAccountService accountService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _context = context;
             _emailSender = emailSender;
+            _accountService = accountService;
         }
 
         // POST: api/Account/Register
@@ -46,12 +51,13 @@ namespace backend.Controllers
                 Birthdate = model.Birthdate
             };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _accountService.CreateUser(user, model.Password);
 
             if (result.Succeeded)
             {
                 //Generate email confirmation token
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                Console.WriteLine("token: " + token);
 
                 //Build the confirmation link
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
@@ -68,7 +74,6 @@ namespace backend.Controllers
             }
             return BadRequest(result.Errors);
         }
-        // AccountController.cs
 
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
@@ -93,51 +98,39 @@ namespace backend.Controllers
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
+
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                // Do not reveal that the user does not exist or is not confirmed
-                return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
-            }
 
-            // Generate password reset token
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            try {
+                var token = await _accountService.GeneratePasswordResetToken(model.Email);
 
-            Console.WriteLine("token: " + token);
-
-            // Build the password reset link
-            var resetLink = Url.Action(
+                var resetLink = Url.Action(
                 nameof(ResetPassword),
                 "Account",
                 new { token, email = user.Email },
                 Request.Scheme);
 
-            // Send the email
-            await _emailSender.SendEmailAsync(
+                await _emailSender.SendEmailAsync(
                 user.Email,
                 "Reset Password",
                 $"Please reset your password by clicking this link: {resetLink}");
 
+            } catch (Exception e) {
+                return BadRequest(new { message = "Invalid request." });
+            }
+            
             return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
         }
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                // Do not reveal that the user does not exist
-                return BadRequest(new { message = "Invalid request." });
+            try {
+                await _accountService.ResetPassword(model);
+            } catch (Exception e) {
+                return BadRequest(new { message = e.Message });
             }
-
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
-            if (result.Succeeded)
-            {
-                return Ok(new { message = "Password has been reset successfully." });
-            }
-
-            return BadRequest(result.Errors);
+            return Ok(new { message = "Password reset successful." });
         }
 
         // POST: api/Account/Login
@@ -149,28 +142,12 @@ namespace backend.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var user = await _userManager.FindByNameAsync(model.Username);
-
-            if (user == null)
-                return BadRequest(new { message = "Invalid username or password" });
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-
-            if (!result.Succeeded)
-                return BadRequest(new { message = "Invalid username or password" });
-
-            var token = await _tokenService.CreateToken(user);
-
-            var returnObject = new
-            {
-                usertoken = token,
-                expiration = "7 days"
-            };
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-            return Ok(new { message = "Login successful", returnObject, user = new { user.Id, user.UserName, user.Email, roles } });
+            try {
+                var token = await _accountService.Login(model.Username, model.Password);
+                return Ok(new { message = "Login successful", token});
+            } catch (Exception e) {
+                return BadRequest(new { message = "Invalid login attempt" });
+            }
         }
 
         // POST: api/Account/Logout

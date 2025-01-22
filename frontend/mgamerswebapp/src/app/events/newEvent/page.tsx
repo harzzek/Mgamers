@@ -3,6 +3,7 @@
 import { useState } from "react";
 import NewEventForm from "@/app/components/forms/NewEventForm";
 import { createEvent } from "@/stores/eventStore";
+import axios, { Axios, AxiosError } from "axios";
 
 export default function NewEvent() {
 
@@ -15,8 +16,16 @@ export default function NewEvent() {
             setCreated(true);
             console.log(data);
         } catch (error) {
-            console.error(error);
-            setErrorMessage("Error creating event.");
+            if (axios.isAxiosError(error)) {
+                const axiosError = error as AxiosError;
+                if (axiosError.response?.data) {
+                    setErrorMessage(axiosError.response.data as string);
+                } else {
+                    setErrorMessage("An error occurred while creating the event");
+                }
+            } else {
+                setErrorMessage("An error occurred while creating the event");
+            }
         }
     }
 

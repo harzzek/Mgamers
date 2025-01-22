@@ -3,14 +3,13 @@
 import axios from 'axios';
 import axiosInstance from './axiosInstance';
 
-const API_URL = 'http://87.59.249.95:8080/api/Account';
+const API_URL = '/Account';
 
-export const login = async (username: string, password: string, rememberMe: boolean) => {
+export const login = async (username: string, password: string) => {
   const response = await axiosInstance.post(`${API_URL}/Login`, {
     username,
     password,
-    rememberMe,
-  });
+    });
   return response.data;
 };
 
@@ -21,7 +20,7 @@ export const logout = () => {
 
 
 export const register = async (name: string, username: string, password: string, email: string, birthdate: string) => {
-  const response = await axios.post(`${API_URL}/Register`, {
+  const response = await axiosInstance.post(`${API_URL}/Register`, {
     name,
     username,
     password,
