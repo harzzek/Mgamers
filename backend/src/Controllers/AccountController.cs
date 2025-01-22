@@ -14,24 +14,15 @@ namespace backend.Controllers
     {
         private readonly UserManager<User> _userManager;
 
-        private readonly SignInManager<User> _signInManager;
-
-        private readonly ITokenService _tokenService;
-
-        private readonly ApplicationDbContext _context;
-
         private readonly IEmailSender _emailSender;
 
         private readonly IAccountService _accountService;
 
         
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDbContext context, IEmailSender emailSender, IAccountService accountService)
+        public AccountController(UserManager<User> userManager, IEmailSender emailSender, IAccountService accountService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenService = tokenService;
-            _context = context;
             _emailSender = emailSender;
             _accountService = accountService;
         }
@@ -179,7 +170,6 @@ namespace backend.Controllers
             return Ok(new
             {
                 message = "Token is valid",
-                user = new { user.Id, user.UserName, user.Email, roles = roles }
             });
         }
 

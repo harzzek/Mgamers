@@ -15,7 +15,7 @@ namespace backend.test.integrationTests
 
         public EventIntegrationTests(){
             // IMPORTANT! Login to get token and replace the token below
-            var token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwibmFtZSI6InRlc3QiLCJyb2xlIjpbIkFkbWluIiwiVXNlciIsIkd1ZXN0Il0sIm5iZiI6MTczMjk3MTAwOCwiZXhwIjoxNzMzNTc1ODA4LCJpYXQiOjE3MzI5NzEwMDgsImlzcyI6Imh0dHA6Ly84Ny41OS4yNDkuOTU6ODA4MCIsImF1ZCI6Imh0dHA6Ly84Ny41OS4yNDkuOTU6ODA4MCJ9.LaRJJ_7S5FIrvlN9i_T53I5f2zZDYhS5wGrr2lLor9ycgNFv0qUqEJUx17NSMdvRFIC6fGrJfnyRjFROtosSRw";
+            var token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwibmFtZSI6InRlc3QiLCJyb2xlIjpbIkFkbWluIiwiVXNlciIsIkd1ZXN0Il0sIm5iZiI6MTczNzU1NDY2MSwiZXhwIjoxNzM4MTU5NDYxLCJpYXQiOjE3Mzc1NTQ2NjEsImlzcyI6Imh0dHA6Ly84Ny41OS4yNDkuOTU6ODA4MCIsImF1ZCI6Imh0dHA6Ly84Ny41OS4yNDkuOTU6ODA4MCJ9.GarXE-PijDKe1nCoBaDlFEvOzkU06-qY41QkcjROw3KnVLgAKXDWqj0Jy7xVhD6rwmMyyez1TrfEK0PVZ5E30A";
             
             _client = new HttpClient{
                 BaseAddress = new Uri("http://localhost:8080")
