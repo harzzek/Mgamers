@@ -18,8 +18,6 @@ namespace backend.Controllers
 
         private readonly IAccountService _accountService;
 
-        
-
         public AccountController(UserManager<User> userManager, IEmailSender emailSender, IAccountService accountService)
         {
             _userManager = userManager;

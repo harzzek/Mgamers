@@ -123,7 +123,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return Ok("User removed from event: " + eventItem);
+            return Ok("User removed from event: " + eventItem.Name);
         }
     }
 }
