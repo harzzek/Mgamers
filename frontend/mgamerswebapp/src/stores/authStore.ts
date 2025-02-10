@@ -1,6 +1,5 @@
 // src/app/services/authService.ts
 
-import axios from 'axios';
 import axiosInstance from './axiosInstance';
 
 const API_URL = '/Account';
@@ -16,6 +15,7 @@ export const login = async (username: string, password: string) => {
 export const logout = () => {
   // Remove the token from localStorage
   localStorage.removeItem('mgamersToken');
+  localStorage.removeItem('mgamersUser');
 };
 
 

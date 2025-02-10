@@ -11,7 +11,7 @@ import {
     TABLE_WIDTH,
     SEAT_VERTICAL_GAP,
 } from '../constants/layout';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { extendSeat } from '@/stores/eventStore';
 
 interface TableSvgProps {
@@ -28,7 +28,7 @@ interface TableSvgProps {
 }
 
 export const TableSvg = (table: TableSvgProps) => {
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
     const tablelocation = table.tableindex % 4;
 
     const ifOnlyOneSeatIsOccupied = (seats: Seat[]) => {
@@ -82,7 +82,7 @@ export const TableSvg = (table: TableSvgProps) => {
     return (
         <g>
             
-            {user?.roles.includes('Admin') && ifOnlyOneSeatIsOccupied(table.table.seats) ? 
+            {user?.userRoles.includes('Admin') && ifOnlyOneSeatIsOccupied(table.table.seats) ? 
                 <rect x={table.x} y={table.y} width={table.width} height={table.height} fill={"yellow"} className='cursor-pointer'
                 onClick={() => handleSeatExtension(table.table.seats)} /> 
                 :

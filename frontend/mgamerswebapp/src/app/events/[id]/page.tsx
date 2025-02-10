@@ -2,7 +2,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { fetchEventById, registerForEvent, unregisterFromEvent } from '@/stores/eventStore';
 import { Event, registration, Table as EventTable } from '../interfaces/event';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { TableSvg } from './components/TableSvg';
 import {
     TABLE_WIDTH,
@@ -21,7 +21,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
     const [event, setEvent] = useState<Event | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const { user: authUser } = useContext(AuthContext);
+    const { user: authUser } = useAuth();
     const [seatIds, setSeatIds] = useState<number[]>([]);
 
     const totalRows = event && event.tables ? Math.ceil(event.tables.length / 4) : 1;

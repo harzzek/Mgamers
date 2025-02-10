@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import EventCard from "./components/EventCard";
 import { Event } from "./interfaces/event";
 import { fetchEvents } from "@/stores/eventStore";
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 const EventsPage: React.FC = () => {
-    const { user } = useContext(AuthContext);
+    const { user  } = useAuth();
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -36,8 +36,8 @@ const EventsPage: React.FC = () => {
     }
 
     const isAdmin = () => {
-        if (user && user.roles) {
-            return user.roles.find(role => role.includes('Admin'));
+        if (user && user.userRoles) {
+            return user.userRoles.find(role => role.includes('Admin'));
         }
         return false;
     };

@@ -1,65 +1,40 @@
 "use client";
 
-import React, { createContext, useState, useEffect } from 'react';
-import { login as loginStore, logout as logoutStore, authenticateUserToken } from '../stores/authStore';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { login as loginStore, logout as logoutStore } from '../stores/authStore';
 import axiosInstance from '@/stores/axiosInstance';
 
 interface User {
   id: number;
-  username: string;
-  name: string;
-  email: string;
-  birthdate: string;
-  roles: string[];
+  userName: string;
+  userRoles: string[];
 }
 
 interface AuthContextProps {
   userToken: string | null;
   user: User | null;
-  login: (username: string, password: string, rememberMe: boolean) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextProps>({
-  userToken: null,
-  user: null,
-  login: async () => { },
-  logout: () => { },
-});
+const AuthContext = createContext<AuthContextProps| undefined>( undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userToken, setUserToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect( () => {
-    // On mount, check if there's a token in localStorage
-    const token = localStorage.getItem('mgamersToken');
-    const user = localStorage.getItem('mgamersUser');
+  //We need to load the authentication on mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem("mgamersToken");
+    const storedUser = localStorage.getItem("mgamersUser");
 
-    if (token && user) {
-      // If there is, set the token and user in state
-
-      setUserToken(token);
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const fetchUser = async () => {
-        console.log('authenticating user token');
-        try {
-          const response = await authenticateUserToken();
-          setUser(response.data.user);
-        } catch (error) {
-          console.error(error);
-          logout();
-        }
-      };
-
-      fetchUser();
+    if(storedToken && storedUser){
+      setUserToken(storedToken);
+      setUser(JSON.parse(storedUser));
     }
+  }, [])
 
-    
-
-  }, []);
-
-  const login = async (username: string, password: string, rememberMe: boolean) => {
+  const login = async (username: string, password: string) => {
     try {
       const data = await loginStore(username, password);
       const token = data.token;
@@ -74,17 +49,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
-      window.location.reload();
     } catch (error) {
       throw error;
     }
   };
 
   const logout = () => {
-    setUserToken(null);
-    setUser(null);
     logoutStore();
-
     delete axiosInstance.defaults.headers.common['Authorization'];
   };
 
@@ -93,4 +64,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };

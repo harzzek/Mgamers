@@ -1,6 +1,6 @@
 "use client";
 import { useState, useContext } from 'react';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import Modal from '../common/Modal';
 import LoginForm from '../forms/LoginForm';
 
@@ -10,13 +10,13 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
 
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async (data: { username: string; password: string; rememberMe: boolean }) => {
     try {
-      await login(data.username, data.password, data.rememberMe);
+      await login(data.username, data.password);
       // Close the modal
       onClose();
     } catch (error) {

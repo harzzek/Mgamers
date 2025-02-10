@@ -18,11 +18,14 @@ namespace backend.Controllers
 
         private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<User> userManager, IEmailSender emailSender, IAccountService accountService)
+        private readonly IUserService _userService;
+
+        public AccountController(UserManager<User> userManager, IEmailSender emailSender, IAccountService accountService, IUserService userService)
         {
             _userManager = userManager;
             _emailSender = emailSender;
             _accountService = accountService;
+            _userService = userService;
         }
 
         // POST: api/Account/Register
@@ -90,7 +93,8 @@ namespace backend.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            try {
+            try
+            {
                 var token = await _accountService.GeneratePasswordResetToken(model.Email);
 
                 var resetLink = Url.Action(
@@ -104,19 +108,24 @@ namespace backend.Controllers
                 "Reset Password",
                 $"Please reset your password by clicking this link: {resetLink}");
 
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 return BadRequest(new { message = "Invalid request." });
             }
-            
+
             return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
         }
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
         {
-            try {
+            try
+            {
                 await _accountService.ResetPassword(model);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 return BadRequest(new { message = e.Message });
             }
             return Ok(new { message = "Password reset successful." });
@@ -131,11 +140,26 @@ namespace backend.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try {
-                var token = await _accountService.Login(model.Username, model.Password);
-                return Ok(new { message = "Login successful", token});
-            } catch (Exception e) {
+
+            User? user = await _userManager.FindByNameAsync(model.Username);
+
+            if (user == null)
+            {
                 return BadRequest(new { message = "Invalid login attempt" });
+            }
+            else
+            {
+                try
+                {
+                    var token = await _accountService.Login(model.Username, model.Password);
+                    IList<string> userRoles = await _userManager.GetRolesAsync(user);
+                    return Ok(new { message = "Login successful", token, user = new {  user.Id, user.UserName, userRoles} });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return BadRequest(new { message = "Invalid login attempt" });
+                }
             }
         }
 
@@ -162,8 +186,6 @@ namespace backend.Controllers
             {
                 return BadRequest(new { message = "User not found" });
             }
-
-            var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(new
             {
