@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241028164708_registrationsTablesAndSeats")]
-    partial class registrationsTablesAndSeats
+    [Migration("20250301011150_DateFormat")]
+    partial class DateFormat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,14 +141,12 @@ namespace backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("EndDate")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("Date")
                         .HasColumnName("end_date");
 
-                    b.Property<string>("EndTime")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time without time zone")
                         .HasColumnName("end_time");
 
                     b.Property<string>("Location")
@@ -161,14 +159,12 @@ namespace backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("StartDate")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("Date")
                         .HasColumnName("start_date");
 
-                    b.Property<string>("StartTime")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone")
                         .HasColumnName("start_time");
 
                     b.HasKey("Id");
@@ -194,7 +190,8 @@ namespace backend.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("SeatId");
+                    b.HasIndex("SeatId")
+                        .IsUnique();
 
                     b.ToTable("registrations");
                 });
@@ -244,15 +241,9 @@ namespace backend.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("table_id");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TableId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("seats");
                 });
@@ -419,8 +410,8 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.HasOne("backend.Models.Seat", "Seat")
-                        .WithMany("Registrations")
-                        .HasForeignKey("SeatId")
+                        .WithOne("Registration")
+                        .HasForeignKey("backend.Models.Registration", "SeatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -445,14 +436,7 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("backend.Models.User", "User")
-                        .WithMany("Seats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Table");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Models.Table", b =>
@@ -475,7 +459,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Seat", b =>
                 {
-                    b.Navigation("Registrations");
+                    b.Navigation("Registration")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("backend.Models.Table", b =>
@@ -486,8 +471,6 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.User", b =>
                 {
                     b.Navigation("Registrations");
-
-                    b.Navigation("Seats");
                 });
 #pragma warning restore 612, 618
         }

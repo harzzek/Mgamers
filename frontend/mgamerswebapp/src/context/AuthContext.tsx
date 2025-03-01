@@ -56,6 +56,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     logoutStore();
+    setUserToken(null);
+    setUser(null);
     delete axiosInstance.defaults.headers.common['Authorization'];
   };
 

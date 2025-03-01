@@ -24,19 +24,21 @@ namespace backend.Models
 
         [Required]
         [Column("start_date")]
-        public string StartDate { get; set; }
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        public DateTime StartDate { get; set; }
 
         [Required]
         [Column("start_time")]
-        public string StartTime { get; set; }
+        public TimeOnly StartTime { get; set; }
 
         [Required]
         [Column("end_date")]
-        public string EndDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public DateTime EndDate { get; set; }
 
         [Required]
         [Column("end_time")]
-        public string EndTime { get; set; }
+        public TimeOnly EndTime { get; set; }
 
         [JsonIgnore]
         public List<Table> Tables { get; set; } = new List<Table>();
@@ -49,7 +51,7 @@ namespace backend.Models
 
         }
 
-        public Event(int id, string name, string description, string location, string startDate, string startTime, string endDate, string endTime, List<Registration> registrations){
+        public Event(int id, string name, string description, string location, DateTime startDate, TimeOnly startTime, DateTime endDate, TimeOnly endTime, List<Registration> registrations){
             Id = id;
             Name = name;
             Description = description;

@@ -43,13 +43,13 @@ const UsersPage: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 bg-slate-700">
+        <div className="container mx-auto px-4 py-8 bg-stone-600">
             <h1 className="text-4xl font-bold mb-8 text-center">Brugere</h1>
-            <p className="text-lg text-center">Her er brugerne fra Mgamers.</p>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {users.map((user) => (
                     <a href={`users/${user.id}`} key={user.id}>
-                        <UserCard  user={user} />
+                        <UserCard user={user} />
                     </a>
                 ))}
             </div>

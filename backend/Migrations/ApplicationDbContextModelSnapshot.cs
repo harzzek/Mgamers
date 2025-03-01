@@ -138,14 +138,12 @@ namespace backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("EndDate")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("Date")
                         .HasColumnName("end_date");
 
-                    b.Property<string>("EndTime")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time without time zone")
                         .HasColumnName("end_time");
 
                     b.Property<string>("Location")
@@ -158,14 +156,12 @@ namespace backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("StartDate")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("Date")
                         .HasColumnName("start_date");
 
-                    b.Property<string>("StartTime")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone")
                         .HasColumnName("start_time");
 
                     b.HasKey("Id");

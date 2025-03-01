@@ -30,7 +30,7 @@ export default function Navbar() {
     
   const handleLogout = () => {
     logout();
-  }
+  };
 
   return (
     <nav className="bg-stone-800 shadow-md top-0 left-0 w-full z-50">
@@ -58,7 +58,7 @@ export default function Navbar() {
           <div className="justify-self-end space-x-4">
             {userToken ? (
               <button
-                onClick={handleLogout}
+                onClick={() => handleLogout()}
                 className="text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md transition"
               >
                 Logout
