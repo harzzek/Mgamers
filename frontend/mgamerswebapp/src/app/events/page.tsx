@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import EventCard from "./components/EventCard";
 import { Event } from "./interfaces/event";
-import { fetchEvents } from "@/stores/eventStore";
+import { fetchUpcomingEvents } from "@/stores/eventStore";
 import { useAuth } from '@/context/AuthContext';
 
 const EventsPage: React.FC = () => {
@@ -15,7 +15,7 @@ const EventsPage: React.FC = () => {
         const getEvents = async () => {
             try {
                 console.log('Fetching events...');
-                const fetchedEvents = await fetchEvents();
+                const fetchedEvents = await fetchUpcomingEvents();
                 setEvents(fetchedEvents);
             } catch (err) {
                 console.error(err);

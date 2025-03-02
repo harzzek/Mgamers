@@ -7,6 +7,8 @@ namespace backend.Interfaces
 
         Task<List<EventDto>> GetAllEvents();
 
+        Task<List<EventDto>> GetUpcomingEvents();
+
         Task<EventDetailsDTO> GetEventById(int eventId);
 
         Task<Event> CreateEvent(CreateEventDto dto);

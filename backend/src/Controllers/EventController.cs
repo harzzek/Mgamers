@@ -26,6 +26,13 @@ namespace backend.Controllers
             return Ok(events);
         }
 
+        [HttpGet("Upcoming")]
+        public async Task<ActionResult<List<Event>>> GetUpcomingEvents(){
+            var events = await _eventService.GetUpcomingEvents();
+            return Ok(events);
+        }
+
+
         [HttpGet("{id}")]
         [Authorize (Roles = "User")]
         public async Task<ActionResult<EventDetailsDTO>> GetEventById(int id){

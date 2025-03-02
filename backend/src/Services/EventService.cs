@@ -40,6 +40,35 @@ namespace backend.Services
             return events;
         }
 
+        public async Task<List<EventDto>> GetUpcomingEvents(){
+
+            
+
+            List<Event> upcomingEvents =  await _context.Events
+                .Where(e => e.StartDate >= DateTime.Now)
+                .ToListAsync();
+
+            List<EventDto> events = new List<EventDto>();
+
+            foreach (Event eventItem in upcomingEvents)
+            {
+                events.Add(new EventDto
+                {
+                    Id = eventItem.Id,
+                    Name = eventItem.Name,
+                    Description = eventItem.Description,
+                    Location = eventItem.Location,
+                    StartDate = eventItem.StartDate.ToShortDateString(),
+                    StartTime = eventItem.StartDate.ToShortTimeString(),
+                    EndDate = eventItem.EndDate.ToShortDateString(),
+                    EndTime = eventItem.EndDate.ToShortTimeString()
+                });
+            }
+
+            return events;
+
+        }
+
         public async Task<EventDetailsDTO> GetEventById(int eventId)
         {
             var eventItem = await _context.Events

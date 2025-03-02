@@ -10,6 +10,11 @@ export const fetchEvents = async () => {
     return json;
 };
 
+export const fetchUpcomingEvents = async () => {
+    const response = await axiosInstance.get(`${API_URL}/Upcoming`);
+    const json = response.data;
+    return json;
+};
 export const fetchEventById = async (id: number) => {
     const response = await axiosInstance.get(`${API_URL}/${id}`);
     return response.data;
