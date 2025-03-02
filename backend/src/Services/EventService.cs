@@ -30,10 +30,10 @@ namespace backend.Services
                     Name = eventItem.Name,
                     Description = eventItem.Description,
                     Location = eventItem.Location,
-                    StartDate = DateTime.ParseExact(eventItem.StartDate.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString(),
-                    StartTime = eventItem.StartTime.ToString(),
-                    EndDate = DateTime.ParseExact(eventItem.EndDate.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString(),
-                    EndTime = eventItem.EndTime.ToString()
+                    StartDate = eventItem.StartDate.ToShortDateString(),
+                    StartTime = eventItem.StartDate.ToShortTimeString(),
+                    EndDate = eventItem.EndDate.ToShortDateString(),
+                    EndTime = eventItem.EndDate.ToShortTimeString()
                 });
             }
 
@@ -50,10 +50,10 @@ namespace backend.Services
                     Name = e.Name,
                     Description = e.Description,
                     Location = e.Location,
-                    StartDate = e.StartDate.ToString(),
-                    StartTime = e.StartTime.ToString(),
-                    EndDate = e.EndDate.ToString(),
-                    EndTime = e.EndTime.ToString(),
+                    StartDate = e.StartDate.ToShortDateString(),
+                    StartTime = e.StartDate.ToShortTimeString(),
+                    EndDate = e.EndDate.ToShortDateString(),
+                    EndTime = e.EndDate.ToShortTimeString(),
                     Participants = e.Registrations.Select(r => new RegistrationDto
                     {
                         UserId = r.UserId,
@@ -85,12 +85,12 @@ namespace backend.Services
         {
             List<Table> tables = new List<Table>();
             List<Seat> seats = new List<Seat>();
-
-            if(!DateTime.TryParseExact(eventItem.StartDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate)){
+           
+            if(!DateTime.TryParseExact(eventItem.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate)){
                 throw new Exception("Invalid start date");
             }
 
-            if(!DateTime.TryParseExact(eventItem.EndDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate)){
+            if(!DateTime.TryParseExact(eventItem.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate)){
                 throw new Exception("Invalid end date");
             }
 
@@ -116,10 +116,8 @@ namespace backend.Services
                 Name = eventItem.Name,
                 Description = eventItem.Description,
                 Location = eventItem.Location,
-                StartDate = DateTime.Parse(eventItem.StartDate),
-                StartTime = TimeOnly.Parse(eventItem.StartTime),
-                EndDate = DateTime.Parse(eventItem.EndDate),
-                EndTime = TimeOnly.Parse(eventItem.EndTime),
+                StartDate = startDate.Add(startTime),
+                EndDate = endDate.Add(endTime),
             };
 
             for(int i = 0; i < eventItem.TableAmount; i++){

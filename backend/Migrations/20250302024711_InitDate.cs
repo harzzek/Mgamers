@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialNew : Migration
+    public partial class InitDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,10 +64,8 @@ namespace backend.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     location = table.Column<string>(type: "text", nullable: false),
-                    start_date = table.Column<DateTime>(type: "Date", nullable: false),
-                    start_time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
-                    end_date = table.Column<DateTime>(type: "Date", nullable: false),
-                    end_time = table.Column<TimeOnly>(type: "time without time zone", nullable: false)
+                    start_date = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    end_date = table.Column<DateTime>(type: "timestamp", nullable: false)
                 },
                 constraints: table =>
                 {

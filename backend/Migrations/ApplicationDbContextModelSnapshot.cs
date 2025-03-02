@@ -139,12 +139,8 @@ namespace backend.Migrations
                         .HasColumnName("description");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("Date")
+                        .HasColumnType("timestamp")
                         .HasColumnName("end_date");
-
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time without time zone")
-                        .HasColumnName("end_time");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -157,12 +153,8 @@ namespace backend.Migrations
                         .HasColumnName("name");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("Date")
+                        .HasColumnType("timestamp")
                         .HasColumnName("start_date");
-
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time without time zone")
-                        .HasColumnName("start_time");
 
                     b.HasKey("Id");
 

@@ -23,22 +23,14 @@ namespace backend.Models
         public string Location { get; set; }
 
         [Required]
-        [Column("start_date")]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        [DataType(DataType.Date)]
+        [Column("start_date", TypeName = "timestamp")]
         public DateTime StartDate { get; set; }
 
         [Required]
-        [Column("start_time")]
-        public TimeOnly StartTime { get; set; }
-
-        [Required]
-        [Column("end_date")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        [DataType(DataType.Date)]
+        [Column("end_date", TypeName = "timestamp")]
         public DateTime EndDate { get; set; }
-
-        [Required]
-        [Column("end_time")]
-        public TimeOnly EndTime { get; set; }
 
         [JsonIgnore]
         public List<Table> Tables { get; set; } = new List<Table>();
@@ -51,17 +43,14 @@ namespace backend.Models
 
         }
 
-        public Event(int id, string name, string description, string location, DateTime startDate, TimeOnly startTime, DateTime endDate, TimeOnly endTime, List<Registration> registrations){
+        public Event(int id, string name, string description, string location, string startDate, string endDate, List<Registration> registrations){
             Id = id;
             Name = name;
             Description = description;
             Location = location;
-            StartDate = startDate;
-            StartTime = startTime;
-            EndDate = endDate;
-            EndTime = endTime;
+            StartDate = DateTime.Parse(startDate);
+            EndDate = DateTime.Parse(endDate);
             Registrations = registrations;
-
         }
 
     }

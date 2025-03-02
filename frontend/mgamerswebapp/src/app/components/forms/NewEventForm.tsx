@@ -21,6 +21,7 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitted(true);
+        console.log("Date: " + startDate)
         onSubmit({ name, description, location, startDate, endDate, startTime, endTime, tableAmount: tables });
     }
 
@@ -58,7 +59,7 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
                     required
                 />
             </div>
-
+            
             <div className="mt-2">
                 <label>Start Date</label>
                 <input

@@ -2,6 +2,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
@@ -24,6 +25,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<Registration>()
             .HasKey(r => new { r.UserId, r.EventId , r.SeatId });
 
@@ -56,6 +58,14 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
             .WithOne(t => t.Event)
             .HasForeignKey(t => t.EventId)
             .IsRequired();
+
+        modelBuilder.Entity<Event>()
+            .Property(e => e.StartDate)
+            .HasColumnType("timestamp");
+
+        modelBuilder.Entity<Event>()
+            .Property(e => e.EndDate)
+            .HasColumnType("timestamp");
 
         modelBuilder.Entity<Registration>()
             .HasIndex(r => r.SeatId)

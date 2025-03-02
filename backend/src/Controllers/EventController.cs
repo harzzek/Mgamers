@@ -22,7 +22,7 @@ namespace backend.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<Event>>> GetAllEvents(){
-            var events = await _context.Events.ToListAsync();
+            var events = await _eventService.GetAllEvents();
             return Ok(events);
         }
 
