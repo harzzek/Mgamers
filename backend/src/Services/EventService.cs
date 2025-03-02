@@ -42,8 +42,6 @@ namespace backend.Services
 
         public async Task<List<EventDto>> GetUpcomingEvents(){
 
-            
-
             List<Event> upcomingEvents =  await _context.Events
                 .Where(e => e.StartDate >= DateTime.Now)
                 .ToListAsync();
@@ -68,6 +66,30 @@ namespace backend.Services
             return events;
 
         }
+
+        public async Task<EventDto> GetNextEvent(){
+            var nextEvent = await _context.Events
+                .Where(e => e.StartDate >= DateTime.Today)
+                .OrderBy(e => e.StartDate)
+                .FirstOrDefaultAsync();
+
+            if(nextEvent == null){
+                throw new Exception("No upcoming events");
+            }
+
+            var reEvent = new EventDto{
+                Id = nextEvent.Id,
+                Name = nextEvent.Name,
+                Description = nextEvent.Description,
+                Location = nextEvent.Location,
+                StartDate = nextEvent.StartDate.ToShortDateString(),
+                StartTime = nextEvent.StartDate.ToShortTimeString(),
+                EndDate = nextEvent.EndDate.ToShortDateString(),
+                EndTime = nextEvent.EndDate.ToShortTimeString()
+            };
+
+            return reEvent;
+        } 
 
         public async Task<EventDetailsDTO> GetEventById(int eventId)
         {

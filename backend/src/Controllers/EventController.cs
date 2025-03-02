@@ -32,6 +32,12 @@ namespace backend.Controllers
             return Ok(events);
         }
 
+        [HttpGet("NextEvent")]
+        public async Task<ActionResult<Event>> GetNextEvent(){
+            var eventItem = await _eventService.GetNextEvent();
+            return Ok(eventItem);
+        }
+
 
         [HttpGet("{id}")]
         [Authorize (Roles = "User")]
