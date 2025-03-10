@@ -52,7 +52,7 @@ namespace backend.Controllers
                 Console.WriteLine("token: " + token);
 
                 //Build the confirmation link
-                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token }, Request.Scheme);
 
                 await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
 
