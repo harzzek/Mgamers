@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchEventById, registerForEvent, unregisterFromEvent } from '@/stores/eventStore';
 import { Event, registration, Table as EventTable } from '../interfaces/event';
 import { useAuth } from '@/context/AuthContext';

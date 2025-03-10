@@ -1,5 +1,4 @@
 'use client'
-import { useContext } from 'react';
 import { Table } from '../../interfaces/event';
 import { Seat } from '../../interfaces/event';
 import { SeatSvg } from './SeatSvg';

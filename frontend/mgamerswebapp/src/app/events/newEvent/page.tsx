@@ -3,7 +3,7 @@
 import { useState } from "react";
 import NewEventForm from "@/app/components/forms/NewEventForm";
 import { createEvent } from "@/stores/eventStore";
-import axios, { Axios, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 
 export default function NewEvent() {
 

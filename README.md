@@ -88,7 +88,7 @@ Go to the frontend folder and read the README attached to that project.
 #### Docker
 build the docker image:
 ```
-docker build -t my-nextjs-app .
+docker build -t mgamerswebapp .
 docker run -d -p 5000:8080 --name mgamersWeb my-nextjs-app
 ```
 
