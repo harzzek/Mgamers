@@ -40,7 +40,7 @@ export default function Modal({ isOpen, onClose, title, children} : ModalProps )
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <DialogPanel className="w-full max-w-md transform overflow-hidden bg-gray-800 rounded-2xl p-6 text-left align-middle shadow-xl transition-all">
+                            <DialogPanel className="w-full max-w-md transform overflow-hidden bg-stone-800 rounded-2xl p-6 text-left align-middle shadow-xl transition-all">
                                 <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-300">
                                     {title}
                                 </DialogTitle>

@@ -8,7 +8,7 @@ import axios, { AxiosError } from "axios";
 export default function NewEvent() {
 
     const [error, setErrorMessage] = useState("");
-    const [created , setCreated] = useState(false);
+    const [created, setCreated] = useState(false);
 
     const handleSubmit = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string, tableAmount: number }) => {
         try {
@@ -31,7 +31,7 @@ export default function NewEvent() {
 
 
     return (
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-6  bg-stone-600">
             {created && <div className="mb-4 text-sm text-green-600">Event created successfully!</div>}
             {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
 

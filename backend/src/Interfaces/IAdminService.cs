@@ -11,5 +11,7 @@ namespace backend.Interfaces
         Task <bool> RemoveUser(User user);
 
         Task <bool> DemoteUserRole(User user, Role role);
+
+        Task <List<Role>> GetAllRoles();
     }
 }

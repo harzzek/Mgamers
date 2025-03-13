@@ -59,5 +59,14 @@ namespace backend.Controllers{
             }
 
         }
+
+        [HttpGet("Roles")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<List<Role>>> GetAllRoles(){
+
+            var roles = await _adminService.GetAllRoles();
+
+            return Ok(roles);
+        }
     }
 }

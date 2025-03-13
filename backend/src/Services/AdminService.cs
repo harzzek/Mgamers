@@ -1,6 +1,7 @@
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services{
 
@@ -59,6 +60,13 @@ namespace backend.Services{
             return true;
 
 
+        }
+
+        public async Task<List<Role>> GetAllRoles()
+        {
+            List<Role> roles = await _roleManager.Roles.ToListAsync();
+
+            return roles;
         }
 
         public Task<bool> RemoveUser(User user)
