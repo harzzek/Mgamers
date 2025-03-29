@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import RegisterModal from '../modals/RegisterModal';
 import Link from 'next/link';
 import Image from 'next/image';
-import mgamersLogo from '../../../resources/transLogo.png'
+import mgamersLogo from '@/app/favicon.ico'
 import { clsx } from "clsx"
 
 const navigation = [
@@ -15,7 +15,7 @@ const navigation = [
   { name: 'Brugere', href: '/users' },
   { name: 'Om os', href: '#' },
   { name: 'Guides', href: '#' },
-  
+
 ]
 
 export default function Navbar() {
@@ -27,7 +27,7 @@ export default function Navbar() {
   const isCurrentPage = (href: string): boolean => {
     return pathname === href;
   }
-    
+
   const handleLogout = () => {
     logout();
   };

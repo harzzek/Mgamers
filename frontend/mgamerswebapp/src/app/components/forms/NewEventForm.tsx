@@ -1,17 +1,20 @@
 'use client';
 
 import { useState } from "react";
+import DateRangePicker from "../common/DateRangePicker";
+import { NewEventDTO } from "@/DTOs/eventDTO";
+
 
 interface NewEventFormProps {
-    onSubmit: (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string; tableAmount: number; }) => void;
+    onSubmit: (data: NewEventDTO) => void;
 }
 
 export default function NewEventForm({ onSubmit }: NewEventFormProps) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+    const [startDate, endDate] = dateRange;
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [tables, setTables] = useState(0);
@@ -21,8 +24,31 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitted(true);
-        console.log("Date: " + startDate)
-        onSubmit({ name, description, location, startDate, endDate, startTime, endTime, tableAmount: tables });
+
+        if(startDate != null && endDate != null){
+            const formatedStartDate = formatDate(startDate);
+            const formatedEndDate = formatDate(endDate);
+
+            const newEvent : NewEventDTO = {
+                name: name, 
+                description: description, 
+                endDate: formatedEndDate,
+                startDate: formatedStartDate,
+                startTime: startTime,
+                endTime: endTime,
+                location: location,
+                tableAmount: tables
+            };
+
+            if (startDate && endDate) {
+
+                onSubmit( newEvent );
+            }
+        }
+    }
+
+    const formatDate = (date: Date) => {
+        return date ? date.toISOString().split("T")[0] : "";
     }
 
     return (
@@ -61,25 +87,8 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
             </div>
             
             <div className="mt-2">
-                <label>Start Date</label>
-                <input
-                    type="date"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div className="mt-2">
-                <label>End Date</label>
-                <input
-                    type="date"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    required
-                />
+                <label>Date Range</label>
+                <DateRangePicker dateRange={dateRange} setDateRange={setDateRange}/>
             </div>
 
             <div className="mt-2">

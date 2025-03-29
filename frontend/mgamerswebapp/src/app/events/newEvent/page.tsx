@@ -4,13 +4,14 @@ import { useState } from "react";
 import NewEventForm from "@/app/components/forms/NewEventForm";
 import { createEvent } from "@/stores/eventStore";
 import axios, { AxiosError } from "axios";
+import { NewEventDTO } from "@/DTOs/eventDTO"; 
 
 export default function NewEvent() {
 
     const [error, setErrorMessage] = useState("");
     const [created, setCreated] = useState(false);
 
-    const handleSubmit = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string, tableAmount: number }) => {
+    const handleSubmit = async (data: NewEventDTO) => {
         try {
             await createEvent(data);
             setCreated(true);

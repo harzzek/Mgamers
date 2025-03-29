@@ -10,7 +10,7 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
     return (
-        <>
+        <a href={`events/${event.id}`} key={event.id}>
             <div
                 className="bg-gray-300 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
@@ -26,7 +26,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                     </div>
                 </div>
             </div>
-        </>
+        </a>
     );
 };
 

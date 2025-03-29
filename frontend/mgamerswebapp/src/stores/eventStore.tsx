@@ -1,3 +1,4 @@
+import { NewEventDTO } from "@/DTOs/eventDTO";
 import axiosInstance from "./axiosInstance";
 
 const API_URL = "/Event";
@@ -20,8 +21,13 @@ export const fetchEventById = async (id: number) => {
     return response.data;
 };
 
+export const fetchNextEvent = async () => {
+    const response = await axiosInstance.get(`${API_URL}/NextEvent`)
+    return response.data;
+};
 
-export const createEvent = async (data: { name: string; description: string; location: string; startDate: string; endDate: string; startTime: string; endTime: string, tableAmount: number }) => {
+
+export const createEvent = async (data: NewEventDTO) => {
     const response = await axiosInstance.post(`${API_URL}`, data);
     return response.data;
 };
