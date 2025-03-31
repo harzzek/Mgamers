@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LoginModal from '../modals/LoginModal'
 import { useAuth } from '@/context/AuthContext';
 import { usePathname } from 'next/navigation';
@@ -11,6 +11,7 @@ import Image from 'next/image';
 import mgamersLogo from '@/app/favicon.ico'
 import { clsx } from "clsx"
 import { Navbar as HeroNav, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import { Spinner } from '@heroui/react';
 
 
 const navigation = [
@@ -23,7 +24,7 @@ const navigation = [
 
 export const Logo = () => {
   return (
-    <Link href="/" className="justify-self-start size-30">
+    <Link href="/" className="justify-self-start size-30 absolute top-0">
       <Image src={mgamersLogo} alt="Logo" width={110} />
     </Link>
   )
@@ -32,7 +33,7 @@ export const Logo = () => {
 export default function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const { userToken, logout } = useAuth();
+  const { userToken, isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
 
   const isCurrentPage = (href: string): boolean => {
@@ -43,6 +44,14 @@ export default function Navbar() {
     logout();
   };
 
+  if (isAuthLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <Spinner />
+      </div>
+    )
+  }
+
   return (
     <HeroNav isBordered>
       <NavbarBrand>
@@ -52,24 +61,42 @@ export default function Navbar() {
         {navigation.map((link) => (
           <NavbarItem isActive={isCurrentPage(link.href)} key={link.name}>
             <Link
-              href={link.href} 
-              color="foreground"
-              >
-                {link.name}
+              href={link.href}
+              color={isCurrentPage(link.href) ? "primary" : "foreground"}
+            >
+              {link.name}
             </Link>
           </NavbarItem>
         ))}
       </NavbarContent>
       <NavbarContent justify="end" key="Authentication">
-      <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {userToken ? (
+          <>
+            <NavbarItem>
+              <Button color="primary" variant="ghost" onPress={() => handleLogout()}>
+                Logout
+              </Button>
+            </NavbarItem>
+          </>
+        ) : (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Button color='primary' onPress={() => setIsLoginModalOpen(true)}>
+                Login
+              </Button>
+            </NavbarItem>
+            <NavbarItem>
+              <Button color="primary" variant="flat" onPress={() => setIsRegisterModalOpen(true)}>
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </>
+        )}
+
       </NavbarContent>
+
+      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      <RegisterModal isOpen={isRegisterModalOpen} onClose={() => setIsRegisterModalOpen(false)} />
     </HeroNav>
   );
 }

@@ -26,7 +26,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left column - Messages for users */}
         <div className="bg-stone-600 p-6 rounded-xl shadow-md">

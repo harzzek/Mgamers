@@ -13,6 +13,7 @@ interface User {
 interface AuthContextProps {
   userToken: string | null;
   user: User | null;
+  isAuthLoading: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 }
@@ -22,16 +23,22 @@ const AuthContext = createContext<AuthContextProps| undefined>( undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userToken, setUserToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   //We need to load the authentication on mount
   useEffect(() => {
-    const storedToken = localStorage.getItem("mgamersToken");
-    const storedUser = localStorage.getItem("mgamersUser");
+    const loadAuth = async () => {
+      const storedToken = localStorage.getItem("mgamersToken");
+      const storedUser = localStorage.getItem("mgamersUser");
 
-    if(storedToken && storedUser){
-      setUserToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
+      if (storedToken && storedUser) {
+        setUserToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      }
+      setIsAuthLoading(false); // Mark loading as complete
+    };
+
+    loadAuth();
   }, [])
 
   const login = async (username: string, password: string) => {
@@ -62,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, userToken, login, logout} }>
+    <AuthContext.Provider value={{ user, userToken, isAuthLoading, login, logout} }>
       {children}
     </AuthContext.Provider>
   );

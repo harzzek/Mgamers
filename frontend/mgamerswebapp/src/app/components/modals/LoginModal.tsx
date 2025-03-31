@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Modal from '../common/Modal';
 import LoginForm from '../forms/LoginForm';
+import { addToast, Button, ToastProvider } from '@heroui/react';
 
 interface LoginModalProps {
   isOpen: boolean;
