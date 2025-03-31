@@ -54,7 +54,12 @@ namespace backend.Controllers
                 //Build the confirmation link
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token }, Request.Scheme);
 
-                await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
+                try{
+                    await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
+                } catch {
+                    var errorResult = await _accountService.RemoveUser(user);
+                    return BadRequest("SMTP service provider down");
+                }
 
                 // Add user to the default role
                 var role = await _userManager.AddToRoleAsync(user, "Guest");

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Divider, Form, Input } from '@heroui/react';
-import { useState } from 'react';
+import { use, useState } from 'react';
 
 interface RegisterFormProps {
     onSubmit: (data: { name: string; username: string; password: string; email: string, birthday: string }) => void;
@@ -15,6 +15,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
     const [error, setError] = useState('');
+    const [invalidCombo, setInvalidCombo] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,7 +23,8 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         if (confirmPassword === password) {
             onSubmit({ name, username, password, email, birthday });
         } else {
-            setError("Skriv dit password igen, TAK")
+            setError("Ikke ens");
+            setInvalidCombo(true);
         }
     };
 
@@ -54,9 +56,10 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
                 <Input
                     isRequired
                     type='password'
-                    errorMessage='Please enter valid password'
+                    errorMessage={error}
                     label='Password'
                     labelPlacement='outside'
+                    isInvalid={invalidCombo}
                     name='password'
                     placeholder='Enter password'
                     onChange={(e) => setPassword(e.target.value)}
@@ -65,8 +68,9 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
                 <Input
                     isRequired
                     type='password'
-                    errorMessage='Please confirm password'
+                    errorMessage={error}
                     label='Confirm password'
+                    isInvalid={invalidCombo}
                     labelPlacement='outside'
                     name='confirm password'
                     placeholder='Reenter password'

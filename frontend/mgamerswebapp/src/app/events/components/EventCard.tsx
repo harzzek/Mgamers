@@ -2,6 +2,7 @@
 'use client';
 import React from 'react';
 import { Event } from '../interfaces/event';
+import { Card, CardBody, CardFooter, CardHeader, Divider } from '@heroui/react';
 
 interface EventCardProps {
     event: Event;
@@ -11,21 +12,34 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
     return (
         <a href={`events/${event.id}`} key={event.id}>
-            <div
-                className="bg-gray-300 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-                <div className="grid grid-flow-row grid-cols-2 auto-rows-max">
-                    <div className="p-4">
-
-                    
-                    <h2 className="text-xl text-gray-800 font-semibold mb-2">{event.name}</h2>
-                    <p className="text-gray-600 mb-1">
-                        <span>{event.startDate}</span> | <span>{event.endDate}</span>
-                    </p>
-                    <p className="text-gray-700 line-clamp-3">{event.location}</p>
+            <Card className='bg-primary-100'>
+                <CardHeader>
+                    <div className='flex flex-col'>
+                        <p className='text-md'>{event.name}</p>
                     </div>
-                </div>
-            </div>
+                </CardHeader>
+                <Divider />
+                <CardBody>
+                    <p>
+                        {event.description}
+                    </p>
+                </CardBody>
+                <Divider />
+                <CardFooter>
+                    <div className='flex flex-col'>
+                        <div>
+                            <p>
+                                <span>{event.startDate}</span> | <span>{event.endDate}</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                {event.location}
+                            </p>
+                        </div>
+                    </div>
+                </CardFooter>
+            </Card>
         </a>
     );
 };

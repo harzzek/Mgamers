@@ -89,6 +89,13 @@ namespace backend.Services
             return result;
         }
 
+        public async Task<IdentityResult> RemoveUser(User user)
+        {
+            var result = await _userManager.DeleteAsync(user);
+
+            return result;
+        }
+
         public async Task<bool> ResetPassword(ResetPasswordDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);

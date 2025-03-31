@@ -45,7 +45,7 @@ const EventsPage: React.FC = () => {
     console.log('isAdmin: ', isAdmin());
 
     return (
-        <div className="container mx-auto px-4 py-8 bg-stone-600">
+        <div className="container mx-auto px-4 py-8 ">
             <h1 className="text-4xl font-bold mb-8 text-center">Kommende Arrangementer</h1>
             <p className="text-lg text-center">Se vores kommende arrangementer.</p>
 

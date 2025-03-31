@@ -7,6 +7,8 @@ namespace backend.Interfaces
     public interface IAccountService
     {
         Task<IdentityResult> CreateUser(User user, string password);
+
+        Task<IdentityResult> RemoveUser(User user);
         
         Task<bool> ConfirmEmail(string email, string token);
 

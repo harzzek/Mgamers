@@ -12,7 +12,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const getEvent = async () => {
-      try{
+      try {
         const fetchedEvent = await fetchNextEvent();
         setCommingEvent(fetchedEvent);
       } catch (err) {
@@ -22,31 +22,32 @@ const Home: React.FC = () => {
       }
     };
     getEvent();
-  },[]);
+  }, []);
 
   return (
     <div>
       <div className="container mx-auto px-4 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left column - Messages for users */}
-        <div className="bg-stone-600 p-6 rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Welcome to Our Event Platform</h2>
-          <p className="text-white">Stay updated with the latest events happening soon. Check out the upcoming event on the right!</p>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Left column - Messages for users */}
+          <div className="bg-secondary-100 p-6 shadow-md">
+            <h2 className="text-2xl font-semibold mb-4">Welcome to Our Event Platform</h2>
+            <p>Stay updated with the latest events happening soon. Check out the upcoming event on the right!</p>
+          </div>
 
-        {/* Right column - Event Card */}
-        <div className="bg-stone-600 p-6 rounded-xl shadow-md">
-          {loading ? (
-            <p className="text-gray-500">Loading upcoming event...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : commingEvent ? (
-            <EventCard event={commingEvent} />
-          ) : (
-            <p className="text-gray-500">No upcoming events</p>
-          )}
+          {/* Right column - Event Card */}
+          <div className="bg-secondary-100 p-6 shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">Kommende Arrangement</h2>
+            {loading ? (
+              <p className="text-gray-500">Loading upcoming event...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : commingEvent ? (
+              <EventCard event={commingEvent} />
+            ) : (
+              <p className="text-gray-500">No upcoming events</p>
+            )}
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
