@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Divider, Form, Input } from '@heroui/react';
 import { useState } from 'react';
 
 interface RegisterFormProps {
@@ -27,88 +28,79 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
     return (
         <>
-            {error &&
-                (
-                    <div className="mb-4 text-sm text-red-600">
-                        {error}
-                    </div>
-                )}
-            <form onSubmit={handleSubmit}>
-                <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-300">Name</label>
-                    <input
-                        type="text"
-                        className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
+            <Form onSubmit={handleSubmit} validationBehavior='aria'>
+                <Input
+                    isRequired
+                    type='text'
+                    errorMessage='Please enter valid name'
+                    label='Name'
+                    labelPlacement='outside'
+                    name='name'
+                    placeholder='Enter name'
+                    onChange={(e) => setName(e.target.value)}
+                />
 
-                <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-300">Username</label>
-                    <input
-                        type="text"
-                        className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
+                <Input
+                    isRequired
+                    type='text'
+                    errorMessage='Please enter valid username'
+                    label='Username'
+                    labelPlacement='outside'
+                    name='username'
+                    placeholder='Enter username'
+                    onChange={(e) => setUsername(e.target.value)}
+                />
 
-                <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-300">Password</label>
-                    <input
-                        type="password"
-                        className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
+                <Input
+                    isRequired
+                    type='password'
+                    errorMessage='Please enter valid password'
+                    label='Password'
+                    labelPlacement='outside'
+                    name='password'
+                    placeholder='Enter password'
+                    onChange={(e) => setPassword(e.target.value)}
+                />
 
-                <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-300">Confirm password</label>
-                    <input
-                        type="password"
-                        className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                    />
-                </div>
+                <Input
+                    isRequired
+                    type='password'
+                    errorMessage='Please confirm password'
+                    label='Confirm password'
+                    labelPlacement='outside'
+                    name='confirm password'
+                    placeholder='Reenter password'
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />
 
-                <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-300">Email</label>
-                    <input
-                        type="email"
-                        className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
+                <Input
+                    isRequired
+                    type='email'
+                    errorMessage='Please enter email'
+                    label='Email'
+                    labelPlacement='outside'
+                    name='email'
+                    placeholder='Enter email'
+                    onChange={(e) => setEmail(e.target.value)}
+                />
 
-                <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-300">Birthday</label>
-                    <input
-                        type="date"
-                        className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        value={birthday}
-                        onChange={(e) => setBirthday(e.target.value)}
-                        required
-                    />
-                </div>
+                <Input
+                    isRequired
+                    type='date'
+                    errorMessage='Please set your birthday'
+                    label='Birthday'
+                    labelPlacement='outside'
+                    name='birthday'
+                    placeholder='Set your birthday'
+                    onChange={(e) => setBirthday(e.target.value)}
+                />
 
-                <div className="mt-4">
-                    <button
-                        type="submit"
-                        className="w-full inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
-                    >
-                        Register
-                    </button>
-                </div>
-            </form>
+                <Divider className='my-4'/>
+
+                <Button type="submit" color="primary">
+                    Create account
+                </Button>
+            </Form>
         </>
     );
 }

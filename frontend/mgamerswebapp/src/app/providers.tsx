@@ -8,11 +8,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <HeroUIProvider>
             <ToastProvider />
-            <main className="dark text-foreground bg-background">
-                <AuthProvider>
-                    <Navbar />
-                    {children}
-                </AuthProvider>
+            <main className="purple-dark text-foreground bg-background">
+                <div className='min-h-screen'>
+                    <AuthProvider>
+                        <Navbar />
+                        {children}
+                    </AuthProvider>
+                </div>
             </main>
         </HeroUIProvider>
     )

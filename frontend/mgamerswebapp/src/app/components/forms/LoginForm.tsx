@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Divider, Form, Input } from '@heroui/react';
 import {useState} from 'react';
 
 interface LoginFormProps {
@@ -17,43 +18,37 @@ export default function LoginForm( {onSubmit}: LoginFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="mt-2">
-                <label className="block text-sm font-medium text-gray-300">Username</label>
-                <input
-                    type="text"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-            </div>
+        <Form onSubmit={handleSubmit} validationBehavior='aria'>
+            <Input
+                isRequired
+                errorMessage="Please enter valid username"
+                label="Username"
+                labelPlacement="outside"
+                name='username'
+                placeholder='Enter username'
+                type="text"
+                onChange={(e) => setUsername(e.target.value)}
+            >
+            </Input>
 
-            <div className="mt-2">
-                <label className="block text-sm font-medium text-gray-300">Password</label>
-                <input
-                    type="password"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </div>
+            <Input
+                isRequired
+                errorMessage="Please enter valid password"
+                label="Password"
+                labelPlacement="outside"
+                name='password'
+                placeholder='Enter password'
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+            >
+            </Input>
 
-            <div className="mt-2">
-                <label className="flex items-center">
-                    <input
-                        type="checkbox"
-                        className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        checked={rememberMe}
-                        onChange={(e) => setRememberMe(e.target.checked)}
-                    />
-                    <span className="ml-2 text-sm text-gray-300">Remember me</span>
-                </label>
-            </div>
+            <Divider className="my-4"/>
 
-            <button type="submit" className="mt-4 w-full bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">Login</button>
-        </form>
+            <Button type="submit" color="primary">
+                Login
+            </Button>
+        </Form>
 
     );
 }
