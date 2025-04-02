@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
+import { Card, CardBody, CardFooter, CardHeader, Divider } from '@heroui/react';
 import React from 'react';
 
 interface User {
@@ -23,9 +23,11 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         <CardHeader>
           {user.username}
         </CardHeader>
+        <Divider/>
         <CardBody>
           @{user.name}
         </CardBody>
+        <Divider/>
         <CardFooter>
           {user.email}
         </CardFooter>

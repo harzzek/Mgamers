@@ -30,6 +30,7 @@ export default function DateRangePicker({ dateRange, setDateRange }: DateRangePi
             className="w-full"
             label="Event Duration"
             labelPlacement="outside"
+            errorMessage="All good things must have an end... And a start for that matter"
             onChange={handleDateChange}
 
         />

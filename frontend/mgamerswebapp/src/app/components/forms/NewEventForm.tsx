@@ -112,12 +112,11 @@ export default function NewEventForm({ onSubmit, submitted }: NewEventFormProps)
             <Input
                 isRequired
                 type='number'
-                errorMessage='Please enter a end time'
+                errorMessage='Ahhh yes numbers go from 1-z... Like your abc, a2c4... Idiot'
                 label='Tables'
                 labelPlacement='outside'
                 name='tables'
                 placeholder='Tables'
-                defaultValue="10"
                 onChange={(e) => setTables(parseInt(e.target.value))}
             />
 
