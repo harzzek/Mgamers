@@ -3,13 +3,15 @@
 import { useState } from "react";
 import DateRangePicker from "../common/DateRangePicker";
 import { NewEventDTO } from "@/DTOs/eventDTO";
+import { Button, Divider, Form, Input } from "@heroui/react";
 
 
 interface NewEventFormProps {
     onSubmit: (data: NewEventDTO) => void;
+    submitted: boolean;
 }
 
-export default function NewEventForm({ onSubmit }: NewEventFormProps) {
+export default function NewEventForm({ onSubmit, submitted }: NewEventFormProps) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
@@ -19,19 +21,19 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
     const [endTime, setEndTime] = useState('');
     const [tables, setTables] = useState(0);
 
-    const [submitted, setSubmitted] = useState(false);
+    
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitted(true);
+        
 
-        if(startDate != null && endDate != null){
+        if (startDate != null && endDate != null) {
             const formatedStartDate = formatDate(startDate);
             const formatedEndDate = formatDate(endDate);
 
-            const newEvent : NewEventDTO = {
-                name: name, 
-                description: description, 
+            const newEvent: NewEventDTO = {
+                name: name,
+                description: description,
                 endDate: formatedEndDate,
                 startDate: formatedStartDate,
                 startTime: startTime,
@@ -42,7 +44,7 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
 
             if (startDate && endDate) {
 
-                onSubmit( newEvent );
+                onSubmit(newEvent);
             }
         }
     }
@@ -52,85 +54,78 @@ export default function NewEventForm({ onSubmit }: NewEventFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="mt-2">
-                <label>Name</label>
-                <input
-                    type="text"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-            </div>
+        <Form onSubmit={handleSubmit}>
+            <Input
+                isRequired
+                type='text'
+                errorMessage='Please enter valid name'
+                label='Name'
+                labelPlacement='outside'
+                name='name'
+                placeholder='Enter name'
+                onChange={(e) => setName(e.target.value)}
+            />
+            <Input
+                type='text'
+                label='Description'
+                labelPlacement='outside'
+                name='discription'
+                placeholder='Beskrivelse'
+                onChange={(e) => setDescription(e.target.value)}
+            />
 
-            <div className="mt-2">
-                <label>Description</label>
-                <input
-                    type="text"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div className="mt-2">
-                <label>Location</label>
-                <input
-                    type="text"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                />
-            </div>
+            <Input
+                isRequired
+                type='text'
+                errorMessage='Please enter location'
+                label='Location'
+                labelPlacement='outside'
+                name='location'
+                placeholder='Location'
+                onChange={(e) => setLocation(e.target.value)}
+            />
             
-            <div className="mt-2">
-                <label>Date Range</label>
-                <DateRangePicker dateRange={dateRange} setDateRange={setDateRange}/>
-            </div>
+            <DateRangePicker dateRange={dateRange} setDateRange={setDateRange}/>
+            
+            <Input
+                isRequired
+                type='time'
+                errorMessage='Please enter a start time'
+                label='Start time'
+                labelPlacement='outside'
+                name='startTime'
+                placeholder='Start Time'
+                onChange={(e) => setStartTime(e.target.value)}
+            />
 
-            <div className="mt-2">
-                <label>Start Time</label>
-                <input
-                    type="time"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    required
-                />
-            </div>
+            <Input
+                isRequired
+                type='time'
+                errorMessage='Please enter a end time'
+                label='End time'
+                labelPlacement='outside'
+                name='endTime'
+                placeholder='End Time'
+                onChange={(e) => setEndTime(e.target.value)}
+            />
 
-            <div className="mt-2">
-                <label>End Time</label>
-                <input
-                    type="time"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    required
-                />
-            </div>
+            <Input
+                isRequired
+                type='number'
+                errorMessage='Please enter a end time'
+                label='Tables'
+                labelPlacement='outside'
+                name='tables'
+                placeholder='Tables'
+                defaultValue="10"
+                onChange={(e) => setTables(parseInt(e.target.value))}
+            />
 
-            <div className="mt-2">
-                <label>Tables</label>
-                <input
-                    type="number"
-                    className="mt-1 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value={tables}
-                    onChange={(e) => setTables(parseInt(e.target.value))}
-                    required
-                />
-            </div>
-
-            <button
-                type="submit"
-                disabled={submitted}
-                className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 w-full bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
+            <Divider className="my-4" />
+            <Button type="submit" color="primary" disabled={submitted}>
                 Create Event
-            </button>
+            </Button>
 
-        </form>
+        </Form>
     );
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import DatePicker from "react-datepicker";
+import { DateRangePicker as Daterranger, DateValue, RangeValue } from "@heroui/react";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../styles/globals.css";
 
@@ -11,25 +11,27 @@ interface DateRangePickerProps {
 }
 
 
-export default function DateRangePicker({ dateRange, setDateRange } : DateRangePickerProps) {
+export default function DateRangePicker({ dateRange, setDateRange }: DateRangePickerProps) {
     const [startDate, endDate] = dateRange
 
-    return (
-        <div className="mt-2 w-full rounded-md text-neutral-950 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            <DatePicker
-                dateFormat="dd/MM/yyyy"
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update) => {
-                        setDateRange(update as [Date | null, Date | null]);
-                        console.log(update[0]?.getDate());
-                        console.log(update[0]?.toISOString());
-                    }
-                }
+    const handleDateChange = (value: RangeValue<DateValue> | null) => {
+        if (value) {
+            if (value.start && value.end) {
+                console.log("Start Date:", value.start.toDate("Europe/Copenhagen"));
+                console.log("End Date:", value.end.toDate("Europe/Copenhagen"));
+                setDateRange([value.start.toDate("Europe/Copenhagen"), value.end.toDate("Europe/Copenhagen")])
+            }
+        }
+    };
 
-                className="border rounded-lg p-2 text-gray-900 "
-            />
-        </div>
+    return (
+        <Daterranger
+            isRequired
+            className="w-full"
+            label="Event Duration"
+            labelPlacement="outside"
+            onChange={handleDateChange}
+
+        />
     );
 }

@@ -32,13 +32,13 @@ export default function NewEvent() {
 
 
     return (
-        <div className="container mx-auto px-4 py-6  bg-stone-600">
-            {created && <div className="mb-4 text-sm text-green-600">Event created successfully!</div>}
-            {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
+        <div className="container mx-auto px-4 py-6">
+            {created && <div color="success" className="mb-4 text-sm">Event created successfully!</div>}
+            {error && <div color="warning" className="mb-4 text-sm">{error}</div>}
 
             <h1 className="text-2xl font-bold mb-6">Create a New Event</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <NewEventForm onSubmit={handleSubmit} />
+                <NewEventForm onSubmit={handleSubmit} submitted={created} />
             </div>
         </div>
     );

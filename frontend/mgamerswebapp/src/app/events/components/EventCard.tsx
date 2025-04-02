@@ -11,7 +11,7 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
     return (
-        <a href={`events/${event.id}`} key={event.id}>
+        <a href={`events/${event.id}`} >
             <Card className='bg-primary-100'>
                 <CardHeader>
                     <div className='flex flex-col'>
