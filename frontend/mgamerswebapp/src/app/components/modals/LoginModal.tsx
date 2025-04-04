@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Modal from '../common/Modal';
 import LoginForm from '../forms/LoginForm';
-import { addToast, Button, ToastProvider } from '@heroui/react';
+import ForgotPasswordModal from './ForgotPassword';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -14,8 +14,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { login } = useAuth();
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [isForgotPassModalOpen, setForgotPassModalOpen] = useState(false)
 
-  const handleLogin = async (data: { username: string; password: string; rememberMe: boolean }) => {
+  const handleLogin = async (data: { username: string; password: string;}) => {
     try {
       await login(data.username, data.password);
       // Close the modal
@@ -34,6 +35,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         </div>
       }
       <LoginForm onSubmit={handleLogin} />
+
+      <a className='text-default-400 cursor-pointer' onClick={() => setForgotPassModalOpen(true)}>
+        Forget password
+      </a>
+
+      <ForgotPasswordModal isOpen={isForgotPassModalOpen} onClose={() => setForgotPassModalOpen(false)}/>
     </Modal>
   );
 }

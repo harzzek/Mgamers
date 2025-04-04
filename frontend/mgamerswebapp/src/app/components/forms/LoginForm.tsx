@@ -4,17 +4,18 @@ import { Button, Divider, Form, Input } from '@heroui/react';
 import {useState} from 'react';
 
 interface LoginFormProps {
-    onSubmit: (data: { username: string; password: string; rememberMe: boolean }) => void;
+    onSubmit: (data: { username: string; password: string; }) => void;
 }
 
 export default function LoginForm( {onSubmit}: LoginFormProps) {
+    //form variables
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
-
+    
+    //once everything is filled out, we can submit the form
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ username, password, rememberMe });
+        onSubmit({ username, password });
     };
 
     return (

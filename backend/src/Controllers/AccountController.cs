@@ -52,11 +52,14 @@ namespace backend.Controllers
                 Console.WriteLine("token: " + token);
 
                 //Build the confirmation link
-                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token }, Request.Scheme);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, user.Email }, Request.Scheme);
 
-                try{
+                try
+                {
                     await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
-                } catch {
+                }
+                catch
+                {
                     var errorResult = await _accountService.RemoveUser(user);
                     return BadRequest("SMTP service provider down");
                 }
@@ -103,8 +106,8 @@ namespace backend.Controllers
                 var token = await _accountService.GeneratePasswordResetToken(model.Email);
 
                 var resetLink = Url.Action(
-                nameof(ResetPassword),
-                "Account",
+                "http://localhost:3000/",
+                "users/reset-password",
                 new { token, email = user.Email },
                 Request.Scheme);
 
@@ -158,7 +161,7 @@ namespace backend.Controllers
                 {
                     var token = await _accountService.Login(model.Username, model.Password);
                     IList<string> userRoles = await _userManager.GetRolesAsync(user);
-                    return Ok(new { message = "Login successful", token, user = new {  user.Id, user.UserName, userRoles} });
+                    return Ok(new { message = "Login successful", token, user = new { user.Id, user.UserName, userRoles } });
                 }
                 catch (Exception e)
                 {

@@ -3,6 +3,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { login as loginStore, logout as logoutStore } from '../stores/authStore';
 import axiosInstance from '@/stores/axiosInstance';
+import { Spinner } from '@heroui/react';
 
 interface User {
   id: number;
@@ -40,6 +41,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     loadAuth();
   }, [])
+
+  if (isAuthLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <Spinner />
+      </div>
+    )
+  }
 
   const login = async (username: string, password: string) => {
     try {

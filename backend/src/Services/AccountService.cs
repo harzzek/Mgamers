@@ -1,3 +1,4 @@
+using System.Threading.Tasks.Dataflow;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
@@ -55,7 +56,7 @@ namespace backend.Services
             Console.WriteLine("token: " + token);
 
             return token;
-    
+
         }
 
         /**
@@ -71,7 +72,7 @@ namespace backend.Services
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 var token = await _tokenService.CreateToken(user);
                 return token;
@@ -104,13 +105,25 @@ namespace backend.Services
                 // Do not reveal that the user does not exist
                 return false;
             }
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
 
-            if (result.Succeeded)
+            try
             {
-                return true;
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            } catch (Exception e) {
+                
+                Console.WriteLine(e.Message);
+                return false;
+
             }
-            return false;
         }
     }
 }

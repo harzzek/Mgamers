@@ -16,7 +16,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         <HeroModal isOpen={isOpen} size="lg" onClose={onClose} backdrop='blur' className='purple-dark'>
             <ModalContent>
                 <>
-                    <ModalHeader className="flex flex-col gap-1">
+                    <ModalHeader className="flex flex-col text-foreground-50">
                         {title}
                     </ModalHeader>
                     <ModalBody>

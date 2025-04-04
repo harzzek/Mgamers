@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import LoginModal from '../modals/LoginModal'
 import { useAuth } from '@/context/AuthContext';
 import { usePathname } from 'next/navigation';
@@ -9,9 +9,7 @@ import { Link } from "@heroui/link";
 import { Button } from "@heroui/button"
 import Image from 'next/image';
 import mgamersLogo from '@/app/favicon.ico'
-import { clsx } from "clsx"
 import { Navbar as HeroNav, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
-import { Spinner } from '@heroui/react';
 
 
 const navigation = [
@@ -43,14 +41,6 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
   };
-
-  if (isAuthLoading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <Spinner />
-      </div>
-    )
-  }
 
   return (
     <HeroNav isBordered>

@@ -96,6 +96,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
                     labelPlacement='outside'
                     name='birthday'
                     placeholder='Set your birthday'
+                    className='text-foreground-500'
                     onChange={(e) => setBirthday(e.target.value)}
                 />
 
