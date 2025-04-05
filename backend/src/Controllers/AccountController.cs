@@ -5,6 +5,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
 
 namespace backend.Controllers
 {
@@ -101,20 +102,27 @@ namespace backend.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
+            if (user == null)
+            {
+                // For security, don't reveal if the email is not found
+                return Ok(new { message = "If the email is associated with an account, a password reset link has been sent." });
+            }
+
             try
             {
                 var token = await _accountService.GeneratePasswordResetToken(model.Email);
 
-                var resetLink = Url.Action(
-                "http://localhost:3000/",
-                "users/reset-password",
-                new { token, email = user.Email },
-                Request.Scheme);
+                // URL-encode the token and email
+                var encodedToken = HttpUtility.UrlEncode(token);
+                var encodedEmail = HttpUtility.UrlEncode(user.Email);
+
+                // Manually construct the full reset link
+                var resetLink = $"http://localhost:3000/users/reset-password?token={encodedToken}&email={encodedEmail}";
 
                 await _emailSender.SendEmailAsync(
-                user.Email,
-                "Reset Password",
-                $"Please reset your password by clicking this link: {resetLink}");
+                    user.Email,
+                    "Reset Your Password",
+                    $"Please reset your password by clicking this link: <a href='{resetLink}'>Reset Password</a>");
 
             }
             catch (Exception e)
