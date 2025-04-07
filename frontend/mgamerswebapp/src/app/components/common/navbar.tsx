@@ -31,7 +31,7 @@ export const Logo = () => {
 export default function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const { userToken, isAuthLoading, logout } = useAuth();
+  const { userToken, logout } = useAuth();
   const pathname = usePathname();
 
   const isCurrentPage = (href: string): boolean => {

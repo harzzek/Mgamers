@@ -115,6 +115,29 @@ dotnet test
 
 ## Deployment
 
+Deployment steps:
+
+1: go into folder /Mgamers/backend
+
+2: ``` dotnet clean ```
+
+3: ``` dotnet build ```
+
+4: ``` docker build -t mgamersapi . ```
+
+5: go into folder /Mgamers/frontend/mgamerswebapp
+
+6: ``` npm run build ```
+
+7: (IF errors found then fix, usually unused parameters... Keep code clean, because nextjs is racist)
+
+8: ``` docker build -t mgamerswebapp . ```
+
+9: go into root /Mgamers
+
+10: ``` docker compose up ```
+
 ### .env file
 
+Contains project wide configs. ALWAYS CHANGE THE KEYS AND PASSWORDS FOR GODS SAKE.
 

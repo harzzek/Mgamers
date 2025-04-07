@@ -85,7 +85,7 @@ export default function NewEventForm({ onSubmit, submitted }: NewEventFormProps)
                 onChange={(e) => setLocation(e.target.value)}
             />
             
-            <DateRangePicker dateRange={dateRange} setDateRange={setDateRange}/>
+            <DateRangePicker setDateRange={setDateRange}/>
             
             <Input
                 isRequired

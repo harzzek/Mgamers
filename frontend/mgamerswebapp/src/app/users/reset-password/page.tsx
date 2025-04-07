@@ -26,9 +26,10 @@ export default function ResetPasswordPage() {
 
             if (newPassword === newPasswordConfirm) {
                 try {
-                    const passwordChangeResponse = await changePassword(data);
+                    await changePassword(data);
                     setMessage("Your password has been changed")
                 } catch (error) {
+                    console.log(error);
                     setErrorMessage("Something went wrong. Either password too short, or sevice is down")
                 }
             } else {

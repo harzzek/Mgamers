@@ -6,13 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../../styles/globals.css";
 
 interface DateRangePickerProps {
-    dateRange: [Date | null, Date | null];
     setDateRange: (range: [Date | null, Date | null]) => void;
 }
 
 
-export default function DateRangePicker({ dateRange, setDateRange }: DateRangePickerProps) {
-    const [startDate, endDate] = dateRange
+export default function DateRangePicker({ setDateRange }: DateRangePickerProps) {
 
     const handleDateChange = (value: RangeValue<DateValue> | null) => {
         if (value) {

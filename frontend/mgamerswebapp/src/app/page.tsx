@@ -16,6 +16,7 @@ const Home: React.FC = () => {
         const fetchedEvent = await fetchNextEvent();
         setCommingEvent(fetchedEvent);
       } catch (err) {
+        console.log(err);
         setError("Error fetching coming event");
       } finally {
         setLoading(false);

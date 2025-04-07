@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Divider, Form, Input } from '@heroui/react';
-import { use, useState } from 'react';
+import { useState } from 'react';
 
 interface RegisterFormProps {
     onSubmit: (data: { name: string; username: string; password: string; email: string, birthday: string }) => void;

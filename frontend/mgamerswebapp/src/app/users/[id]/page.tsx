@@ -115,7 +115,7 @@ export default function UserDetails({ params }: UserDetailsProps) {
                         <span className="font-semibold ">Roles:</span>
                         {
                             unassignableRoles.map((role) => (
-                                <p>{role.name}</p>
+                                <p key={role.id}>{role.name}</p>
                             ))
                         }
                     </div>

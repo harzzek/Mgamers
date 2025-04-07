@@ -57,8 +57,6 @@ export default function EventDetails({ params }: EventDetailsProps) {
         } finally {
             setLoading(false);
         }
-
-
     }
 
 

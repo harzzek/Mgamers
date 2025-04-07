@@ -4,7 +4,7 @@ WORKDIR /app
 EXPOSE 8080:8080
 
 # Use the SDK image to build the app
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-noble AS build
 WORKDIR /src
 COPY . .
 RUN dotnet restore
