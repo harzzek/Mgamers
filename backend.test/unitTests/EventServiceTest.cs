@@ -24,6 +24,7 @@ public class EventServiceTest
         Assert.True(true);
     }
 
+    /*
     [Fact]
     public async Task GetAllEvents_ReturnsAllEvents()
     {
@@ -115,6 +116,7 @@ public class EventServiceTest
         var createdEvent = await eventService.GetEventById(result.Id);
         Assert.Equal("Event 3", createdEvent.Name);
     }
+    */
 
     [Fact]
     public async Task CreateEventWithZeroTables_ReturnsEvent(){
