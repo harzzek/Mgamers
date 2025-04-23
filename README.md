@@ -7,6 +7,25 @@ Udvikling af et online-registreringssystem
 - Node version
 - .net
 
+### Enviroment variables
+ConnectionStrings__DefaultConnection
+(Er connection string til databasen. Den definere port, database type, brugernavn og kode)
+
+POSTGRES_PASSWORD
+(Database kode skal være det samme som i ConnectionStrings)
+
+JWT__SigningKey
+(SLAM YOUR HEAD AGAINST THE KEYBOARD!!!!!! Seriøst jeg mener det, den skal være lang og komplikeret. Endelig brug symboler)
+
+SMTP_SENDERPASSWORD
+(Vi bruger google konto email i denne applikation. Fordi alt andet vil være for dyrt eller besværligt. Senere kan vi integere en SMTP server til behandling af emails. Jeg er ikke "just" glad for nuværende løsning)
+
+ASPNETCORE_ENVIROMENT
+(Angiver enviromentet. På din egen pc er det nok bedst at bruge Development, bare behold denne værdi som produktion for at kunne adskille, hvis senere versioner har brug for det. Pipelines vil være nice)
+
+NEXT_PUBLIC_DOMAIN_IP
+(Angiver hvor frontenden skal finde backenden. Sæt denne til domænet "mgamers.dk" eller til ip "xx.xx.xx.xx:port")
+
 ## Start services
 
 ### Database
@@ -120,6 +139,9 @@ Contains project wide configs. ALWAYS CHANGE THE KEYS AND PASSWORDS FOR GODS SAK
 AND FOR GODS SAKE! Don't commit this file with the new values.
 
 All needed values are centralized here for easier deployment
+
+#### Enviroment variables
+
 
 ### Steps after setting enviroment variables
 Deployment steps:
