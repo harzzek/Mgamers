@@ -156,15 +156,17 @@ Deployment steps:
 
 5: go into folder /Mgamers/frontend/mgamerswebapp
 
-6: ``` npm run build ```
+6: ``` npm install ```
 
-7: (IF errors found then fix, usually unused parameters... Keep code clean, because nextjs is racist)
+7: ``` npm run build ```
 
-8: ``` docker build -t mgamerswebapp . ```
+8: (IF errors found then fix, usually unused parameters... Keep code clean, because nextjs is racist)
 
-9: go into root /Mgamers
+9: ``` docker build -t mgamerswebapp . ```
 
-10: ``` docker compose up ```
+10: go into root /Mgamers
+
+11: ``` docker compose up ```
 
 
 

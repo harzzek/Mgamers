@@ -24,6 +24,7 @@ services:
 
   frontend:
     image: mgamerswebapp
+    env_file: ".env"
     build: 
       context: ./frontend/mgamerswebapp
       dockerfile: Dockerfile
