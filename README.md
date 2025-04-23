@@ -115,6 +115,13 @@ dotnet test
 
 ## Deployment
 
+### .env file
+Contains project wide configs. ALWAYS CHANGE THE KEYS AND PASSWORDS FOR GODS SAKE.
+AND FOR GODS SAKE! Don't commit this file with the new values.
+
+All needed values are centralized here for easier deployment
+
+### Steps after setting enviroment variables
 Deployment steps:
 
 1: go into folder /Mgamers/backend
@@ -137,10 +144,7 @@ Deployment steps:
 
 10: ``` docker compose up ```
 
-### .env file
 
-Contains project wide configs. ALWAYS CHANGE THE KEYS AND PASSWORDS FOR GODS SAKE.
-AND FOR GODS SAKE! Don't commit this file with the new values.
 
 
 
