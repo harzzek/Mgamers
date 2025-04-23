@@ -140,4 +140,7 @@ Deployment steps:
 ### .env file
 
 Contains project wide configs. ALWAYS CHANGE THE KEYS AND PASSWORDS FOR GODS SAKE.
+AND FOR GODS SAKE! Don't commit this file with the new values.
+
+
 

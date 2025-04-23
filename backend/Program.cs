@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>{
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("AllowAll",
         builder =>
         {
@@ -28,7 +29,8 @@ builder.Configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<User, Role>(options =>{
+builder.Services.AddIdentity<User, Role>(options =>
+{
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireLowercase = false;
@@ -42,6 +44,15 @@ builder.Services.AddIdentity<User, Role>(options =>{
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.Configure<SmtpSettings>(options =>
+{
+    builder.Configuration.GetSection("SmtpSettings").Bind(options);
+    var password = Environment.GetEnvironmentVariable("SMTP_SENDERPASSWORD");
+    if (!string.IsNullOrEmpty(password)){
+        options.SenderPassword = password;
+    }
+}
+);
 
 builder.Services.AddTransient<IEmailSender, SmtpEmailSenderService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -54,15 +65,17 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(
-    options => {
-        options.DefaultAuthenticateScheme = 
-        options.DefaultChallengeScheme = 
-        options.DefaultForbidScheme = 
-        options.DefaultScheme = 
+    options =>
+    {
+        options.DefaultAuthenticateScheme =
+        options.DefaultChallengeScheme =
+        options.DefaultForbidScheme =
+        options.DefaultScheme =
         options.DefaultSignInScheme =
         options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
     }
-).AddJwtBearer( options => {
+).AddJwtBearer(options =>
+{
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters = new TokenValidationParameters
@@ -79,7 +92,7 @@ builder.Services.AddAuthentication(
 
 //Swagger/OpenAPI  https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(option => 
+builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -127,7 +140,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
+
 }
 
 //app.UseHttpsRedirection(); For production

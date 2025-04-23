@@ -1,6 +1,8 @@
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
-using System.Net.Mail;
+using MimeKit;
 
 
 public class SmtpEmailSenderService : IEmailSender
@@ -10,23 +12,29 @@ public class SmtpEmailSenderService : IEmailSender
     {
         _options = configuration.Value;
     }
+
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        var mail = new MailMessage()
-        {
-            From = new MailAddress(_options.SenderEmail, _options.SenderName),
-            Subject = subject,
-            Body = htmlMessage,
-            IsBodyHtml = true,
-        };
-        mail.To.Add(email);
+        var message = new MimeMessage();
 
-        using var smtp = new SmtpClient(_options.Server, _options.Port)
+        message.From.Add(new MailboxAddress(_options.SenderName, _options.SenderEmail));
+        message.To.Add(MailboxAddress.Parse(email));
+        message.Subject = subject;
+
+        var bodyBuilder = new BodyBuilder
         {
-            EnableSsl = false // MailHog does not require SSL
+            HtmlBody = htmlMessage
         };
 
-        await smtp.SendMailAsync(mail);
+        message.Body = bodyBuilder.ToMessageBody();
+
+        using var smtp = new SmtpClient();
+
+        await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+
+        await smtp.AuthenticateAsync(_options.SenderEmail, _options.SenderPassword);
+        await smtp.SendAsync(message);
+        await smtp.DisconnectAsync(true);
     }
 }
 
