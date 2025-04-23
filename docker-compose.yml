@@ -28,6 +28,8 @@ services:
     build: 
       context: ./frontend/mgamerswebapp
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_DOMAIN=http://localhost:8080
     restart: always
     ports:
       - 3000:3000
