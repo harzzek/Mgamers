@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: `https://192.168.0.81/api`,
+    baseURL: `https://www.hctest.dk/api`,
     headers: {
         'Content-Type': 'application/json',
     },

@@ -21,12 +21,15 @@ namespace backend.Controllers
 
         private readonly IUserService _userService;
 
-        public AccountController(UserManager<User> userManager, IEmailSender emailSender, IAccountService accountService, IUserService userService)
+        private readonly IConfiguration _configuration;
+
+        public AccountController(UserManager<User> userManager, IEmailSender emailSender, IAccountService accountService, IUserService userService, IConfiguration configuration)
         {
             _userManager = userManager;
             _emailSender = emailSender;
             _accountService = accountService;
             _userService = userService;
+            _configuration = configuration;
         }
 
         // POST: api/Account/Register
@@ -101,6 +104,7 @@ namespace backend.Controllers
         {
 
             var user = await _userManager.FindByEmailAsync(model.Email);
+            var frontendBaseUrl = _configuration["Frontend:BaseUrl"];
 
             if (user == null)
             {
@@ -117,7 +121,7 @@ namespace backend.Controllers
                 var encodedEmail = HttpUtility.UrlEncode(user.Email);
 
                 // Manually construct the full reset link
-                var resetLink = $"http://localhost:3000/users/reset-password?token={encodedToken}&email={encodedEmail}";
+                var resetLink = $"{frontendBaseUrl}/users/reset-password?token={encodedToken}&email={encodedEmail}";
 
                 await _emailSender.SendEmailAsync(
                     user.Email,
@@ -147,7 +151,6 @@ namespace backend.Controllers
             return Ok(new { message = "Password reset successful." });
         }
 
-        // POST: api/Account/Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
@@ -179,7 +182,6 @@ namespace backend.Controllers
             }
         }
 
-        // POST: api/Account/Logout
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {

@@ -1,8 +1,0 @@
-example.com {
-	reverse_proxy /api/* localhost:8080
-	file_server
-}
-
-mgamers.com {
-    reverse_proxy localhost:3000
-}
