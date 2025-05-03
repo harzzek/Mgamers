@@ -10,15 +10,16 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin() // Adjust this to match your Next.js frontend URL and port
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
+    options.AddPolicy("DynamicCors", policy =>
+    {
+        policy.WithOrigins(allowedOrigins!)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Configuration
@@ -139,11 +140,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    Console.WriteLine($"Current environment: {app.Environment.EnvironmentName}");
+    Console.WriteLine($"ASPNETCORE_ENVIRONMENT = {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
+
+
+} else {
+    Console.WriteLine($"Current environment: {app.Environment.EnvironmentName}");
+    Console.WriteLine($"ASPNETCORE_ENVIRONMENT = {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
 
 }
 
 //app.UseHttpsRedirection(); For production
-app.UseCors("AllowAll");
+app.UseCors("DynamicCors");
 app.UseAuthentication();
 app.UseAuthorization();
 
