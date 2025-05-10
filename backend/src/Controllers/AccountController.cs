@@ -53,7 +53,6 @@ namespace backend.Controllers
             {
                 //Generate email confirmation token
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                Console.WriteLine("token: " + token);
 
                 //Build the confirmation link
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, user.Email }, Request.Scheme);
@@ -62,9 +61,10 @@ namespace backend.Controllers
                 {
                     await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
                 }
-                catch
+                catch (Exception e)
                 {
                     var errorResult = await _accountService.RemoveUser(user);
+                    Console.WriteLine(e);
                     return BadRequest("SMTP service provider down");
                 }
 

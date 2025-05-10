@@ -44,18 +44,21 @@ builder.Services.AddIdentity<User, Role>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
-builder.Services.Configure<SmtpSettings>(options =>
-{
-    builder.Configuration.GetSection("SmtpSettings").Bind(options);
-    var password = Environment.GetEnvironmentVariable("SMTP_SENDERPASSWORD");
-    if (!string.IsNullOrEmpty(password)){
-        options.SenderPassword = password;
-    }
-}
+builder.Services.Configure<SendGridSettings>(
+    builder.Configuration.GetSection("SendGridSettings")
 );
+builder.Services.Configure<SendGridSettings>(options => {
+    builder.Configuration.GetSection("SendGridSettings").Bind(options);
+    var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+    if (!string.IsNullOrEmpty(apiKey)){
+        options.ApiKey = apiKey;
+    } else {
+        Console.WriteLine("No API key found for SENDGRID");
+    }
+});
 
-builder.Services.AddTransient<IEmailSender, SmtpEmailSenderService>();
+builder.Services.AddTransient<IEmailSender, SendGridEmailSenderService>();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IEventService, EventService>();
@@ -94,7 +97,7 @@ builder.Services.AddAuthentication(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
+    option.SwaggerDoc("v1", new() { Title = "Mgamers API", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
