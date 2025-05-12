@@ -40,9 +40,10 @@ namespace backend.Services
             return events;
         }
 
-        public async Task<List<EventDto>> GetUpcomingEvents(){
+        public async Task<List<EventDto>> GetUpcomingEvents()
+        {
 
-            List<Event> upcomingEvents =  await _context.Events
+            List<Event> upcomingEvents = await _context.Events
                 .Where(e => e.StartDate >= DateTime.Now)
                 .ToListAsync();
 
@@ -67,17 +68,20 @@ namespace backend.Services
 
         }
 
-        public async Task<EventDto> GetNextEvent(){
+        public async Task<EventDto> GetNextEvent()
+        {
             var nextEvent = await _context.Events
                 .Where(e => e.StartDate >= DateTime.Today)
                 .OrderBy(e => e.StartDate)
                 .FirstOrDefaultAsync();
 
-            if(nextEvent == null){
+            if (nextEvent == null)
+            {
                 throw new Exception("No upcoming events");
             }
 
-            var reEvent = new EventDto{
+            var reEvent = new EventDto
+            {
                 Id = nextEvent.Id,
                 Name = nextEvent.Name,
                 Description = nextEvent.Description,
@@ -89,7 +93,7 @@ namespace backend.Services
             };
 
             return reEvent;
-        } 
+        }
 
         public async Task<EventDetailsDTO> GetEventById(int eventId)
         {
@@ -136,34 +140,42 @@ namespace backend.Services
         {
             List<Table> tables = new List<Table>();
             List<Seat> seats = new List<Seat>();
-           
-            if(!DateTime.TryParseExact(eventItem.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate)){
+
+            if (!DateTime.TryParseExact(eventItem.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+            {
                 throw new Exception("Invalid start date");
             }
 
-            if(!DateTime.TryParseExact(eventItem.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate)){
+            if (!DateTime.TryParseExact(eventItem.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+            {
                 throw new Exception("Invalid end date");
             }
 
-            if (startDate > endDate){
+            if (startDate > endDate)
+            {
                 throw new Exception("Start date cannot be after end date");
             }
 
-            if (!TimeSpan.TryParseExact(eventItem.StartTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan startTime)){
+            if (!TimeSpan.TryParseExact(eventItem.StartTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan startTime))
+            {
                 throw new Exception("Invalid start time");
             }
 
-            if (!TimeSpan.TryParseExact(eventItem.EndTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan endTime)){
+            if (!TimeSpan.TryParseExact(eventItem.EndTime, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan endTime))
+            {
                 throw new Exception("Invalid end time");
             }
 
-            if (startDate == endDate){
-                if(startTime > endTime){
+            if (startDate == endDate)
+            {
+                if (startTime > endTime)
+                {
                     throw new Exception("Start time cannot be after end time");
                 }
             }
 
-            var newEvent = new Event{
+            var newEvent = new Event
+            {
                 Name = eventItem.Name,
                 Description = eventItem.Description,
                 Location = eventItem.Location,
@@ -171,15 +183,24 @@ namespace backend.Services
                 EndDate = endDate.Add(endTime),
             };
 
-            for(int i = 0; i < eventItem.TableAmount; i++){
-                var newTable = new Table{
-                    Event = newEvent,
-                };
+            if (eventItem.TableAmount < 51)
+            {
+                for (int i = 0; i < eventItem.TableAmount; i++)
+                {
 
-                tables.Add(newTable);
+                    var newTable = new Table
+                    {
+                        Event = newEvent,
+                    };
+
+                    tables.Add(newTable);
+                }
+            } else {
+                throw new Exception("Weedwizard fuck off");
             }
 
-            if(eventItem.TableAmount > 0){
+            if (eventItem.TableAmount > 0)
+            {
                 foreach (Table table in tables)
                 {
                     for (int i = 0; i < 2; i++)
