@@ -144,6 +144,17 @@ export default function EventDetails({ params }: EventDetailsProps) {
     if (loading) {
         return <div>Loading event...</div>;
     }
+
+    if (!authUser || !authUser.userRoles.includes("Admin") || !authUser.userRoles.includes("User") ) {
+        return( 
+            <div className=' bg- text-center container mx-auto px-4 py-8'>
+                <p className='text-danger-700'>
+                    You need to either be logged in or be a confirmed user to get seating
+                </p>
+            </div>
+        );
+
+    }
     return (
         <div className='container mx-auto px-4 py-8'>
             {error &&

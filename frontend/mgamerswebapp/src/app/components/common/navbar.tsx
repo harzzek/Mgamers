@@ -8,14 +8,14 @@ import RegisterModal from '../modals/RegisterModal';
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button"
 import Image from 'next/image';
-import mgamersLogo from '@/resources/MGAMERS_logo.png'
+import mgamersLogo from '@/resources/MGAMERS_logo.png';
 import { Navbar as HeroNav, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 
 
 const navigation = [
   { name: 'Arrangementer', href: '/events' },
   { name: 'Brugere', href: '/users' },
-  { name: 'Om os', href: '#' },
+  { name: 'Om os', href: '/about' },
   { name: 'Guides', href: '#' },
 
 ]
