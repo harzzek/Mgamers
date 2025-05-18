@@ -1,7 +1,8 @@
 "use client";
-
 import { Button, Divider, Form, Input } from '@heroui/react';
 import { useState } from 'react';
+import Modal from '../common/Modal';
+import axios from 'axios';
 
 interface RegisterFormProps {
     onSubmit: (data: { name: string; username: string; password: string; email: string, birthday: string }) => void;
@@ -21,7 +22,14 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         e.preventDefault();
 
         if (confirmPassword === password) {
-            onSubmit({ name, username, password, email, birthday });
+            try {
+                onSubmit({ name, username, password, email, birthday });
+            } catch (error) {
+                if (axios.isAxiosError(error))
+                    setError(error.response?.data[0].description);
+                console.log(error)
+            }
+
         } else {
             setError("Ikke ens");
             setInvalidCombo(true);
@@ -100,7 +108,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
                     onChange={(e) => setBirthday(e.target.value)}
                 />
 
-                <Divider className='my-4'/>
+                <Divider className='my-4' />
 
                 <Button type="submit" color="primary">
                     Create account
