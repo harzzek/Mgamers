@@ -87,10 +87,10 @@ export const TableSvg = (table: TableSvgProps) => {
                 :
                 <rect x={table.x} y={table.y} width={table.width} height={table.height} fill={"gray"} />
             }
-            {table.table.seats.map((seat) => {
+            {table.table.seats.map((seat, index) => {
 
                 return (
-                    <SeatSvg key={seat.id} seat={seat} x={calculateSeatPositionX()} y={ calculateSeatPositionY(seat)} width={SEAT_WIDTH} height={SEAT_HEIGHT} onSeatClick={table.onSeatClick}>
+                    <SeatSvg key={seat.id} seat={seat} x={calculateSeatPositionX()} y={ calculateSeatPositionY(seat)} width={SEAT_WIDTH} height={SEAT_HEIGHT} onSeatClick={table.onSeatClick} seatIndex={index} tableIndex={table.tableindex}>
                     </SeatSvg>
                 );
             })

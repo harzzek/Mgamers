@@ -44,20 +44,33 @@ builder.Services.AddIdentity<User, Role>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.Configure<SendGridSettings>(
-    builder.Configuration.GetSection("SendGridSettings")
-);
-builder.Services.Configure<SendGridSettings>(options => {
-    builder.Configuration.GetSection("SendGridSettings").Bind(options);
-    var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-    if (!string.IsNullOrEmpty(apiKey)){
-        options.ApiKey = apiKey;
-    } else {
-        Console.WriteLine("No API key found for SENDGRID");
-    }
-});
-
-builder.Services.AddTransient<IEmailSender, SendGridEmailSenderService>();
+if (builder.Environment.IsDevelopment())
+{
+    Console.WriteLine("SMTP Developement");
+    builder.Services.Configure<MailHogSettings>(builder.Configuration.GetSection("MailHogSettings"));
+    builder.Services.AddTransient<IEmailSender, SmtpMailHogSenderService>();
+}
+else
+{
+    Console.WriteLine("SMTP Production");
+    builder.Services.Configure<SendGridSettings>(
+        builder.Configuration.GetSection("SendGridSettings")
+    );
+    builder.Services.Configure<SendGridSettings>(options =>
+    {
+        builder.Configuration.GetSection("SendGridSettings").Bind(options);
+        var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+        if (!string.IsNullOrEmpty(apiKey))
+        {
+            options.ApiKey = apiKey;
+        }
+        else
+        {
+            Console.WriteLine("No API key found for SENDGRID");
+        }
+    });
+    builder.Services.AddTransient<IEmailSender, SendGridEmailSenderService>();
+}
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -147,7 +160,9 @@ if (app.Environment.IsDevelopment())
     Console.WriteLine($"ASPNETCORE_ENVIRONMENT = {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
 
 
-} else {
+}
+else
+{
     Console.WriteLine($"Current environment: {app.Environment.EnvironmentName}");
     Console.WriteLine($"ASPNETCORE_ENVIRONMENT = {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
 
