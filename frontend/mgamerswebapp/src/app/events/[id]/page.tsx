@@ -23,6 +23,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
     const [error, setError] = useState<string | null>(null);
     const { user: authUser } = useAuth();
     const [seatIds, setSeatIds] = useState<number[]>([]);
+    const [registrations, setRegistrations] = useState<registration[]>([]);
 
     const totalRows = event && event.tables ? Math.ceil(event.tables.length / 4) : 1;
 
@@ -37,8 +38,12 @@ export default function EventDetails({ params }: EventDetailsProps) {
         try {
             console.log('Fetching event...');
             const fetchedEvent = await fetchEventById(params.id);
+            const uniqueRegistrations : Array<registration> = [];
 
             fetchedEvent.participants.forEach((participant: registration) => {
+                if(!uniqueRegistrations.some((reg) => reg.userId === participant.userId)){
+                    uniqueRegistrations.push(participant);
+                }
                 const seatId = participant.seatId;
                 fetchedEvent.tables.forEach((table: EventTable) => {
                     table.seats.forEach(seat => {
@@ -49,7 +54,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     });
                 });
             });
-
+            setRegistrations(uniqueRegistrations)
             setEvent(fetchedEvent);
         } catch (err) {
             console.error(err);
@@ -140,14 +145,13 @@ export default function EventDetails({ params }: EventDetailsProps) {
         return rowNumber * (TABLE_HEIGHT + VERTICAL_SPACING);
     }
 
-
     if (loading) {
         return <div>Loading event...</div>;
     }
 
     if (!authUser || (!authUser.userRoles.includes("Admin") && !authUser.userRoles.includes("User")) ) {
         return( 
-            <div className=' bg- text-center container mx-auto px-4 py-8'>
+            <div className='text-center container mx-auto px-4 py-8'>
                 <p className='text-danger-700'>
                     You need to either be logged in or be a confirmed user to get seating
                 </p>
@@ -156,7 +160,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
 
     }
     return (
-        <div className='container mx-auto px-4 py-8'>
+        <div className='container mx-auto px-4 py-16'>
             {error &&
                 <div id="toast-top-right" className="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow top-30 right-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800" role="alert">
                     <div className='ms-3 text-sm font-normal'>
@@ -164,14 +168,46 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     </div>
                 </div>
             }
-            <h1>Event Details</h1>
-            <div className='grid grid-flow-row grid-cols-2 auto-rows-max'>
-                <div>
-                    <h2>{event?.name}</h2>
-                    <p>{event?.startDate}</p>
-                    <p>{event?.location}</p>
-                    <p>{event?.description}</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                    <h1 className="text-3xl font-bold mb-3">{event?.name}</h1>
+                    <div className='grid grid-cols-3 gap-4'>
+                        <div>
+                            <p className='font-bold'>Arrangement dato</p>
+                            <p>{event?.startDate} - {event?.endDate}</p>
+                        </div>
+                        <div>
+                            <p className='font-bold'>Arrangement tid</p>
+                            <p>{event?.startTime} - {event?.endTime}</p>
+                        </div>
+                        <div>
+                            <p className='font-bold'>Pladsering</p>
+                            <p>{event?.location}</p>
+                        </div>
+                        <div>
+                            <p className='font-bold'>Beskrivelse</p>
+                            <p>{event?.description}</p>
+                        </div>
+                    </div>
+
                 </div>
+                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                    <h1 className="text-3xl font-bold mb-3">Deltagere</h1>
+                    <div className='grid grid-cols-3 gap-4'>
+                    {registrations.map(registeredUser =>{
+                        const username = registeredUser.user.username;
+                        const displayName = username.length > 12 ? `${username.slice(0, 12)}...` : username;
+                        return(
+                            <div className=" border-b-2 border-primary-200 mb-1 text-center" key={registeredUser.userId + registeredUser.seatId}>
+                                <p>{displayName}</p>
+                            </div>
+                        )
+                    })}
+                    </div>
+
+                </div>
+
             </div>
 
             <div className="flex flex-col items-center">
