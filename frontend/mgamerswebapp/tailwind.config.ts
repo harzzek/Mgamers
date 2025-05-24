@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
-import {heroui} from "@heroui/react";
+import { heroui } from "@heroui/react";
+import typeography from "@tailwindcss/typography"
 
 const config: Config = {
   content: [
@@ -106,7 +107,9 @@ const config: Config = {
         },
       },
     }
-  )],
+  ),
+    typeography
+  ],
 };
 export default config;
 

@@ -19,7 +19,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
   return (
     <a href={`users/${user.id}`} >
-      <Card className='bg-primary-100 p-4'>
+      <Card className='bg-primary-100 p-4 hover:opacity-75'>
         <CardHeader>
           {user.username}
         </CardHeader>

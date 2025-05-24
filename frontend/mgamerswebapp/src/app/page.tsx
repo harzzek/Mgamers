@@ -32,7 +32,7 @@ const Home: React.FC = () => {
           {/* Left column - Messages for users */}
           <div>
             <div className="bg-secondary-100 p-6 shadow-md mb-3">
-              <h1 className="text-2xl font-semibold mb-4">Velkommen til MGamers Esport
+              <h1>Velkommen til MGamers Esport
                 Dit Gamerfællesskab!
               </h1>
               <p>
@@ -45,25 +45,25 @@ const Home: React.FC = () => {
               </p>
             </div>
             <div className="bg-secondary-100 p-6 shadow-md">
-              <h1 className="text-2xl font-semibold mb-4">
+              <h1>
                 Hvad gør os unikke?
               </h1>
 
               <ul className="space-y-6">
                 <li>
-                  <h3 className="text-xl font-semibold mb-2">Gaming på alle niveauer</h3>
+                  <h3>Gaming på alle niveauer</h3>
                   <p>Vi tilbyder alt fra afslappede gaming-sessions til konkurrencer og esport-events, hvor du kan udfordre dig selv og andre.</p>
                 </li>
                 <li>
-                  <h3 className="text-xl font-semibold mb-2">LAN-events</h3>
+                  <h3>LAN-events</h3>
                   <p>Deltag i vores legendariske LAN-events, hvor vi skaber rammerne for 46 timers sjov, gaming og fællesskab. Alt er klar til dig – borde, strøm, internetkabler og en lynhurtig 1 Gbit forbindelse.</p>
                 </li>
                 <li>
-                  <h3 className="text-xl font-semibold mb-2">Fællesskab og hygge</h3>
+                  <h3>Fællesskab og hygge</h3>
                   <p>MGamers Esport er ikke kun om gaming – vi spiller også brætspil, hygger os og møder ligesindede med samme passion.</p>
                 </li>
                 <li>
-                  <h3 className="text-xl font-semibold mb-2">For børn, unge og voksne</h3>
+                  <h3>For børn, unge og voksne</h3>
                   <p>Vi er åbne for alle fra 12 år og opefter, og vi har fokus på et trygt og inkluderende miljø for alle medlemmer.</p>
                 </li>
               </ul>

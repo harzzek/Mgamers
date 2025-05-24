@@ -12,7 +12,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
     return (
         <a href={`events/${event.id}`} >
-            <Card className='bg-primary-100'>
+            <Card className='bg-primary-100 hover:opacity-75'>
                 <CardHeader>
                     <div className='flex flex-col'>
                         <p className='text-md'>{event.name}</p>

@@ -16,7 +16,7 @@ const navigation = [
   { name: 'Arrangementer', href: '/events' },
   { name: 'Brugere', href: '/users' },
   { name: 'Om os', href: '/about' },
-  { name: 'Guides', href: '#' },
+  { name: 'News', href: '/news' },
 
 ]
 
@@ -29,7 +29,7 @@ export const Logo = () => {
 }
 
 export default function Navbar() {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const { userToken, logout } = useAuth();
   const pathname = usePathname();
