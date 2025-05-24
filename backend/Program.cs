@@ -78,6 +78,7 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<INewsPostService, NewsPostService>();
 // Add services to the container.
 builder.Services.AddControllers();
 

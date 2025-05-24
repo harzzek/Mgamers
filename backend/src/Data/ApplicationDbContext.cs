@@ -22,6 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     public DbSet<Table> Tables { get; set; }
     public DbSet<Seat> Seats { get; set; }
     public DbSet<Registration> Registrations { get; set; }
+    public DbSet<NewsPost> NewsPosts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,7 +86,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
                 .HasColumnName("created_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            entity.HasOne(e => e.User)
+            entity.HasOne(e => e.CreatorUser)
                 .WithMany()
                 .HasForeignKey(e => e.Creator)
                 .OnDelete(DeleteBehavior.Cascade);

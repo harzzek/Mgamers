@@ -25,6 +25,6 @@ namespace backend.Models
 
         [ForeignKey(nameof(Creator))]
         [JsonIgnore]
-        public User User { get; set; }
+        public User CreatorUser { get; set; }
     }
 }
