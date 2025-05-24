@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 public class ApplicationDbContext : IdentityDbContext<User, Role, int>
-{ 
+{
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -27,7 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     {
 
         modelBuilder.Entity<Registration>()
-            .HasKey(r => new { r.UserId, r.EventId , r.SeatId });
+            .HasKey(r => new { r.UserId, r.EventId, r.SeatId });
 
         modelBuilder.Entity<Registration>()
             .HasOne(r => r.User)
@@ -52,9 +52,9 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
             .WithMany(t => t.Seats)
             .HasForeignKey(s => s.TableId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<Event>()
-            .HasMany(e => e.Tables) 
+            .HasMany(e => e.Tables)
             .WithOne(t => t.Event)
             .HasForeignKey(t => t.EventId)
             .IsRequired();
@@ -71,6 +71,25 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
             .HasIndex(r => r.SeatId)
             .IsUnique();
 
+        modelBuilder.Entity<NewsPost>(entity =>
+        {
+            entity.ToTable("newspost");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Letter).HasColumnName("letter");
+            entity.Property(e => e.Creator).HasColumnName("creator_id");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.Creator)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
         base.OnModelCreating(modelBuilder);
     }
 }
