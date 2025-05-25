@@ -16,22 +16,17 @@ namespace backend.Services
 
         public async Task<List<NewsPostDto>> GetAllNewsPosts()
         {
-            List<NewsPost> dbNews = await _context.NewsPosts.ToListAsync();
-
-            List<NewsPostDto> newsPosts = new List<NewsPostDto>();
-
-            foreach (NewsPost newsItem in dbNews)
-            {
-                newsPosts.Add(new NewsPostDto
+            List<NewsPostDto> news = await _context.NewsPosts
+                .OrderByDescending(n => n.CreatedAt)
+                .Select(n => new NewsPostDto
                 {
-                    Id = newsItem.Id,
-                    Letter = newsItem.Letter,
-                    Creator = newsItem.Creator,
-                    CreatedAt = newsItem.CreatedAt
-                });
-            }
+                    Id = n.Id,
+                    Letter = n.Letter,
+                    Creator = n.Creator,
+                    CreatedAt = n.CreatedAt
+                }).ToListAsync();
 
-            return newsPosts;
+            return news;
         }
 
         public async Task<List<NewsPostDto>> GetLatestNews(int numOfLatest)

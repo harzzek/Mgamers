@@ -1,15 +1,20 @@
 "use client";
 
-import { Card, CardBody, CardFooter, Divider } from '@heroui/react';
+import { Button, Card, CardBody, CardFooter, Divider, PressEvent } from '@heroui/react';
 import React, { useEffect, useState } from 'react';
 import { NewsPost } from "../interfaces/newsPost"
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
+import { useAuth } from '@/context/AuthContext';
+import { deleteNewsPost } from '@/stores/newsPostStore';
+import ConfirmModal from '@/app/components/modals/ConfirmModal';
 
 export default function NewsCard(newspost: NewsPost) {
     const [htmlContent, setHtmlContent] = useState<string>('');
+    const { user } = useAuth();
+    const [confirmOpen, setConfirmOpen] = useState(false);
 
     useEffect(() => {
         const convertMarkdown = async () => {
@@ -28,20 +33,46 @@ export default function NewsCard(newspost: NewsPost) {
         convertMarkdown();
     }, [newspost.letter]);
 
+    const isAdmin = () => {
+        if (user && user.userRoles) {
+            return user.userRoles.find(role => role.includes('Admin'));
+        }
+        return false;
+    };
+
+    const deletePostPress = (e: PressEvent) => {
+        setConfirmOpen(true);
+    };
+
+    const deletePost = async () => {
+        try {
+            await deleteNewsPost(newspost.id);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
-        <Card className='bg-secondary-200 p-6 shadow-md mb-3'>
-            <CardBody>
-                <div className="prose max-w-none prose-invert" dangerouslySetInnerHTML={{ __html: htmlContent }} />
-            </CardBody>
-            <Divider/>
-            <CardFooter>
-                <div className='flex justify-end w-full'>
-                    <div>
-                        <p>{newspost.createdAt.toLocaleDateString()}</p>
+        <>
+            <Card className='bg-secondary-200 p-6 shadow-md mb-3'>
+                <CardBody>
+                    <div className="prose max-w-none prose-invert" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                </CardBody>
+                <Divider />
+                <CardFooter>
+                    {isAdmin() &&
+                        <Button color="danger" onPress={(e) => deletePostPress(e)}>
+                            Delete
+                        </Button>
+                    }
+                    <div className='flex justify-end w-full'>
+                        <div>
+                            <p>{newspost.createdAt.toLocaleDateString()}</p>
+                        </div>
                     </div>
-                </div>
-                
-            </CardFooter>
-        </Card>
+                </CardFooter>
+            </Card>
+            <ConfirmModal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} title='Er du sikker?' message='Du er igang med at slette en nyhed' onConfirm={() => deletePost()}/>
+        </>
     );
 }

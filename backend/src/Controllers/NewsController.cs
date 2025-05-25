@@ -55,8 +55,8 @@ namespace backend.Controllers
             return Ok(createdNews);
         }
 
-        [HttpDelete]
-        [Authorize(Roles = "Admn")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<NewsPostDto>> DeleteNewsPost(int id)
         {
             var deletedNews = await _newsService.DeleteNewsPostAsync(id);
