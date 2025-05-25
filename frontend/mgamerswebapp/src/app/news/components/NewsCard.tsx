@@ -41,6 +41,7 @@ export default function NewsCard(newspost: NewsPost) {
     };
 
     const deletePostPress = (e: PressEvent) => {
+        console.log(e);
         setConfirmOpen(true);
     };
 

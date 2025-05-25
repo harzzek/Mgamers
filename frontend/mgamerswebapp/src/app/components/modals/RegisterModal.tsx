@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Modal from '../common/Modal';
 import RegisterForm from '../forms/RegisterForm';
 import { register as registerService } from '@/stores/authStore';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 interface RegistermodalProps {
     isOpen: boolean;

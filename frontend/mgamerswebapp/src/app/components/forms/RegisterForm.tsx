@@ -1,7 +1,6 @@
 "use client";
 import { Button, Divider, Form, Input } from '@heroui/react';
 import { useState } from 'react';
-import Modal from '../common/Modal';
 import axios from 'axios';
 
 interface RegisterFormProps {

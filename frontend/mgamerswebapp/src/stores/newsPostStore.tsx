@@ -5,7 +5,7 @@ const API_URL = '/News';
 
 export const fetchAllNews = async (): Promise<NewsPost[]> => {
     const response = await axiosInstance.get(`${API_URL}`);
-    return response.data.map((post: any) => ({
+    return response.data.map((post: NewsPost) => ({
         ...post,
         createdAt: new Date(post.createdAt),
     })) as NewsPost[];
@@ -13,7 +13,7 @@ export const fetchAllNews = async (): Promise<NewsPost[]> => {
 
 export const fetchLatestNews = async (): Promise<NewsPost[]> => {
     const response = await axiosInstance.get(`${API_URL}/Latest`);
-    return response.data.map((post: any) => ({
+    return response.data.map((post: NewsPost) => ({
         ...post,
         createdAt: new Date(post.createdAt),
     })) as NewsPost[];

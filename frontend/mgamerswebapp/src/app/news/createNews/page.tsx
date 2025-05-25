@@ -6,7 +6,6 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import { Button, PressEvent } from '@heroui/button';
-import { Form, Input } from '@heroui/react';
 import ConfirmModal from '@/app/components/modals/ConfirmModal';
 import { createNewsPost } from '@/stores/newsPostStore';
 
@@ -39,6 +38,7 @@ const NewsPage: React.FC = () => {
 
 
     const handleSubmit = (e: PressEvent) => {
+        console.log(e);
         setConfirmOpen(true);
     }
 
@@ -47,6 +47,7 @@ const NewsPage: React.FC = () => {
             await createNewsPost(markdown);
             setConfirmOpen(false);
         } catch (error){
+            console.log(error);
             setErrorMessage("Fejl skete, højst sandsynlig server fejl. Kontakt HC");
         }
         
