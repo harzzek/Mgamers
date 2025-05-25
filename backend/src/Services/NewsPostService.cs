@@ -26,7 +26,8 @@ namespace backend.Services
                 {
                     Id = newsItem.Id,
                     Letter = newsItem.Letter,
-                    Creator = newsItem.Creator
+                    Creator = newsItem.Creator,
+                    CreatedAt = newsItem.CreatedAt
                 });
             }
 
@@ -42,7 +43,8 @@ namespace backend.Services
                 {
                     Id = n.Id,
                     Letter = n.Letter,
-                    Creator = n.Creator
+                    Creator = n.Creator,
+                    CreatedAt = n.CreatedAt
                 }).ToListAsync();
 
             return latestNews;

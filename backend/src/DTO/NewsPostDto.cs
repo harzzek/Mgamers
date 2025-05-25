@@ -13,4 +13,9 @@ public class NewsPostDto
     [Required]
     [Column("creator_id")]
     public int Creator { get; set; }
+
+    [Required]
+    [DataType(DataType.Date)]
+    [Column("created_at")]
+    public DateTime CreatedAt { get; set; }
 }
