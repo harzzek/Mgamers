@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Net.Mime;
-using Microsoft.Extensions.Logging;
 
 namespace YourNamespace.Controllers
 {
@@ -9,12 +6,10 @@ namespace YourNamespace.Controllers
     [ApiController]
     public class FilesController : ControllerBase
     {
-        private readonly ILogger<FilesController> _logger;
         private readonly IWebHostEnvironment _env;
 
-        public FilesController(ILogger<FilesController> logger, IWebHostEnvironment env)
+        public FilesController(IWebHostEnvironment env)
         {
-            _logger = logger;
             _env = env;
         }
 
@@ -25,7 +20,6 @@ namespace YourNamespace.Controllers
             
             if (!System.IO.File.Exists(filePath))
             {
-                _logger.LogWarning("File not found: {filename}", filename);
                 return NotFound("File not found.");
             }
 

@@ -53,23 +53,23 @@ if (builder.Environment.IsDevelopment())
 else
 {
     Console.WriteLine("SMTP Production");
-    builder.Services.Configure<SendGridSettings>(
-        builder.Configuration.GetSection("SendGridSettings")
+    builder.Services.Configure<ResendSettings>(
+        builder.Configuration.GetSection("ResendSettings")
     );
-    builder.Services.Configure<SendGridSettings>(options =>
+    builder.Services.Configure<ResendSettings>(options =>
     {
-        builder.Configuration.GetSection("SendGridSettings").Bind(options);
-        var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+        builder.Configuration.GetSection("ResendSettings").Bind(options);
+        var apiKey = Environment.GetEnvironmentVariable("RESEND_APITOKEN");
         if (!string.IsNullOrEmpty(apiKey))
         {
             options.ApiKey = apiKey;
         }
         else
         {
-            Console.WriteLine("No API key found for SENDGRID");
+            Console.WriteLine("No API key found for RESEND");
         }
     });
-    builder.Services.AddTransient<IEmailSender, SendGridEmailSenderService>();
+    builder.Services.AddTransient<IEmailSender, ResendEmailSenderService>();
 }
 
 builder.Services.AddScoped<IUserService, UserService>();
