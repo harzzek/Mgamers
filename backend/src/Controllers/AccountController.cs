@@ -59,7 +59,7 @@ namespace backend.Controllers
 
                 try
                 {
-                    await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
+                    await _emailSender.SendEmailAsync(user.Email, "Confirm your email", ConfirmAccountTemplate.Render(confirmationLink, user.UserName));
                 }
                 catch (Exception e)
                 {
@@ -126,7 +126,7 @@ namespace backend.Controllers
                 await _emailSender.SendEmailAsync(
                     user.Email,
                     "Reset Your Password",
-                    $"Please reset your password by clicking this link: <a href='{resetLink}'>Reset Password</a>");
+                    ResetPasswordTemplate.Render(resetLink, user.UserName));
 
             }
             catch (Exception e)
