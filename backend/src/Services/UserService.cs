@@ -2,8 +2,7 @@ using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Services
 {
@@ -69,24 +68,72 @@ namespace backend.Services
                 return null;
             }
 
-            if(dto.Name != null && dto.Name != dbuser.Name)
+            if (dto.Name != null && dto.Name != dbuser.Name)
             {
                 dbuser.Name = dto.Name;
             }
 
-            if(dto.Birthdate != null && dto.Birthdate != dbuser.Birthdate)
+            if (dto.Address != null && dto.Address != dbuser.Address)
             {
-                dbuser.Birthdate = dto.Birthdate;
+                dbuser.Address = dto.Address;
             }
 
-            if(dto.Username != null && dto.Username != dbuser.UserName)
+            string PhoneNumber = dto.PhoneNumber.ToString();
+
+            if (PhoneNumber != null && PhoneNumber != dbuser.PhoneNumber)
             {
-                dbuser.UserName = dto.Username;
+                if (!PhoneNumber.IsNullOrEmpty())
+                {
+                    if (IsEightDigits(dto.PhoneNumber.ToString()))
+                    {
+                        dbuser.PhoneNumber = PhoneNumber;
+                    }
+                    else
+                    {
+                        throw new Exception("Phone number not valid");
+                    }
+
+                }
+
+            }
+
+            string PostNumber = dto.PostNumber.ToString();
+
+            if (PostNumber != null && PostNumber != dbuser.PostNumber)
+            {
+                if (!PostNumber.IsNullOrEmpty())
+                {
+                    dbuser.PostNumber = PostNumber;
+                }
             }
 
             await _userManager.UpdateAsync(dbuser);
 
             return dbuser;
+        }
+
+        private static bool IsEightDigits(string number)
+        {
+            return number.Length == 8 && number.All(char.IsDigit);
+        }
+
+        public async Task<User> DeleteUser(int id)
+        {
+            User dbUser = await _userManager.FindByIdAsync(id.ToString());
+
+            if (dbUser == null)
+            {
+                throw new Exception("No user with this id");
+            }
+
+            IdentityResult result = await _userManager.DeleteAsync(dbUser);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to delete user");
+            }
+
+            return dbUser;
         }
     }
 

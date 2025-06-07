@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useState } from "react";
-import { fetchUserById } from '@/stores/userStore';
+import { fetchUserById, deleteUser } from '@/stores/userStore';
 import { useAuth } from "@/context/AuthContext";
 import { fetchRoles, upgradeUserRole } from "@/stores/adminStore";
-import { Button, Divider, Select, SelectItem } from "@heroui/react";
+import { Button, Divider, PressEvent, Select, SelectItem } from "@heroui/react";
+import ConfirmModal from "@/app/components/modals/ConfirmModal";
+import { useRouter } from 'next/navigation';
 
 interface Role {
     id: number;
@@ -35,6 +37,8 @@ export default function UserDetails({ params }: UserDetailsProps) {
     const [assignableRoles, setAssignableRoles] = useState<Role[]>([]);
     const [unassignableRoles, setUnassignableRoles] = useState<Role[]>([]);
     const [selectedRoleUpgrade, setSelectedRoleUpgrade] = useState<string>("");
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -95,6 +99,22 @@ export default function UserDetails({ params }: UserDetailsProps) {
         }
     };
 
+    const handleDelete = (e: PressEvent) => {
+        console.log(e);
+        setConfirmOpen(true);
+    }
+
+    const handleDeleteUser = async () => {
+            try{
+                await deleteUser(params.id);
+                setConfirmOpen(false);
+                router.push('/')
+            } catch (error){
+                console.log(error);
+            }
+            
+        }
+
     if (loading) {
         return <div>Loading user...</div>;
     }
@@ -121,9 +141,9 @@ export default function UserDetails({ params }: UserDetailsProps) {
                     </div>
                 </div>
                 {user?.userRoles.find(role => role.includes('Admin')) &&
-                    <div>
-                        <div className="ml-8 p-6 bg-primary-50  shadow-lg rounded-lg w-96">
-                            <h3 className="text-xl font-bold mb-4">Assign Role</h3>
+                    <div className="ml-8 p-6 bg-primary-50  shadow-lg rounded-lg w-96">
+                        <div className="pb-8">
+                            <h3>Assign Role</h3>
                             <Select
                                 className="w-full p-2 rounded-lg mb-4" id="role-select"
                                 value={selectedRoleUpgrade}
@@ -142,9 +162,27 @@ export default function UserDetails({ params }: UserDetailsProps) {
                                 Assign Role
                             </Button>
                         </div>
+                        <Divider/>
+
+                        <div className="pt-6">
+                            <h3>Delete user</h3>
+
+                            <Button
+                                color="danger"
+                                className="w-full px-4 py-2"
+                                onPress={handleDelete}
+                            >
+                                Slet bruger
+                            </Button>
+
+                        </div>
+
+
                     </div>
                 }
             </div>
+            
+            <ConfirmModal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} title='Du er igang med at slette en bruger' message='Når brugeren er slettet, så kan brugeren ikke længere findes i systemet. Alt historie bliver rydet og kan ikke genoprettes.' onConfirm={() => handleDeleteUser()}/>
         </div>
     );
 }

@@ -78,8 +78,24 @@ namespace backend.Controllers
                 }
                 else
                 {
-                    throw;
+                    throw new Exception("User does not exist");
                 }
+                
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                User user = await _userService.DeleteUser(id);
+                return Ok("User was deleted");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 

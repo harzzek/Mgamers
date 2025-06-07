@@ -13,3 +13,7 @@ export const fetchUserById = async (id: number) => {
 	return response.data;
 };
 
+export const deleteUser = async (id: number) => {
+	const response = await axiosInstance.delete(`${API_URL}/${id}`);
+	return response.data;
+}

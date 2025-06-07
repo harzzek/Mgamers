@@ -30,6 +30,20 @@ namespace backend.Models
         [Column("birthdate")]
         public string Birthdate { get; set; }
 
+        [Required]
+        [DataType(DataType.Date)]
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("address")]
+        public string? Address { get; set; }
+
+        [Column("phonenumber")]
+        public override string? PhoneNumber { get; set; }
+
+        [Column("postnumber")]
+        public string? PostNumber { get; set; }
+
         [JsonIgnore]
         public List<Registration> Registrations { get; set; } = new List<Registration>();
 

@@ -72,6 +72,13 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int>
             .HasIndex(r => r.SeatId)
             .IsUnique();
 
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(u => u.CreatedAt)
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+
         modelBuilder.Entity<NewsPost>(entity =>
         {
             entity.ToTable("newspost");

@@ -8,6 +8,7 @@ import rehypeStringify from 'rehype-stringify';
 import { Button, PressEvent } from '@heroui/button';
 import ConfirmModal from '@/app/components/modals/ConfirmModal';
 import { createNewsPost } from '@/stores/newsPostStore';
+import { useRouter } from 'next/navigation';
 
 const NewsPage: React.FC = () => {
 
@@ -15,6 +16,7 @@ const NewsPage: React.FC = () => {
     const [htmlContent, setHtmlContent] = useState<string>('');
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const router = useRouter();
     
 
     // Convert markdown to HTML
@@ -46,6 +48,7 @@ const NewsPage: React.FC = () => {
         try{
             await createNewsPost(markdown);
             setConfirmOpen(false);
+            router.push('/')
         } catch (error){
             console.log(error);
             setErrorMessage("Fejl skete, højst sandsynlig server fejl. Kontakt HC");
