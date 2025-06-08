@@ -1,3 +1,4 @@
+import { UpdateUserDTO } from '@/DTOs/updateUserInfoDTO';
 import axiosInstance from './axiosInstance';
 
 const API_URL = '/User';
@@ -15,5 +16,10 @@ export const fetchUserById = async (id: number) => {
 
 export const deleteUser = async (id: number) => {
 	const response = await axiosInstance.delete(`${API_URL}/${id}`);
+	return response.data;
+}
+
+export const updateUserById = async (id: number, data: UpdateUserDTO) => {
+	const response = await axiosInstance.put(`${API_URL}/${id}`, data);
 	return response.data;
 }

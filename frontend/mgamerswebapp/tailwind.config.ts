@@ -78,7 +78,7 @@ const config: Config = {
             secondary: {
               50: "#33200d",
               100: "#5b3411",
-              200: "#924f1b",
+              200: "#27c72a",
               300: "#c76d27",
               400: "#fba163", // Mgamers orange
               500: "#ffb57e",

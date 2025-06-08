@@ -5,7 +5,7 @@ namespace backend.Interfaces
 {
     public interface IUserService
     {
-        Task<List<UserDto>> GetAllUsers();
+        Task<List<SimpleUserDto>> GetAllUsers();
         Task<UserDto> GetUserById(int id);
 
         Task<User> UpdateUser(int id, UpdateUserDto dto);

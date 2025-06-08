@@ -8,7 +8,6 @@ interface User {
   name: string;
   username: string;
   email: string;
-  avatarUrl?: string; // Optional avatar URL
 }
 
 interface UserCardProps {
@@ -20,16 +19,20 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
   return (
     <a href={`users/${user.id}`} >
       <Card className='bg-primary-100 p-4 hover:opacity-75'>
-        <CardHeader>
-          {user.username}
+        <CardHeader className="gap-3">
+          <div>
+            <p className="text-md text-default-600">
+              {user.username}
+            </p>
+          </div>
         </CardHeader>
         <Divider/>
         <CardBody>
-          @{user.name}
+          Navn: {user.name}
         </CardBody>
         <Divider/>
         <CardFooter>
-          {user.email}
+          Email: {user.email}
         </CardFooter>
 
       </Card>

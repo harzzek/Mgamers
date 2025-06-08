@@ -25,9 +25,9 @@ namespace backend.Controllers
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<List<UserDto>>> GetAllUsers()
+        public async Task<ActionResult<List<SimpleUserDto>>> GetAllUsers()
         {
-            List<UserDto> users = await _userService.GetAllUsers();
+            List<SimpleUserDto> users = await _userService.GetAllUsers();
             //var users = await _context.Users.ToListAsync();
             return Ok(users);
         }
@@ -36,19 +36,25 @@ namespace backend.Controllers
         [Authorize(Roles = "User")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _userService.GetUserById(id);
+            try
+            {
+                var user = await _userService.GetUserById(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
 
-            if (user == null)
+                return Ok(user);
+            }
+            catch
             {
                 return NotFound();
+
             }
-
-            return Ok(user);
-
         }
 
         [HttpPut("{id}")]
-        [Authorize (Roles = "Guest")]
+        [Authorize(Roles = "Guest")]
         public async Task<ActionResult> UpdateUser(int id, UpdateUserDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -59,9 +65,10 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            
-            if(userId == null || userId.Value != dbuser.Id.ToString()){
-                return BadRequest("User not found");
+
+            if (userId == null || userId.Value != dbuser.Id.ToString())
+            {
+                return BadRequest("User does not exist");
             }
 
             try
@@ -80,7 +87,7 @@ namespace backend.Controllers
                 {
                     throw new Exception("User does not exist");
                 }
-                
+
             }
         }
 

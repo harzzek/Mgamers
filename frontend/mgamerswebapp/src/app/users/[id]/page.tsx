@@ -3,25 +3,9 @@ import { useEffect, useState } from "react";
 import { fetchUserById, deleteUser } from '@/stores/userStore';
 import { useAuth } from "@/context/AuthContext";
 import { fetchRoles, upgradeUserRole } from "@/stores/adminStore";
-import { Button, Divider, PressEvent, Select, SelectItem } from "@heroui/react";
+import { Button, Divider, Link, PressEvent, Select, SelectItem } from "@heroui/react";
 import ConfirmModal from "@/app/components/modals/ConfirmModal";
 import { useRouter } from 'next/navigation';
-
-interface Role {
-    id: number;
-    name: string;
-}
-
-interface User {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    birthdate: string;
-    // Users have many roles
-    roles: Role[];
-    avatarUrl?: string;
-}
 
 interface UserDetailsProps {
     params: {
@@ -104,16 +88,23 @@ export default function UserDetails({ params }: UserDetailsProps) {
         setConfirmOpen(true);
     }
 
-    const handleDeleteUser = async () => {
-            try{
-                await deleteUser(params.id);
-                setConfirmOpen(false);
-                router.push('/')
-            } catch (error){
-                console.log(error);
-            }
-            
+    const isOwnUser = () => {
+        if (user && user.id) {
+            return user.id == params.id;
         }
+        return false;
+    };
+
+    const handleDeleteUser = async () => {
+        try {
+            await deleteUser(params.id);
+            setConfirmOpen(false);
+            router.push('/')
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
     if (loading) {
         return <div>Loading user...</div>;
@@ -124,20 +115,35 @@ export default function UserDetails({ params }: UserDetailsProps) {
     }
     return (
         <div>
-            <div className="container mx-auto px-4 py-16 flex items-center justify-center">
+            <div className="container mx-auto px-4 py-16 flex items-center justify-center relative">
+                {isOwnUser() &&
+                    <Link href={`/users/${user?.id}/edit`} className="absolute top-8 right-4 bg-primary-400 hover:bg-primary-200 px-4 py-2 rounded shadow-lg transition text-foreground-50">
+                        Rediger
+                    </Link>
+                }
                 <div className="w-full max-w-2xl shadow-lg overflow-hidden p-8 bg-primary-50">
                     <h2 className="text-3xl font-bold  mb-2 text-center">{mgUser?.name}</h2>
                     <p className="text-lg  text-center">@{mgUser?.username}</p>
                     <div className="mt-6 border-t pt-4 text-center">
-                        <p className=" text-lg"><span className="font-semibold ">Email:</span> {mgUser?.email}</p>
+                        <p className="text-lg"><span className="font-semibold ">Email:</span> {mgUser?.email}</p>
                         <p className="text-lg mt-2"><span className="font-semibold ">Birthdate:</span> {mgUser?.birthdate}</p>
-                        <Divider className="my-4"/>
-                        <span className="font-semibold ">Roles:</span>
-                        {
-                            unassignableRoles.map((role) => (
-                                <p key={role.id}>{role.name}</p>
-                            ))
+                        <p className="text-lg mt-2"><span className="font-semibold ">Addresse:</span> {mgUser?.address}</p>
+                        <p className="text-lg mt-2"><span className="font-semibold ">Post nummer:</span> {mgUser?.postNumber}</p>
+                        <p className="text-lg mt-2"><span className="font-semibold ">Telefon nummer:</span> {mgUser?.phoneNumber}</p>
+                        <p className="text-lg mt-2"><span className="font-semibold ">Medlem siden:</span> {mgUser?.createdAt}</p>
+                        <Divider className="my-4" />
+                        {user?.userRoles.find(role => role.includes('Admin')) &&
+                            <>
+                                <span className="font-semibold ">Roles:</span>
+                                {
+                                    unassignableRoles.map((role) => (
+                                        <p key={role.id}>{role.name}</p>
+                                    ))
+                                }
+                            </>
                         }
+                        
+                        
                     </div>
                 </div>
                 {user?.userRoles.find(role => role.includes('Admin')) &&
@@ -162,7 +168,7 @@ export default function UserDetails({ params }: UserDetailsProps) {
                                 Assign Role
                             </Button>
                         </div>
-                        <Divider/>
+                        <Divider />
 
                         <div className="pt-6">
                             <h3>Delete user</h3>
@@ -181,8 +187,8 @@ export default function UserDetails({ params }: UserDetailsProps) {
                     </div>
                 }
             </div>
-            
-            <ConfirmModal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} title='Du er igang med at slette en bruger' message='Når brugeren er slettet, så kan brugeren ikke længere findes i systemet. Alt historie bliver rydet og kan ikke genoprettes.' onConfirm={() => handleDeleteUser()}/>
+
+            <ConfirmModal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} title='Du er igang med at slette en bruger' message='Når brugeren er slettet, så kan brugeren ikke længere findes i systemet. Alt historie bliver rydet og kan ikke genoprettes.' onConfirm={() => handleDeleteUser()} />
         </div>
     );
 }

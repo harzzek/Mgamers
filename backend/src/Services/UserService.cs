@@ -1,3 +1,4 @@
+using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
@@ -8,34 +9,28 @@ namespace backend.Services
 {
     public class UserService : IUserService
     {
-        private List<User> _users = new List<User>();
 
         private readonly UserManager<User> _userManager;
 
-        private readonly ApplicationDbContext _context;
-
-        public UserService(UserManager<User> userManager, ApplicationDbContext context)
+        public UserService(UserManager<User> userManager)
         {
             _userManager = userManager;
-            _context = context;
         }
 
-        public async Task<List<UserDto>> GetAllUsers()
+        public async Task<List<SimpleUserDto>> GetAllUsers()
         {
             List<User> dbusers = await _userManager.Users.ToListAsync();
 
-            List<UserDto> users = new List<UserDto>();
+            List<SimpleUserDto> users = new List<SimpleUserDto>();
 
             foreach (User user in dbusers)
             {
-                users.Add(new UserDto
+                users.Add(new SimpleUserDto
                 {
                     Id = user.Id,
                     Username = user.UserName,
                     Name = user.Name,
                     Email = user.Email,
-                    Birthdate = user.Birthdate,
-                    Roles = (await _userManager.GetRolesAsync(user)).Select(roleName => new Role { Name = roleName }).ToList()
                 });
             }
 
@@ -54,6 +49,10 @@ namespace backend.Services
                 Name = dbuser.Name,
                 Email = dbuser.Email,
                 Birthdate = dbuser.Birthdate,
+                CreatedAt = dbuser.CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                Address = dbuser.Address,
+                PhoneNumber = dbuser.PhoneNumber,
+                PostNumber = dbuser.PostNumber,
                 Roles = (await _userManager.GetRolesAsync(dbuser)).Select(roleName => new Role { Name = roleName }).ToList()
             };
 
@@ -65,7 +64,7 @@ namespace backend.Services
 
             if (dbuser == null)
             {
-                return null;
+                throw new Exception("No user found");
             }
 
             if (dto.Name != null && dto.Name != dbuser.Name)
@@ -78,15 +77,13 @@ namespace backend.Services
                 dbuser.Address = dto.Address;
             }
 
-            string PhoneNumber = dto.PhoneNumber.ToString();
-
-            if (PhoneNumber != null && PhoneNumber != dbuser.PhoneNumber)
+            if (dto.PhoneNumber != null && dto.PhoneNumber != dbuser.PhoneNumber)
             {
-                if (!PhoneNumber.IsNullOrEmpty())
+                if (!dto.PhoneNumber.IsNullOrEmpty())
                 {
-                    if (IsEightDigits(dto.PhoneNumber.ToString()))
+                    if (IsEightDigits(dto.PhoneNumber))
                     {
-                        dbuser.PhoneNumber = PhoneNumber;
+                        dbuser.PhoneNumber = dto.PhoneNumber;
                     }
                     else
                     {
@@ -97,13 +94,11 @@ namespace backend.Services
 
             }
 
-            string PostNumber = dto.PostNumber.ToString();
-
-            if (PostNumber != null && PostNumber != dbuser.PostNumber)
+            if (dto.PostNumber != null && dto.PostNumber != dbuser.PostNumber)
             {
-                if (!PostNumber.IsNullOrEmpty())
+                if (!dto.PostNumber.IsNullOrEmpty())
                 {
-                    dbuser.PostNumber = PostNumber;
+                    dbuser.PostNumber = dto.PostNumber;
                 }
             }
 
