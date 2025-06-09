@@ -30,7 +30,7 @@ export const SeatSvg = (seatProps: SeatSvgProps) => {
             if (userNameOnSeat.length > 12) {
                 userNameOnSeat = userNameOnSeat.slice(0, 12) + "...";
             }
-            return "#0D001A";
+            return "#1a1212";
         } else if (isSelected) {
             //Blue
             return "#3F51B5";

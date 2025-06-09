@@ -121,7 +121,7 @@ export default function UserDetails({ params }: UserDetailsProps) {
                         Rediger
                     </Link>
                 }
-                <div className="w-full max-w-2xl shadow-lg overflow-hidden p-8 bg-primary-50">
+                <div className="w-full max-w-2xl shadow-lg overflow-hidden p-8 bg-primary-100">
                     <h2 className="text-3xl font-bold  mb-2 text-center">{mgUser?.name}</h2>
                     <p className="text-lg  text-center">@{mgUser?.username}</p>
                     <div className="mt-6 border-t pt-4 text-center">
@@ -147,13 +147,14 @@ export default function UserDetails({ params }: UserDetailsProps) {
                     </div>
                 </div>
                 {user?.userRoles.find(role => role.includes('Admin')) &&
-                    <div className="ml-8 p-6 bg-primary-50  shadow-lg rounded-lg w-96">
+                    <div className="ml-8 p-6 bg-primary-100  shadow-lg rounded-lg w-96">
                         <div className="pb-8">
                             <h3>Assign Role</h3>
                             <Select
                                 className="w-full p-2 rounded-lg mb-4" id="role-select"
                                 value={selectedRoleUpgrade}
                                 label="Role"
+                                color="secondary"
                                 onChange={(e) => setSelectedRoleUpgrade(e.target.value)}
                             >
                                 {assignableRoles.map((role) => (

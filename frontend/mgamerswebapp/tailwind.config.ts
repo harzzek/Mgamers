@@ -24,7 +24,7 @@ const config: Config = {
           extend: "dark", // <- inherit default values from dark theme
           colors: {
             background: "#0D001A",
-            foreground: "#ffffff",
+            foreground: "#F5FFFA",
             primary: {
               50: "#3B096C",
               100: "#520F83",
@@ -37,7 +37,7 @@ const config: Config = {
               800: "#FDD5F9",
               900: "#FEECFE",
               DEFAULT: "#DD62ED",
-              foreground: "#ffffff",
+              foreground: "#0D001A",
             },
             focus: "#F182F6",
           },
@@ -59,37 +59,37 @@ const config: Config = {
         "mgamers-dark": {
           extend: "dark", // Inherit default dark values
           colors: {
-            background: "#1e2b30", // Dark muted black/blue
-            foreground: "#f4fbfb", // Silver-like text for contrast
+            background: "#1a1212", // Dark muted black/blue
+            foreground: "#F5FFFA", // Silver-like text for contrast
             primary: {
-              50: "#35180d",
-              100: "#5c1f0f",
-              200: "#94280f",
-              300: "#c43211",
-              400: "#fe3514", // Mgamers red
-              500: "#ff5a36",
-              600: "#ff835e",
-              700: "#ffa98a",
-              800: "#ffcabb",
-              900: "#ffede3",
-              DEFAULT: "#fe3514", // Main primary color
+              50: "#241B1A",
+              100: "#3D3332",
+              200: "#524949",
+              300: "#695554",
+              400: "#805B5A", 
+              500: "#99605E",
+              600: "#AF5E5C",
+              700: "#DE514C",
+              800: "#F54640",
+              900: "#F7423C",
+              DEFAULT: "#A65656",
               foreground: "#ffffff",
             },
             secondary: {
-              50: "#33200d",
-              100: "#5b3411",
-              200: "#27c72a",
-              300: "#c76d27",
-              400: "#fba163", // Mgamers orange
-              500: "#ffb57e",
-              600: "#ffc795",
-              700: "#ffd8ae",
-              800: "#ffe5c7",
-              900: "#fff3e2",
-              DEFAULT: "#fba163",
-              foreground: "#1e2b30",
+              50: "#211515",
+              100: "#0A0707",
+              200: "#524241",
+              300: "#675C5C",
+              400: "#7E6867",
+              500: "#946D6B",
+              600: "#AD706E",
+              700: "#C36D6A",
+              800: "#DB6763",
+              900: "#F25D58",
+              DEFAULT: "#8B5F49",
+              foreground: "#ffffff",
             },
-            focus: "#fba163", // Orange glow effect
+            focus: "#fba163",
           },
           layout: {
             disabledOpacity: "0.3",

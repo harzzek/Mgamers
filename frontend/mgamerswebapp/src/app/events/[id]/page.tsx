@@ -170,7 +170,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
             }
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                <div className="bg-primary-100 p-6 shadow-md mb-3">
                     <h1 className="text-3xl font-bold mb-3">{event?.name}</h1>
                     <div className='grid grid-cols-3 gap-4'>
                         <div>
@@ -192,7 +192,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     </div>
 
                 </div>
-                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                <div className="bg-primary-100 p-6 shadow-md mb-3">
                     <h1 className="text-3xl font-bold mb-3">Deltagere</h1>
                     <div className='grid grid-cols-3 gap-4'>
                     {registrations.map(registeredUser =>{

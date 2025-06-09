@@ -16,7 +16,7 @@ const navigation = [
   { name: 'Arrangementer', href: '/events' },
   { name: 'Brugere', href: '/users' },
   { name: 'Om os', href: '/about' },
-  { name: 'News', href: '/news' },
+  { name: 'Nyheder', href: '/news' },
 
 ]
 
@@ -76,7 +76,7 @@ export default function Navbar() {
               </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button color="primary" variant="flat" onPress={() => setIsRegisterModalOpen(true)}>
+              <Button color="secondary" variant="bordered" onPress={() => setIsRegisterModalOpen(true)}>
                 Sign Up
               </Button>
             </NavbarItem>

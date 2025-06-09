@@ -15,7 +15,7 @@ const AboutUsPage: React.FC = () => {
     return (
         <div className="container mx-auto px-4 py-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                <div className="bg-primary-100 p-6 shadow-md mb-3">
                     <h1>Velkommen til MGamers Esport
                         Dit Gamerfællesskab!
                     </h1>
@@ -28,7 +28,7 @@ const AboutUsPage: React.FC = () => {
                         og vi er stolte af at være en af Danmarks ældste og mest etablerede gamingforeninger.
                     </p>
                 </div>
-                <div className="bg-secondary-100 p-6 shadow-md">
+                <div className="bg-primary-100 p-6 shadow-md">
                     <h1>
                         Hvad gør os unikke?
                     </h1>
@@ -52,7 +52,7 @@ const AboutUsPage: React.FC = () => {
                         </li>
                     </ul>
                 </div>
-                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                <div className="bg-primary-100 p-6 shadow-md mb-3">
                     <h2 className="text-3xl font-bold mb-6">Om foreningen</h2>
                     <p className="mb-6">
                         MG Esport er en LAN-forening med base i Måløv for børn, unge og voksne fra 7. klasse (fyldt 13 år) og op. Idéen bag MG Esport løber mere end 10 år tilbage, hvor pædagoger og forældre ønskede at fylde et lokale med unge mennesker med hang til computerspil og nørderi. Her over 10 år senere eksisterer foreningen stadig og har en let stigning i antallet af medlemmer hvert år.
@@ -80,7 +80,7 @@ const AboutUsPage: React.FC = () => {
                     </p>
 
                 </div>
-                <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                <div className="bg-primary-100 p-6 shadow-md mb-3">
                     <h2 className="text-3xl font-bold mb-6">Dokumenter</h2>
                     <ul>
                         <li>

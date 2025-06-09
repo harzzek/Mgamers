@@ -31,7 +31,7 @@ export default function EditUser() {
                     <UpdateUserInformationForm userId={Number(id)} onSubmit={handleSubmit} submitted={created} />
                 </div>
                 <div className="col-span-1">
-                    <div className="bg-secondary-100 p-6 shadow-md mb-3">
+                    <div className="bg-primary-100 p-6 shadow-md mb-3">
                         <h1>
                             Bruger Information
                         </h1>

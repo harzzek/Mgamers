@@ -69,7 +69,7 @@ const NewsPage: React.FC = () => {
                 value={markdown}
                 onChange={(e) => setMarkdown(e.target.value)}
             />
-            <div className="bg-secondary-200 p-6 shadow-md mb-3 border">
+            <div className="bg-primary-200 p-6 shadow-md mb-3 border">
                 <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
             </div>
 

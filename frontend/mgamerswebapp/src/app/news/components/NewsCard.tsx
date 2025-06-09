@@ -55,7 +55,7 @@ export default function NewsCard(newspost: NewsPost) {
 
     return (
         <>
-            <Card className='bg-secondary-200 p-6 shadow-md mb-3'>
+            <Card className='bg-primary-200 text-foreground-200 p-6 shadow-md mb-3'>
                 <CardBody>
                     <div className="prose max-w-none prose-invert" dangerouslySetInnerHTML={{ __html: htmlContent }} />
                 </CardBody>

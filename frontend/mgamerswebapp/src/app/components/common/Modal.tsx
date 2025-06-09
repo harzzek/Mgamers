@@ -13,7 +13,7 @@ interface ModalProps {
 export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
 
     return (
-        <HeroModal isOpen={isOpen} size="lg" onClose={onClose} backdrop='blur' className='purple-dark'>
+        <HeroModal isOpen={isOpen} size="lg" onClose={onClose} backdrop='blur' className='mgamers-dark'>
             <ModalContent>
                 <>
                     <ModalHeader className="flex flex-col text-foreground-50">

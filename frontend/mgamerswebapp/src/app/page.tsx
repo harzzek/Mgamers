@@ -49,10 +49,10 @@ const Home: React.FC = () => {
         <div className="grid grid-cols-3 gap-6">
           {/* Left column - Messages for users */}
           <div className="col-span-2">
-            <div className="bg-secondary-100 p-6 shadow-md mb-3">
+            <div className="bg-primary-100 p-6 shadow-md mb-3">
               <h1>Nyheder</h1>
               {newsError ?
-                <p className="text-red-500">{newsError}</p>
+                <p className="text-warning-500">{newsError}</p>
                 : <>
                   {latestNews && latestNews.map((post) => (
                     <NewsCard key={post.id} {...post} />
@@ -66,16 +66,16 @@ const Home: React.FC = () => {
 
           {/* Right column - Event Card */}
           <div className="col-span-1">
-            <div className="bg-secondary-100 p-6 shadow-md">
+            <div className="bg-primary-100 p-6 shadow-md">
               <h2 className="text-2xl font-semibold mb-4">Kommende Arrangement</h2>
               {loading ? (
-                <p className="text-gray-500">Loading upcoming event...</p>
+                <p className="text-default-500">Loading upcoming event...</p>
               ) : evetError ? (
-                <p className="text-red-500">{evetError}</p>
+                <p className="text-warning-500">{evetError}</p>
               ) : commingEvent ? (
                 <EventCard event={commingEvent} />
               ) : (
-                <p className="text-gray-500">No upcoming events</p>
+                <p className="text-default-500">No upcoming events</p>
               )}
             </div>
           </div>
