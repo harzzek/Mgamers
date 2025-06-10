@@ -17,6 +17,7 @@ const navigation = [
   { name: 'Brugere', href: '/users' },
   { name: 'Om os', href: '/about' },
   { name: 'Nyheder', href: '/news' },
+  { name: 'Sponsor', href: '/sponsor' }
 
 ]
 
