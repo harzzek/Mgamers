@@ -79,19 +79,7 @@ namespace backend.Services
 
             if (dto.PhoneNumber != null && dto.PhoneNumber != dbuser.PhoneNumber)
             {
-                if (!dto.PhoneNumber.IsNullOrEmpty())
-                {
-                    if (IsEightDigits(dto.PhoneNumber))
-                    {
-                        dbuser.PhoneNumber = dto.PhoneNumber;
-                    }
-                    else
-                    {
-                        throw new Exception("Phone number not valid");
-                    }
-
-                }
-
+                dbuser.PhoneNumber = dto.PhoneNumber;
             }
 
             if (dto.PostNumber != null && dto.PostNumber != dbuser.PostNumber)

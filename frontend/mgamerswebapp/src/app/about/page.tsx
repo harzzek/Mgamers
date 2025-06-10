@@ -83,14 +83,21 @@ const AboutUsPage: React.FC = () => {
                 <div className="bg-primary-100 p-6 shadow-md mb-3">
                     <h2 className="text-3xl font-bold mb-6">Dokumenter</h2>
                     <ul>
-                        <li>
+                        <li className="mb-6">
+                            <p>General forsamling</p>
                             <FileDownloadButton filename="generalforsamling.pdf" />
                         </li>
-                        <li>
+                        <li className="mb-6">
+                            <p>Privatlivs politik</p>
                             <FileDownloadButton filename="privatlivspolitik.pdf" />
                         </li>
-                        <li>
+                        <li className="mb-6">
+                            <p>Vedtægter</p>
                             <FileDownloadButton filename="vedtaegter.pdf" />
+                        </li>
+                        <li className="mb-6">
+                            <p>Til forældre</p>
+                            <FileDownloadButton filename="parentguide.pdf"/>
                         </li>
                     </ul>
                 </div>
