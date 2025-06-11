@@ -6,7 +6,7 @@ import ConfirmModal from "../modals/ConfirmModal";
 import { useRouter } from 'next/navigation';
 import { UpdateUserDTO } from "@/DTOs/updateUserInfoDTO"
 import { fetchUserById } from "@/stores/userStore";
-
+import { User } from "@/app/users/interfaces/userInfo" ;
 
 interface UpdateUserFormProps {
     userId: number;

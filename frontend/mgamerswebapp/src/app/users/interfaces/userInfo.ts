@@ -1,4 +1,4 @@
-interface User {
+export interface User {
     id: number;
     name: string;
     username: string;
@@ -12,7 +12,7 @@ interface User {
     roles: Role[];
 }
 
-interface Role {
+export interface Role {
     id: number;
     name: string;
 }

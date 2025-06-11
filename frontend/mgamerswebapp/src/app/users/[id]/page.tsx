@@ -6,6 +6,7 @@ import { fetchRoles, upgradeUserRole } from "@/stores/adminStore";
 import { Button, Divider, Link, PressEvent, Select, SelectItem } from "@heroui/react";
 import ConfirmModal from "@/app/components/modals/ConfirmModal";
 import { useRouter } from 'next/navigation';
+import { User, Role } from "../interfaces/userInfo";
 
 interface UserDetailsProps {
     params: {
