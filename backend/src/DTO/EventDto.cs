@@ -19,18 +19,12 @@ public class EventDto
     public string Location { get; set; }
 
     [Required]
+    [DataType(DataType.Date)]
     [Column("start_date")]
-    public string StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
     [Required]
-    [Column("start_time")]
-    public string StartTime { get; set; }
-
-    [Required]
+    [DataType(DataType.Date)]
     [Column("end_date")]
-    public string EndDate { get; set; }
-
-    [Required]
-    [Column("end_time")]
-    public string EndTime { get; set; }
+    public DateTime EndDate { get; set; }
 }

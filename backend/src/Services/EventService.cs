@@ -30,41 +30,49 @@ namespace backend.Services
                     Name = eventItem.Name,
                     Description = eventItem.Description,
                     Location = eventItem.Location,
-                    StartDate = eventItem.StartDate.ToShortDateString(),
-                    StartTime = eventItem.StartDate.ToShortTimeString(),
-                    EndDate = eventItem.EndDate.ToShortDateString(),
-                    EndTime = eventItem.EndDate.ToShortTimeString()
+                    StartDate = eventItem.StartDate,
+                    EndDate = eventItem.EndDate,
                 });
             }
 
             return events;
         }
 
-        public async Task<List<EventDto>> GetUpcomingEvents()
+        public async Task<List<EventDto>> GetUpcomingEvents(int? x)
         {
+            List<EventDto> upcomingEvents = new List<EventDto>();
 
-            List<Event> upcomingEvents = await _context.Events
-                .Where(e => e.StartDate >= DateTime.Now)
-                .ToListAsync();
-
-            List<EventDto> events = new List<EventDto>();
-
-            foreach (Event eventItem in upcomingEvents)
+            if (x.HasValue)
             {
-                events.Add(new EventDto
+                upcomingEvents = await _context.Events
+                .Where(e => e.EndDate >= DateTime.Now)
+                .Take(x.Value)
+                .Select(eventItem => new EventDto
                 {
                     Id = eventItem.Id,
                     Name = eventItem.Name,
                     Description = eventItem.Description,
                     Location = eventItem.Location,
-                    StartDate = eventItem.StartDate.ToShortDateString(),
-                    StartTime = eventItem.StartDate.ToShortTimeString(),
-                    EndDate = eventItem.EndDate.ToShortDateString(),
-                    EndTime = eventItem.EndDate.ToShortTimeString()
-                });
+                    StartDate = eventItem.StartDate,
+                    EndDate = eventItem.EndDate,
+                }).ToListAsync();
+            }
+            else
+            {
+                upcomingEvents = await _context.Events
+                .Where(e => e.EndDate >= DateTime.Now)
+                .Select(eventItem => new EventDto
+                {
+                    Id = eventItem.Id,
+                    Name = eventItem.Name,
+                    Description = eventItem.Description,
+                    Location = eventItem.Location,
+                    StartDate = eventItem.StartDate,
+                    EndDate = eventItem.EndDate,
+                }).ToListAsync();
             }
 
-            return events;
+            return upcomingEvents;
 
         }
 
@@ -86,10 +94,8 @@ namespace backend.Services
                 Name = nextEvent.Name,
                 Description = nextEvent.Description,
                 Location = nextEvent.Location,
-                StartDate = nextEvent.StartDate.ToShortDateString(),
-                StartTime = nextEvent.StartDate.ToShortTimeString(),
-                EndDate = nextEvent.EndDate.ToShortDateString(),
-                EndTime = nextEvent.EndDate.ToShortTimeString()
+                StartDate = nextEvent.StartDate,
+                EndDate = nextEvent.EndDate,
             };
 
             return reEvent;
@@ -105,10 +111,8 @@ namespace backend.Services
                     Name = e.Name,
                     Description = e.Description,
                     Location = e.Location,
-                    StartDate = e.StartDate.ToShortDateString(),
-                    StartTime = e.StartDate.ToShortTimeString(),
-                    EndDate = e.EndDate.ToShortDateString(),
-                    EndTime = e.EndDate.ToShortTimeString(),
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
                     Participants = e.Registrations.Select(r => new RegistrationDto
                     {
                         UserId = r.UserId,

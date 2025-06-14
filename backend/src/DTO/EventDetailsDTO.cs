@@ -22,19 +22,13 @@ public class EventDetailsDTO
 
     [Required]
     [Column("start_date")]
-    public string StartDate { get; set; }
-
-    [Required]
-    [Column("start_time")]
-    public string StartTime { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime StartDate { get; set; }
 
     [Required]
     [Column("end_date")]
-    public string EndDate { get; set; }
-
-    [Required]
-    [Column("end_time")]
-    public string EndTime { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime EndDate { get; set; }
 
     [ForeignKey("UserId")]
     public List<RegistrationDto> Participants { get; set; } = new List<RegistrationDto>();

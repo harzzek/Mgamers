@@ -27,8 +27,8 @@ namespace backend.Controllers
         }
 
         [HttpGet("Upcoming")]
-        public async Task<ActionResult<List<Event>>> GetUpcomingEvents(){
-            var events = await _eventService.GetUpcomingEvents();
+        public async Task<ActionResult<List<Event>>> GetUpcomingEvents(int? x){
+            var events = await _eventService.GetUpcomingEvents(x);
             return Ok(events);
         }
 
@@ -40,10 +40,20 @@ namespace backend.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize (Roles = "User")]
+        [Authorize (Roles = "Guest")]
         public async Task<ActionResult<EventDetailsDTO>> GetEventById(int id){
+            EventDetailsDTO eventItem;
 
-            EventDetailsDTO eventItem = await _eventService.GetEventById(id);
+            try
+            {
+                eventItem = await _eventService.GetEventById(id);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+
+            
 
             return Ok(eventItem);
         }
