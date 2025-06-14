@@ -46,6 +46,7 @@ namespace backend.Services
             {
                 upcomingEvents = await _context.Events
                 .Where(e => e.EndDate >= DateTime.Now)
+                .OrderBy(e => e.StartDate)
                 .Take(x.Value)
                 .Select(eventItem => new EventDto
                 {
