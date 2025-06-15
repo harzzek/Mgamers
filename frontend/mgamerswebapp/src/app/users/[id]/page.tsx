@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { fetchUserById, deleteUser } from '@/stores/userStore';
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from '@/context/AuthContext';
 import { fetchRoles, upgradeUserRole } from "@/stores/adminStore";
 import { Button, Divider, Link, PressEvent, Select, SelectItem } from "@heroui/react";
 import ConfirmModal from "@/app/components/modals/ConfirmModal";
@@ -23,6 +23,7 @@ export default function UserDetails({ params }: UserDetailsProps) {
     const [unassignableRoles, setUnassignableRoles] = useState<Role[]>([]);
     const [selectedRoleUpgrade, setSelectedRoleUpgrade] = useState<string>("");
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const { user: authUser } = useAuth();
     const router = useRouter();
 
     useEffect(() => {

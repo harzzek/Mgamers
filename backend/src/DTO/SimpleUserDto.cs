@@ -15,4 +15,11 @@ public class SimpleUserDto
 
     [Required]
     public string Email { get; set; }
+
+    [Required]
+    public IList<Role> Roles { get; set; }
+
+    [Required]
+    [DataType(DataType.Date)]
+    public DateTime CreatedAt { get; set; }
 }

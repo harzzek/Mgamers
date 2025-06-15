@@ -2,22 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import UserCard from './components/UserCard';
 import { fetchUsers  } from '@/stores/userStore';
-
-interface Role {
-    id: number;
-    name: string;
-}
-
-interface User {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    birthdate: string;
-    // Users have many roles
-    roles: Role[];
-    avatarUrl?: string;
-}
+import { SimpleUser as User } from './interfaces/userInfo';
 
 const UsersPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);

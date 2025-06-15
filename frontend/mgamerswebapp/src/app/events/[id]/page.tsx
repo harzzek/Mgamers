@@ -13,7 +13,6 @@ import {
 import { EventInfo } from '@/DTOs/eventDTO';
 import LargeEventCard from '../components/LargeEventCard';
 import { Button } from '@heroui/react';
-import Image from 'next/image'
 
 interface EventDetailsProps {
     params: {
@@ -197,7 +196,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                             {registrations.map((reg) => (
                                 <div className='flex items-center justify-between p-2 rounded-lg bg-primary-400' key={reg.eventId + reg.seatId}>
                                     <div className="flex items-center gap-3">
-                                        <Image src={`https://placehold.co/32x32/1F2937/FFFFFF?text=${reg.user.username.charAt(0).toUpperCase()}`} className="w-8 h-8 rounded-full" alt="avatar"/>
+                                        <img src={`https://placehold.co/32x32/1F2937/FFFFFF?text=${reg.user.username.charAt(0).toUpperCase()}`} className="w-8 h-8 rounded-full" alt="avatar"/>
                                         <span className="font-medium text-white">{reg.user.username}</span>
                                     </div>
                                     <span className="text-sm font-semibold text-secondary-300">Plads #{reg.seatId}</span>

@@ -31,6 +31,8 @@ namespace backend.Services
                     Username = user.UserName,
                     Name = user.Name,
                     Email = user.Email,
+                    Roles = (await _userManager.GetRolesAsync(user)).Select(roleName => new Role { Name = roleName }).ToList(),
+                    CreatedAt = user.CreatedAt
                 });
             }
 
