@@ -1,5 +1,4 @@
 import { registration, Table } from "@/app/events/interfaces/event";
-import { ParticipantUser } from "@/app/events/interfaces/user";
 
 export interface NewEventDTO {
     name: string;

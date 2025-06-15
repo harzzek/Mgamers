@@ -2,7 +2,6 @@
 'use client';
 import React from 'react';
 import { Event } from '../interfaces/event';
-import { Card, CardBody, CardFooter, CardHeader, Divider } from '@heroui/react';
 
 interface EventCardProps {
     event: Event;

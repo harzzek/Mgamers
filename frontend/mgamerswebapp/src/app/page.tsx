@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { Event } from "./events/interfaces/event";
-import { fetchNextEvent, fetchUpcomingEvents } from "@/stores/eventStore";
+import { fetchUpcomingEvents } from "@/stores/eventStore";
 import EventCard from "./events/components/EventCard";
 import { fetchLatestNews } from "@/stores/newsPostStore";
 import { NewsPost } from "./news/interfaces/newsPost";

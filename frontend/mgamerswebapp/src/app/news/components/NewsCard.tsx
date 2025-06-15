@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, CardBody, CardFooter, Divider, PressEvent } from '@heroui/react';
+import { Button, PressEvent } from '@heroui/react';
 import React, { useEffect, useState } from 'react';
 import { NewsPost } from "../interfaces/newsPost"
 import { unified } from 'unified';
