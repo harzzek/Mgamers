@@ -23,7 +23,6 @@ export default function UserDetails({ params }: UserDetailsProps) {
     const [unassignableRoles, setUnassignableRoles] = useState<Role[]>([]);
     const [selectedRoleUpgrade, setSelectedRoleUpgrade] = useState<string>("");
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const { user: authUser } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
