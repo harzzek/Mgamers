@@ -37,7 +37,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
     return (
         <>
-            <Form onSubmit={handleSubmit} validationBehavior='aria'>
+            <Form onSubmit={handleSubmit} validationBehavior='aria' className='py-5'>
                 <Input
                     isRequired
                     type='text'
@@ -109,7 +109,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
                 <Divider className='my-4' />
 
-                <Button type="submit" color="primary">
+                <Button type="submit" color="success">
                     Create account
                 </Button>
             </Form>

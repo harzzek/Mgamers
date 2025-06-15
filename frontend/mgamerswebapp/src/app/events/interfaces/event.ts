@@ -4,10 +4,8 @@ export interface Event {
     id: number;
     name: string;
     description: string;
-    startDate: string;
-    endDate: string;
-    startTime: string;
-    endTime: string;
+    startDate: Date;
+    endDate: Date;
     location: string;
     participants: registration[];
     tables: Table[];

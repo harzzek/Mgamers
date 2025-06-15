@@ -19,7 +19,7 @@ export default function LoginForm( {onSubmit}: LoginFormProps) {
     };
 
     return (
-        <Form onSubmit={handleSubmit} validationBehavior='aria'>
+        <Form onSubmit={handleSubmit} validationBehavior='aria' className='py-5'>
             <Input
                 isRequired
                 errorMessage="Please enter valid username"
@@ -46,7 +46,7 @@ export default function LoginForm( {onSubmit}: LoginFormProps) {
 
             <Divider className="my-4"/>
 
-            <Button type="submit" color="primary">
+            <Button type="submit" color="success">
                 Login
             </Button>
         </Form>

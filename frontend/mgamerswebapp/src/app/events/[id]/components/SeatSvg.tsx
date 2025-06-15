@@ -30,7 +30,7 @@ export const SeatSvg = (seatProps: SeatSvgProps) => {
             if (userNameOnSeat.length > 12) {
                 userNameOnSeat = userNameOnSeat.slice(0, 12) + "...";
             }
-            return "#1a1212";
+            return "#1b2331";
         } else if (isSelected) {
             //Blue
             return "#3F51B5";
@@ -66,7 +66,7 @@ export const SeatSvg = (seatProps: SeatSvgProps) => {
 
     return (
         <g>
-            <rect x={seatProps.x} y={seatProps.y} width={seatProps.width} height={seatProps.height} fill={color()} className='cursor-pointer'
+            <rect x={seatProps.x} y={seatProps.y} width={seatProps.width} height={seatProps.height} rx="2" fill={color()} className='cursor-pointer'
                 onClick={() => {
                     if (!seatProps.seat.occupied) {
                         setIsSelected(!isSelected);

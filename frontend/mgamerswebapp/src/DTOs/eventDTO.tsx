@@ -1,3 +1,5 @@
+import { registration, Table } from "@/app/events/interfaces/event";
+import { ParticipantUser } from "@/app/events/interfaces/user";
 
 export interface NewEventDTO {
     name: string;
@@ -8,4 +10,15 @@ export interface NewEventDTO {
     startTime: string;
     endTime: string;
     tableAmount: number;
+}
+
+export interface EventInfo{
+    id: number;
+    name: string;
+    description: string;
+    location: string;
+    startDate: Date;
+    endDate: Date;
+    participants: registration[];
+    tables: Table[]
 }

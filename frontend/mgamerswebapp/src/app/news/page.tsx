@@ -46,7 +46,7 @@ const NewsPage: React.FC = () => {
                     + Nyhed
                 </Link>
             }
-            <div className="">
+            <div className="space-y-5">
                 <h1>Nyheder</h1>
                 {error && 
                     <p>Where the news?</p>

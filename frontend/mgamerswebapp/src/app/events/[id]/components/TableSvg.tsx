@@ -82,10 +82,10 @@ export const TableSvg = (table: TableSvgProps) => {
         <g>
             
             {user?.userRoles.includes('Admin') && ifOnlyOneSeatIsOccupied(table.table.seats) ? 
-                <rect x={table.x} y={table.y} width={table.width} height={table.height} fill={"yellow"} className='cursor-pointer'
+                <rect x={table.x} y={table.y} width={table.width} height={table.height} fill={"yellow"} rx="1" className='cursor-pointer'
                 onClick={() => handleSeatExtension(table.table.seats)} /> 
                 :
-                <rect x={table.x} y={table.y} width={table.width} height={table.height} fill={"gray"} />
+                <rect x={table.x} y={table.y} width={table.width} height={table.height} fill={"gray"} rx="1" />
             }
             {table.table.seats.map((seat, index) => {
 

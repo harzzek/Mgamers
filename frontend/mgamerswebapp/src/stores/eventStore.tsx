@@ -1,29 +1,43 @@
-import { NewEventDTO } from "@/DTOs/eventDTO";
+import { EventInfo, NewEventDTO } from "@/DTOs/eventDTO";
 import axiosInstance from "./axiosInstance";
+import { Event } from "@/app/events/interfaces/event";
 
 const API_URL = "/Event";
 
 const API_URL_REGISTRATION = "/Registration";
 
-export const fetchEvents = async () => {
+export const fetchEvents = async (): Promise<Event[]> => {
     const response = await axiosInstance.get(`${API_URL}`);
     const json = response.data;
     return json;
 };
 
-export const fetchUpcomingEvents = async () => {
-    const response = await axiosInstance.get(`${API_URL}/Upcoming`);
-    const json = response.data;
-    return json;
+export const fetchUpcomingEvents = async (x?: number): Promise<Event[]> => {
+    const url = x ? `${API_URL}/Upcoming/?x=${x}` : `${API_URL}/Upcoming`;
+    const response = await axiosInstance.get<Event[]>(url);
+
+    return response.data.map((eventItem) => ({
+        ...eventItem,
+        startDate: new Date(eventItem.startDate),
+        endDate: new Date(eventItem.endDate),
+    }));
 };
-export const fetchEventById = async (id: number) => {
+export const fetchEventById = async (id: number): Promise<EventInfo> => {
     const response = await axiosInstance.get(`${API_URL}/${id}`);
-    return response.data;
+    return {
+        ...response.data,
+        startDate: new Date(response.data.startDate),
+        endDate: new Date(response.data.endDate)
+    } as EventInfo;
 };
 
-export const fetchNextEvent = async () => {
+export const fetchNextEvent = async (): Promise<Event> => {
     const response = await axiosInstance.get(`${API_URL}/NextEvent`)
-    return response.data;
+    return {
+        ...response.data,
+        startDate: new Date(response.data.startDate),
+        endDate: new Date(response.data.endDate)
+    } as Event;
 };
 
 

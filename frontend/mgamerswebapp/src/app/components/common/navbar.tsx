@@ -9,7 +9,8 @@ import { Link } from "@heroui/link";
 import { Button } from "@heroui/button"
 import Image from 'next/image';
 import mgamersLogo from '@/resources/logo.png';
-import { Navbar as HeroNav, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import { Navbar as HeroNav, NavbarBrand, NavbarContent, NavbarItem as HeroNavbarItem } from '@heroui/navbar';
+import NavbarItem  from './NavbarItem' ;
 
 
 const navigation = [
@@ -50,37 +51,30 @@ export default function Navbar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center" key="Navcontent">
         {navigation.map((link) => (
-          <NavbarItem isActive={isCurrentPage(link.href)} key={link.name}>
-            <Link
-              href={link.href}
-              color={isCurrentPage(link.href) ? "primary" : "foreground"}
-            >
-              {link.name}
-            </Link>
-          </NavbarItem>
+          <NavbarItem name={link.name} isActive={isCurrentPage(link.href)} hrefString={link.href} key={link.name}/>
         ))}
       </NavbarContent>
       <NavbarContent justify="end" key="Authentication">
         {userToken ? (
           <>
-            <NavbarItem>
-              <Button color="primary" variant="ghost" onPress={() => handleLogout()}>
+            <HeroNavbarItem>
+              <Button color="secondary" variant="ghost" onPress={() => handleLogout()}>
                 Logout
               </Button>
-            </NavbarItem>
+            </HeroNavbarItem>
           </>
         ) : (
           <>
-            <NavbarItem className="hidden lg:flex">
-              <Button color='primary' onPress={() => setIsLoginModalOpen(true)}>
+            <HeroNavbarItem className="hidden lg:flex">
+              <Button variant='light' onPress={() => setIsLoginModalOpen(true)}>
                 Login
               </Button>
-            </NavbarItem>
-            <NavbarItem>
-              <Button color="secondary" variant="bordered" onPress={() => setIsRegisterModalOpen(true)}>
+            </HeroNavbarItem>
+            <HeroNavbarItem>
+              <Button color="secondary" variant="solid" onPress={() => setIsRegisterModalOpen(true)}>
                 Sign Up
               </Button>
-            </NavbarItem>
+            </HeroNavbarItem>
           </>
         )}
 

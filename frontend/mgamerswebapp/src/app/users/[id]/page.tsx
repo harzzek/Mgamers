@@ -155,7 +155,7 @@ export default function UserDetails({ params }: UserDetailsProps) {
                                 className="w-full p-2 rounded-lg mb-4" id="role-select"
                                 value={selectedRoleUpgrade}
                                 label="Role"
-                                color="secondary"
+                                color="default"
                                 onChange={(e) => setSelectedRoleUpgrade(e.target.value)}
                             >
                                 {assignableRoles.map((role) => (
@@ -163,7 +163,7 @@ export default function UserDetails({ params }: UserDetailsProps) {
                                 ))}
                             </Select>
                             <Button
-                                color="secondary"
+                                color="warning"
                                 className="w-full px-4 py-2"
                                 onPress={handleRoleAssignment}
                             >

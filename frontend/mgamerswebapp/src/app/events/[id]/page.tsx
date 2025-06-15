@@ -10,6 +10,9 @@ import {
     HORIZONTAL_SPACING,
     VERTICAL_SPACING,
 } from './constants/layout';
+import { EventInfo } from '@/DTOs/eventDTO';
+import LargeEventCard from '../components/LargeEventCard';
+import { Button, Chip, Listbox, ListboxItem, ScrollShadow, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 
 interface EventDetailsProps {
     params: {
@@ -18,7 +21,9 @@ interface EventDetailsProps {
 }
 
 export default function EventDetails({ params }: EventDetailsProps) {
-    const [event, setEvent] = useState<Event | null>(null);
+    const [event, setEvent] = useState<EventInfo | null>(null);
+    const [participantAmount, setParticipantAmount] = useState<number>(0);
+    const [cardEvent, setCardEvent] = useState<Event | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const { user: authUser } = useAuth();
@@ -38,11 +43,23 @@ export default function EventDetails({ params }: EventDetailsProps) {
         try {
             console.log('Fetching event...');
             const fetchedEvent = await fetchEventById(params.id);
-            const uniqueRegistrations : Array<registration> = [];
+            const uniqueRegistrations: Array<registration> = [];
+
+            const fetchedCardEvent: Event = {
+                id: fetchedEvent.id,
+                name: fetchedEvent.name,
+                description: fetchedEvent.description,
+                startDate: fetchedEvent.startDate,
+                endDate: fetchedEvent.endDate,
+                location: fetchedEvent.location,
+                participants: fetchedEvent.participants,
+                tables: fetchedEvent.tables
+            }
 
             fetchedEvent.participants.forEach((participant: registration) => {
-                if(!uniqueRegistrations.some((reg) => reg.userId === participant.userId)){
+                if (!uniqueRegistrations.some((reg) => reg.userId === participant.userId)) {
                     uniqueRegistrations.push(participant);
+                    setParticipantAmount(participantAmount + 1);
                 }
                 const seatId = participant.seatId;
                 fetchedEvent.tables.forEach((table: EventTable) => {
@@ -54,7 +71,8 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     });
                 });
             });
-            setRegistrations(uniqueRegistrations)
+            setCardEvent(fetchedCardEvent);
+            setRegistrations(uniqueRegistrations);
             setEvent(fetchedEvent);
         } catch (err) {
             console.error(err);
@@ -82,7 +100,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     console.error('User or event not found.');
                 }
             } catch (err) {
-                
+
                 console.error(err);
                 setError('Failed to register for event.');
             }
@@ -96,6 +114,7 @@ export default function EventDetails({ params }: EventDetailsProps) {
             if (authUser && event) {
                 const data = await unregisterFromEvent(event.id, authUser.id);
                 console.log('Unregistered from event.', data);
+                setParticipantAmount(participantAmount-1);
                 fetchEvent();
             } else {
                 console.error('User or event not found.');
@@ -149,8 +168,8 @@ export default function EventDetails({ params }: EventDetailsProps) {
         return <div>Loading event...</div>;
     }
 
-    if (!authUser || (!authUser.userRoles.includes("Admin") && !authUser.userRoles.includes("User")) ) {
-        return( 
+    if (!authUser || (!authUser.userRoles.includes("Admin") && !authUser.userRoles.includes("User") && !authUser.userRoles.includes("Guest"))) {
+        return (
             <div className='text-center container mx-auto px-4 py-8'>
                 <p className='text-danger-700'>
                     You need to either be logged in or be a confirmed user to get seating
@@ -168,77 +187,76 @@ export default function EventDetails({ params }: EventDetailsProps) {
                     </div>
                 </div>
             }
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-primary-100 p-6 shadow-md mb-3">
-                    <h1 className="text-3xl font-bold mb-3">{event?.name}</h1>
-                    <div className='grid grid-cols-3 gap-4'>
-                        <div>
-                            <p className='font-bold'>Arrangement dato</p>
-                            <p>{event?.startDate} - {event?.endDate}</p>
-                        </div>
-                        <div>
-                            <p className='font-bold'>Arrangement tid</p>
-                            <p>{event?.startTime} - {event?.endTime}</p>
-                        </div>
-                        <div>
-                            <p className='font-bold'>Pladsering</p>
-                            <p>{event?.location}</p>
-                        </div>
-                        <div>
-                            <p className='font-bold'>Beskrivelse</p>
-                            <p>{event?.description}</p>
+            <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+                <div className="lg:col-span-1 space-y-8">
+                    <LargeEventCard event={cardEvent!} buttonShow={false} />
+                    <div className='bg-primary-100 rounded-xl p-6'>
+                        <h2>Deltagere (<span>{participantAmount}</span>)</h2>
+                        <div className="participant-list h-64 overflow-y-auto space-y-3 pr-2">
+                            {registrations.map((reg) => (
+                                <div className='flex items-center justify-between p-2 rounded-lg bg-primary-400'>
+                                    <div className="flex items-center gap-3">
+                                        <img src={`https://placehold.co/32x32/1F2937/FFFFFF?text=${reg.user.username.charAt(0).toUpperCase()}`} className="w-8 h-8 rounded-full" alt="avatar"></img>
+                                        <span className="font-medium text-white">{reg.user.username}</span>
+                                    </div>
+                                    <span className="text-sm font-semibold text-secondary-300">Plads #{reg.seatId}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                 </div>
-                <div className="bg-primary-100 p-6 shadow-md mb-3">
-                    <h1 className="text-3xl font-bold mb-3">Deltagere</h1>
-                    <div className='grid grid-cols-3 gap-4'>
-                    {registrations.map(registeredUser =>{
-                        const username = registeredUser.user.username;
-                        const displayName = username.length > 12 ? `${username.slice(0, 12)}...` : username;
-                        return(
-                            <div className=" border-b-2 border-primary-200 mb-1 text-center" key={registeredUser.userId + registeredUser.seatId}>
-                                <p>{displayName}</p>
-                            </div>
-                        )
-                    })}
+                <div className="lg:col-span-2 bg-primary-100 rounded-xl p-6 grid grid-cols-1 content-between">
+                    
+                    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                        preserveAspectRatio='xMidYMid meet'
+                    >
+                        {event?.tables.map((table, index) => {
+                            const x = calculateTablePositionX(index);
+                            const y = calculateTablePositionY(index);
+                            return (
+                                <TableSvg 
+                                    key={table.id} 
+                                    table={table} 
+                                    x={x} 
+                                    y={y} 
+                                    width={TABLE_WIDTH} 
+                                    height={TABLE_HEIGHT} 
+                                    tableindex={index} 
+                                    onSeatClick={onSeatClick} 
+                                    eventid={event.id} 
+                                    fetchEvent={fetchEvent} />
+                            )
+                        })}
+                    </svg>
+
+                    <div className='text-right'>
+                    {isRegistered() ?
+                        <Button
+                            type="submit"
+                            color="success"
+                            onPress={handleRegister}
+                            variant='solid'
+                        >
+                            Register
+                        </Button>
+                        :
+                        <Button
+                            type="submit"
+                            color='warning'
+                            onPress={handleUnregister}
+                            variant='ghost'
+                        >
+                            Unregister
+                        </Button>
+                    }
                     </div>
-
+                    
+                    
                 </div>
-
             </div>
 
-            <div className="flex flex-col items-center">
-                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-                    preserveAspectRatio='xMidYMid meet'
-                >
-                    {event?.tables.map((table, index) => {
-                        const x = calculateTablePositionX(index);
-                        const y = calculateTablePositionY(index);
-                        return (
-                            <TableSvg key={table.id} table={table} x={x} y={y} width={TABLE_WIDTH} height={TABLE_HEIGHT} tableindex={index} onSeatClick={onSeatClick} eventid={event.id} fetchEvent={fetchEvent} />
-                        )
-                    })}
-                </svg>
 
-                {isRegistered() ?
-                    <button
-                        type="submit"
-                        onClick={handleRegister}
-                        className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700">
-                        Register
-                    </button>
-                    :
-                    <button
-                        type="submit"
-                        onClick={handleUnregister}
-                        className="disabled:bg-gray-800 disabled:text-gray-500 mt-4 bg-red-500 text-white font-semibold p-2 rounded-md hover:bg-red-300">
-                        Unregister
-                    </button>
-                }
-            </div>
 
         </div>
     );

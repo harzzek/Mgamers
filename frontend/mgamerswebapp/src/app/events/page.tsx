@@ -4,6 +4,7 @@ import EventCard from "./components/EventCard";
 import { Event } from "./interfaces/event";
 import { fetchUpcomingEvents } from "@/stores/eventStore";
 import { useAuth } from '@/context/AuthContext';
+import LargeEventCard from "./components/LargeEventCard";
 
 const EventsPage: React.FC = () => {
     const { user  } = useAuth();
@@ -47,13 +48,16 @@ const EventsPage: React.FC = () => {
     return (
         <div className="container mx-auto px-4 py-8 ">
             <h1 className="text-4xl font-bold mb-8 text-center">Kommende Arrangementer</h1>
-            <p className="text-lg text-center">Se vores kommende arrangementer.</p>
+            <p className="text-lg text-center mb-8">Se vores kommende arrangementer.</p>
 
-            <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {events.map((event) => (
-                    <EventCard event={event} key={event.id}/>
+                    
+                    <LargeEventCard event={event} key={event.id + event.name} buttonShow={true}/>
+                    
                 ))}
             </div>
+            
 
             {isAdmin() && (
                 <a
